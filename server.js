@@ -57,6 +57,9 @@ app.use(cookieSession({
 const DB = process.env.USER;
 const WMDB = 'wmdb';
 const STAFF = 'staff';
+const POSTS = 'posts';
+const LIKES = 'likes';
+const USERS = 'users';
 
 // main page. This shows the use of session cookies
 app.get('/', (req, res) => {
