@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>Node Starter</title>
+    <!-- load bootstrap stylesheet (css) -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
     <!-- load local stylesheet (css) -->
     <link rel="stylesheet" href="/styles.css" />
     <!-- loading jquery -->
@@ -24,7 +26,9 @@
     </form>
     </div>
 
-    <p>You have visited <%= visits %> times.</p>
+    <div class="col-6" style="background-color: red">
+        <p>You have visited <%= visits %> times.</p>
+    </div>
 
     <h2>Links</h2>
 
@@ -44,5 +48,7 @@
             $("#not-logged-in").show();
         }
     </script>
+    <!-- load bootstrap js -->
+    <script src="../bootstrap.min.js"></script>
 </body>
 </html>
