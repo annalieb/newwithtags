@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Node Starter</title>
+    <!-- load bootstrap stylesheet (css) -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- load local stylesheet (css) -->
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- loading jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <a><img src="../assets/arrow-back.svg">Back</a>
+            </div>
+        
+            <div class="col-12">
+                <h1>Share a look</h1>
+                <form>
+                    <label for="city">
+                        <p class="bold" style="margin-bottom: 5px;">City</p>
+                        <p class="text-timestamp">Select from the dropdown</p>
+                    </label>
+                    <select id="city" name="city">
+                        <option value="Barcelona">Barcelona</option>
+                        <option value="Seattle">Seattle</option>
+                        <option value="Wellesley">Wellesley</option>
+                    </select>
+
+                    <br>
+
+                    <label for="tags">
+                        <p class="bold" style="margin-bottom: 5px;">Tags</p>
+                        <p class="text-timestamp">Type each tag with a hashtag in the front</p>
+                    </label>
+                    <input type="text" id="tags" name="tags">
+
+                    <br>
+
+                    <label for="description">
+                        <p class="bold" style="margin-bottom: 5px;">Description</p>
+                        <p class="text-timestamp">Say whatever you’d like about the look!</p>
+                    </label>
+                    <input type="text" id="description" name="description">
+                    
+                    <br>
+
+                    <label for="imageUpload">
+                        <p class="bold" style="margin-bottom: 5px;">Image</p>
+                        <p class="text-timestamp">Choose an image to upload</p>
+                    </label>
+                    <input type="file" id="imageUpload" name="imageUpload">
+
+                    <br>
+
+                    <input type="submit" value="UPLOAD POST">
+                </form>
+                
+        
+            
+            </div>
+        </div>
+    </div>
+
+    <!-- load local js -->
+    <script src="/main.js"></script>
+    <!-- load bootstrap js -->
+    <script src="../bootstrap.min.js"></script>
+</bodys>
+</html>

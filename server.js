@@ -75,6 +75,10 @@ app.get('/post-single', (req, res) => {
     return res.render('post-single.ejs');
 });
 
+app.get('/create', (req, res) => {
+    return res.render('create.ejs');
+});
+
 // shows how logins might work by setting a value in the session
 // This is a conventional, non-Ajax, login, so it redirects to main page 
 app.post('/set-uid/', (req, res) => {
