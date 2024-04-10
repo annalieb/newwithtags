@@ -86,6 +86,42 @@ input[type="submit"] {
 	padding: 9px 18px;
 }
 
+/* NAV BAR */
+
+.navbar {
+	border-bottom: 3px solid black;
+}
+
+.navbar a {
+	display: block;
+}
+
+.nav-items {
+	display: inline;
+}
+
+.nav-items li {
+	display: inline;
+	float: right;
+	color: white;
+	background-color: black; 
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 24px; 
+	border: none;
+	margin: 9px;
+	padding: 6px 9px;
+}
+
+.nav-items a {
+	text-decoration: none;
+	color: white;
+}
+
+.navbar-img img {
+	width: 30px;
+}
+
 /* CONTAINERS */
 .container-fluid {
 	display: flex;
