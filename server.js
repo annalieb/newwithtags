@@ -84,6 +84,32 @@ app.post('/insert', async (req, res) => {
     return res.redirect('/');
 });
 
+/**
+ * handles search city lookup
+ */
+app.get('/search/:city', async(req, res) => {
+    const cityTag = req.params.city;
+    const db = await Connection.open(mongoUri, newwithtags); // connects to newwithtags database
+    const postsDB = db.collection(POSTS);
+
+    let findCity = await postsDB.find({city: cityTag}).toArray();
+
+    return res.render();
+})
+
+/**
+ * handles search tag lookup
+ */
+app.get('/search/:tags', async(req, res) => {
+    const styleTag = req.params.tags;
+    const db = await Connection.open(mongoUri, newwithtags);
+    const postsDB = db.collection(POSTS);
+
+    let findTag = await postsDB.find({tags: styleTag}).toArray(); // need to check what styleTag looks like to edit find()
+
+    return res.render();
+})
+
 
 // main page. This shows the use of session cookies
 app.get('/', (req, res) => {
