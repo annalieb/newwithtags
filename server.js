@@ -54,12 +54,36 @@ app.use(cookieSession({
 // ================================================================
 // custom routes here
 
-const DB = process.env.USER;
-const WMDB = 'wmdb';
-const STAFF = 'staff';
+//const DB = process.env.USER; // will this get newwithtags database?
+const DB = 'newwithtags';
 const POSTS = 'posts';
 const LIKES = 'likes';
 const USERS = 'users';
+
+/**
+ * 
+ * @param {*} counters 
+ * @param {*} key 
+ * @returns 
+ */
+async function incrCounter(counters, key) {
+    // this will update the document and return the document after the update
+    let result = await counters.findOneAndUpdate({collection: key},
+                                                 {$inc: {counter: 1}}, 
+                                                 {returnDocument: "after"});
+    return result.counter;
+}
+
+// Insert a new recipe into the database
+app.post('/insert', async (req, res) => {
+    let db = await Connection.open(mongoUri, DB)
+    let counters = db.collection(COUNTERS);
+    let newId = await incrCounter(counters, 'recipe');
+    let recipes = db.collection(RECIPES);
+    recipes.insert({rid: newId, name: req.body.name});
+    return res.redirect('/');
+});
+
 
 // main page. This shows the use of session cookies
 app.get('/', (req, res) => {
@@ -77,6 +101,37 @@ app.get('/post-single', (req, res) => {
 
 app.get('/create', (req, res) => {
     return res.render('create.ejs');
+});
+
+app.post('/create', async (req, res) => {
+    let postID = 1;
+    let city = req.body.city;
+    let tags = req.body.tags;
+    let caption = req.body.description;
+    let imageUpload = req.body.imageUpload;
+    let date = '2024-09-24'; // make date object
+
+    if (!city) {
+        req.flash('error', "Missing Input: City is missing");
+    } 
+
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    console.log(postID, city, tags, caption, imageUpload, date);
+    
+    // generate ID - counter? what scott talked about
+    let insertPost = await posts.insertOne({postID: postID, 
+                                            imageURL: imageUpload, 
+                                            comments: [],
+                                            tags: tags,
+                                            city: city, 
+                                            date: date,
+                                            caption: caption});
+    console.log("inserting post", insertPost);
+
+    return res.render('create.ejs');
+    
 });
 
 // shows how logins might work by setting a value in the session
@@ -124,12 +179,6 @@ app.post('/form/', (req, res) => {
     return res.render('form.ejs', {action: '/form/', data: req.body });
 });
 
-app.get('/staffList/', async (req, res) => {
-    const db = await Connection.open(mongoUri, WMDB);
-    let all = await db.collection(STAFF).find({}).sort({name: 1}).toArray();
-    console.log('len', all.length, 'first', all[0]);
-    return res.render('list.ejs', {listDescription: 'all staff', list: all});
-});
 
 // ================================================================
 // postlude
