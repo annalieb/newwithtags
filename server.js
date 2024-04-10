@@ -59,6 +59,7 @@ const DB = 'newwithtags';
 const POSTS = 'posts';
 const LIKES = 'likes';
 const USERS = 'users';
+const COUNTERS = 'counters';
 
 /**
  * 
@@ -71,6 +72,7 @@ async function incrCounter(counters, key) {
     let result = await counters.findOneAndUpdate({collection: key},
                                                  {$inc: {counter: 1}}, 
                                                  {returnDocument: "after"});
+    console.log(result);
     return result.counter;
 }
 
@@ -79,7 +81,6 @@ app.post('/insert', async (req, res) => {
     let db = await Connection.open(mongoUri, DB)
     let counters = db.collection(COUNTERS);
     let newId = await incrCounter(counters, 'recipe');
-    let recipes = db.collection(RECIPES);
     recipes.insert({rid: newId, name: req.body.name});
     return res.redirect('/');
 });
@@ -130,23 +131,35 @@ app.get('/create', (req, res) => {
 });
 
 app.post('/create', async (req, res) => {
-    let postID = 1;
+    let db = await Connection.open(mongoUri, DB);
+    let counters = db.collection(COUNTERS);
+
+    let postID = await incrCounter(counters, POSTS);
+    let posts = db.collection(POSTS);
+
     let city = req.body.city;
-    let tags = req.body.tags;
+    let tagsInitial = req.body.tags.split(" ");
+    let tags = tagsInitial.map((elt) => elt.slice(1));
     let caption = req.body.description;
     let imageUpload = req.body.imageUpload;
-    let date = '2024-09-24'; // make date object
 
-    if (!city) {
-        req.flash('error', "Missing Input: City is missing");
-    } 
+    // do date and time
+    let dateObj = new Date(); 
+    let the_day = dateObj.getDate();
+    let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
+    let the_year = dateObj.getFullYear();
 
-    const db = await Connection.open(mongoUri, DB);
-    const posts = db.collection(POSTS);
+    let the_hour = dateObj.getHours();
+    let the_minute = dateObj.getMinutes();
+    let the_second = dateObj.getSeconds();
+
+    let date = the_year + "-" + the_month + "-" + the_day + " " + the_hour + ":" + the_minute + ":" + the_second;
+
+    console.log(date);
+
 
     console.log(postID, city, tags, caption, imageUpload, date);
     
-    // generate ID - counter? what scott talked about
     let insertPost = await posts.insertOne({postID: postID, 
                                             imageURL: imageUpload, 
                                             comments: [],
