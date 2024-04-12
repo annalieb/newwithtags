@@ -65,7 +65,7 @@ async function main() {
 
   // sample posts
   const post1 = {
-    postID: 282749,
+    postID: 20001,
     imageURL: "~304nwt/images/wellesley.jpeg",
     comments: [
         {text: "I love this city!!", 
@@ -82,7 +82,46 @@ async function main() {
     ],
     city: "Boston",
     date: "2023-12-20 3:26:23",
-    caption: "new city!!"
+    caption: "new city!! (this is the least liked post)"
+  };
+
+  const post2 = {
+    postID: 20002,
+    imageURL: "~304nwt/images/wellesley.jpeg",
+    comments: [
+        {text: "beautiful", 
+        userID: 123, 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "Love your coat!", 
+        userID: 124, 
+        date: "2023-12-20 4:30:52"}
+    ], 
+    tags: [
+        "#cottagecore", 
+        "#pastel",
+        "#balletflats"
+    ],
+    city: "Boston",
+    date: "2023-12-20 3:26:23",
+    caption: "check out my new coat! (this is the middle liked post)"
+  };
+
+  const post3 = {
+    postID: 20003,
+    imageURL: "~304nwt/images/wellesley.jpeg",
+    comments: [
+        {text: "this is so cool", 
+        userID: 123, 
+        date: "2023-12-20 3:55:43"}, 
+    ], 
+    tags: [
+        "#cottagecore", 
+        "#pastel",
+        "#balletflats"
+    ],
+    city: "Seattle",
+    date: "2023-12-20 3:26:23",
+    caption: "this city is so incredibly rainy but beautiful. (this is the most liked post)"
   };
 
   // sample users
@@ -101,15 +140,38 @@ async function main() {
     password: "hello123",
     email: "mm124@wellesley.edu",
     dateCreated: "2023-11-20"
-  }
+  };
+
+  const user3 = {
+    userID: 125, 
+    userFirstName: "Soo",
+    userLastName: "Lee",
+    password: "thisismypassword",
+    email: "sl120@wellesley.edu",
+    dateCreated: "2024-04-16"
+  };
+
+  const user4 = {
+    userID: 126, 
+    userFirstName: "Anna",
+    userLastName: "Lieb",
+    password: "hellothere",
+    email: "al117@wellesley.edu",
+    dateCreated: "2024-04-17"
+  };
 
   // sample likes
-  const like1 = {postID: 282749, userID: 123};
-  const like2 = {postID: 282749, userID: 124};
+  const like1 = {postID: 20001, userID: 123};
+  const like2 = {postID: 20002, userID: 124};
+  const like3 = {postID: 20002, userID: 123};
+  const like4 = {postID: 20003, userID: 125};
+  const like5 = {postID: 20003, userID: 126};
+  const like6 = {postID: 20003, userID: 123};
 
-  let lsPosts = [post1];
-  let lsUsers = [user1, user2];
-  let lsLikes = [like1, like2];
+
+  let lsPosts = [post1, post2, post3];
+  let lsUsers = [user1, user2, user3, user4];
+  let lsLikes = [like1, like2, like3, like4, like5, like6];
 
   // delete all data from each collection
   let deletePosts = await deleteDocuments(myDB, POSTS);
