@@ -56,7 +56,6 @@ app.use(cookieSession({
 // ================================================================
 // custom routes here
 
-//const DB = process.env.USER; // will this get newwithtags database?
 const DB = 'newwithtags';
 const POSTS = 'posts';
 const LIKES = 'likes';
@@ -92,7 +91,7 @@ app.post('/insert', async (req, res) => {
  */
 app.get('/search/:city', async(req, res) => {
     const cityTag = req.params.city;
-    const db = await Connection.open(mongoUri, newwithtags); // connects to newwithtags database
+    const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
@@ -105,7 +104,7 @@ app.get('/search/:city', async(req, res) => {
  */
 app.get('/search/:tags', async(req, res) => {
     const styleTag = req.params.tags;
-    const db = await Connection.open(mongoUri, newwithtags);
+    const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
     let findTag = await postsDB.find({tags: styleTag}).toArray(); // need to check what styleTag looks like to edit find()
@@ -128,6 +127,18 @@ app.get('/post-single', (req, res) => {
     return res.render('post-single.ejs');
 });
 
+app.get('/post-single/:id', async (req, res) => {
+    const postID = parseInt(req.params.id);
+    console.log(postID);
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    let findPost = await posts.findOne({postID: postID}); 
+    console.log(findPost);
+
+    return res.render('post-single.ejs', {findPost});
+});
+
 app.get('/create', (req, res) => {
     return res.render('create.ejs');
 });
@@ -140,8 +151,7 @@ app.post('/create', async (req, res) => {
     let posts = db.collection(POSTS);
 
     let city = req.body.city;
-    let tagsInitial = req.body.tags.split(" ");
-    let tags = tagsInitial.map((elt) => elt.slice(1));
+    let tags = req.body.tags.split(" ");
     let caption = req.body.description;
     let imageUpload = req.body.imageUpload;
 

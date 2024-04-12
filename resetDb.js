@@ -70,15 +70,15 @@ async function main() {
     comments: [
         {text: "I love this city!!", 
         userID: 123, 
-        Date: "2023-12-20 3:55:43"}, 
+        date: "2023-12-20 3:55:43"}, 
         {text: "Love your coat!", 
         userID: 124, 
-        Date: "2023-12-20 4:30:52"}
+        date: "2023-12-20 4:30:52"}
     ], 
     tags: [
-        "cottageCore", 
-        "pastel",
-        "balletFlats"
+        "#cottagecore", 
+        "#pastel",
+        "#balletflats"
     ],
     city: "Boston",
     date: "2023-12-20 3:26:23",
