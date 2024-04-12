@@ -66,7 +66,7 @@ async function main() {
   // sample posts
   const post1 = {
     postID: 20001,
-    imageURL: "~304nwt/images/wellesley.jpeg",
+    imageURL: "../assets/uploads/img1.jpeg",
     comments: [
         {text: "I love this city!!", 
         userID: 123, 
@@ -87,7 +87,7 @@ async function main() {
 
   const post2 = {
     postID: 20002,
-    imageURL: "~304nwt/images/wellesley.jpeg",
+    imageURL: "../assets/uploads/img2.jpeg",
     comments: [
         {text: "beautiful", 
         userID: 123, 
@@ -108,7 +108,7 @@ async function main() {
 
   const post3 = {
     postID: 20003,
-    imageURL: "~304nwt/images/wellesley.jpeg",
+    imageURL: "../assets/uploads/img3.jpeg",
     comments: [
         {text: "this is so cool", 
         userID: 123, 

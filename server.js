@@ -114,13 +114,41 @@ app.get('/search/:tags', async(req, res) => {
 
 
 // main page. This shows the use of session cookies
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     let uid = req.session.uid || 'unknown';
     let visits = req.session.visits || 0;
     visits++;
     req.session.visits = visits;
     console.log('uid', uid);
-    return res.render('index.ejs', {uid, visits});
+
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+    const likes = db.collection(LIKES);
+
+    // aggregation pipeline to get an array of all the posts 
+    // from the posts collection, sorted in descending order of likes
+    let sortedPosts = await posts.aggregate([
+        {
+            $lookup: {
+                from: "likes",
+                localField: "postID",
+                foreignField: "postID",
+                as: "likes"
+            }
+        },
+        {
+            $addFields: {
+                numLikes: { $size: "$likes" }
+            }
+        },
+        {
+            $sort: {numLikes: -1} // sort posts by num of likes in decr. order
+        }
+    ]).toArray();
+
+    console.log(sortedPosts);
+
+    return res.render('index.ejs', {uid, visits, posts: sortedPosts});
 });
 
 app.get('/post-single', (req, res) => {
