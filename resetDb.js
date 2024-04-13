@@ -77,8 +77,7 @@ async function main() {
     ], 
     tags: [
         "#cottagecore", 
-        "#pastel",
-        "#balletflats"
+        "#fairycore"
     ],
     city: "Boston",
     date: "2023-12-20 3:26:23",
@@ -97,9 +96,9 @@ async function main() {
         date: "2023-12-20 4:30:52"}
     ], 
     tags: [
-        "#cottagecore", 
-        "#pastel",
-        "#balletflats"
+        "#businesscasual", 
+        "#city",
+        "#corporate"
     ],
     city: "Boston",
     date: "2023-12-20 3:26:23",
