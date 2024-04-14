@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Node Starter</title>
+    <!-- load bootstrap stylesheet (css) -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- load local stylesheet (css) -->
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- loading jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+    <%- include("partials/navbar.ejs") %>
+
+    <div id="cityTag">
+        <p>Filter</p>
+        <form id="searchCity" method="GET" action="/city/">
+            <p>
+                <label>Search...<input type="text" required city="city"></label>
+                <input type="submit" value="search" id="searchCityButton">
+            </p>
+        </form>
+    </div>
+
+    <div id="row">
+        <div id="column">
+            <img src="img1.jpeg">
+            <img src="img2.jpeg">
+            <img src="img3.jpeg">
+        </div>
+        <div id="column">
+            <img src="img4.jpeg">
+            <img src="img5.jpeg">
+            <img src="img6.jpeg">
+        </div>
+        <div id="column">
+            <img src="img7.jpeg">
+            <img src="img8.jpeg">
+            <img src="img9.jpeg">
+        </div>
+    </div>
+
+    <!-- load local js -->
+    <script src="/main.js"></script>
+    <!-- load bootstrap js -->
+    <script src="../bootstrap.min.js"></script>
+</body>
+</html>
