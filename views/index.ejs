@@ -14,41 +14,89 @@
 
     <%- include("partials/navbar.ejs") %>
 
-    <div id="cityTag">
-        <p>Filter</p>
-        <form id="searchCity" method="GET" action="/city/">
-            <p>
-                <label>Search...<input type="text" required city="city"></label>
-                <input type="submit" value="search" id="searchCityButton">
-            </p>
-        </form>
-    </div>
+    <div class="container-fluid">
 
-    <div id="row">
-        <div id="column">
+        <div class="row">
+
+
+
+
+    
+                <div class="session col-12" style="display: flex; flex-wrap: wrap">
+                   
+                        <div class="question" style="display: flex; width: 100%">
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="padding-left: 0px">
+                                <p class="bold">Sort</p> 
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-6" style="padding-left: 0px">
+                                <p class="bold">Filter</p> 
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-2" style="padding-right: 0px; display: flex; justify-content: flex-end;">
+                                <div class="arrow-container">
+                                    <img src="../assets/arrow-down.svg" style="margin-top: 4px;height:9px; width:14px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content" style="display: flex; width: 100%; margin-bottom: 15px">
+                            <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px">
+                                <p>Sort by</p> 
+                                <form>
+                                    <label>
+                                        <input type="radio" name="Newest" value="Newest">
+                                        Newest
+                                    </label>
+                                
+                                    <label>
+                                        <input type="radio" name="Liked" value="Liked">
+                                        Most liked
+                                    </label>
+                                </form>
+                                
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-12" style="padding-left: 0px">
+                                <p>Select city</p> 
+                                <a class="city-tag">Boston</a>
+                                <a class="city-tag">Wellesley</a>
+                                <a class="city-tag">Paris</a>
+                                <a class="city-tag">Tokyo</a>
+                                <form id="searchCity" method="GET" action="/city/">
+                                    <p >
+                                        <label>Search...
+                                            <input style="width: 100%" type="text" required city="city">
+                                        </label>
+                                        <input  type="submit" value="search" id="searchCityButton">
+                                    </p>
+                                </form>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12" style="padding-left: 0px">
+                                <p>Select tags</p> 
+                                <a class="component-tag">Corporate</a>
+                                <a class="component-tag">Cottagecore</a>
+                                <a class="component-tag">Edgey</a>
+                                <a class="component-tag">Scandi</a>
+                            </div>
+            
+                        </div>
+                 
+            
+                </div>
+      
+
+
+        </div>
+    
+        <div class="row">
             <% posts.forEach((elt) => { %>
-                <img src=<%= elt.imageURL %>>
+                <div class="col-lg-4 col-md-4 col-sm-6 gallery-image">
+                    <img src=<%= elt.imageURL %>>
+                </div>
             <% }); %>
         </div>
+        
     </div>
 
-    <div id="row">
-        <div id="column">
-            <img src="../assets/uploads/img1.jpeg">
-            <img src="../assets/uploads/img2.jpeg">
-            <img src="../assets/uploads/img3.jpeg">
-        </div>
-        <div id="column">
-            <img src="../assets/uploads/img4.jpeg">
-            <img src="../assets/uploads/img5.jpeg">
-            <img src="../assets/uploads/img6.jpeg">
-        </div>
-        <div id="column">
-            <img src="../assets/uploads/img7.jpeg">
-            <img src="../assets/uploads/img8.jpeg">
-            <img src="../assets/uploads/img9.jpeg">
-        </div>
-    </div>
 
     <div id="logged-in">
     <p>You are logged in as <span id="login-uid"><%= uid %></span>
@@ -88,3 +136,30 @@
     <script src="../bootstrap.min.js"></script>
 </body>
 </html>
+
+
+<script>
+
+    // Function to toggle the active class on the content div
+    function toggleContent(event) {
+        const session = event.currentTarget.closest('.session'); // The clicked "session" div
+        const content = session.querySelector('.content'); // The content div inside the clicked "session" div
+        const question = session.querySelector('.question');
+
+        // Toggle the "active" class on the content div
+        session.classList.toggle('active');
+        content.classList.toggle('active');
+        question.classList.toggle('p-bold');
+    }
+
+    // Add click event listener to all elements with the class "session"
+    const sessions = document.querySelectorAll('.session');
+    sessions.forEach(session => {
+        const question = session.querySelector('.question');
+        const toggle = session.querySelector('.toggle');
+        
+        question.addEventListener('click', toggleContent);
+        toggle.addEventListener('click', toggleContent);
+    });
+
+</script>

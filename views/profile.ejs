@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Node Starter</title>
+    <!-- load bootstrap stylesheet (css) -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- load local stylesheet (css) -->
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- loading jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <%- include("partials/navbar.ejs") %>
+    <div class="container-fluid">
+        <div class="row" style="margin-top: 20px">
+        
+            <div class="col-lg-4 col-md-4 col-sm-12">
+             
+                <h1>Posted by you</h1>
+                <div class="container-comment">
+                    <p class="selector">Posted</p>
+                    <p class="selector">Liked</p>
+        
+                </div>
+        
+                <hr>
+                <h2 class="bold">Profile</h2>
+                <p style="margin-bottom:5px">Email</p>
+                <p class="text-timestamp">example@email.com</p>
+                <p style="margin-bottom:5px">Since</p>
+                <p class="text-timestamp">November 22, 2023</p>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 container-image">
+                <img src="../assets/placeholder.png">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- load local js -->
+    <script src="/main.js"></script>
+    <!-- load bootstrap js -->
+    <script src="../bootstrap.min.js"></script>
+</bodys>
+</html>
+
+
