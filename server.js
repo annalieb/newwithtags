@@ -89,22 +89,34 @@ app.post('/insert', async (req, res) => {
 /**
  * handles search city lookup
  */
-app.get('/search/:city', async(req, res) => {
+app.get('/city/:city', async(req, res) => {
     const cityTag = req.params.city;
-    const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
+    console.log('hello');
+    console.log(`PRINT: ${req}`)
+    console.log(`you submitted ${cityTag}`);
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
+    if (findCity.length == 0){
+        return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+    } else {
+        let imageOut = findCity[0].imageURL;
+        let pID = findCity[0].postId;
 
-    return res.render();
-})
+        let redirectURL = "/city/" + cityTag;
+        res.redirect(redirectURL);
+
+        return res.render('search.ejs', {imageLoad: imageOut, id: pID});
+    }
+});
 
 /**
  * handles search tag lookup
  */
-app.get('/search/:tags', async(req, res) => {
+app.get('/tag/:tags', async(req, res) => {
     const styleTag = req.params.tags;
-    const db = await Connection.open(mongoUri, DB);
+    const db = await Connection.open(mongoUri, "newwithtags");
     const postsDB = db.collection(POSTS);
 
     let findTag = await postsDB.find({tags: styleTag}).toArray(); // need to check what styleTag looks like to edit find()
