@@ -22,40 +22,34 @@
             </div>
         
             <div class="col-lg-8 col-md-8 col-sm-12 container-image">
-                <img src="../assets/placeholder.png">
+                <img src=<%= findPost.imageURL %>>
             </div>
         
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <p>From the streets of</p>
-                <h1>Seattle</h1>
-                <p class="text-timestamp" style="margin-bottom: 35px">2 days ago</p>
+                <h1><%=findPost.city%></h1>
+                <p class="text-timestamp" style="margin-bottom: 35px"><%=findPost.date%></p>
                 <p>Tagged as</p>
                 <div class="container-comment">
-                    <p class="component-tag">#PrimaryColors</p>
-                    <p class="component-tag">#SportsInspired</p>
-                    <p class="component-tag">#Baggy</p>
+                    <% findPost.tags.forEach((elt) => { %>
+                        <p class="component-tag"><%=elt%></p>
+                    <%}); %>
                 </div>
                 <div class="container-comment">
                     <p>
-                        As I walked to work today, I saw someone wearing an 
-                        outfit on the street that struck me so much that I 
-                        asked them if I could take a picture of them to 
-                        upload on NWT! I love their use of color blocking!
+                        <%=findPost.caption%>
                     </p>
                 </div>
         
                 <hr>
                 <p class="bold">Comments</p>
-                <div class="container-comment">
-                    <hr class="gray">
-                    <p>Wow! Love this look!</p>
-                    <p class="text-timestamp">1 day ago</p>
-                </div>
-                <div class="container-comment">
-                    <hr class="gray">
-                    <p>Wow! Love this look!</p>
-                    <p class="text-timestamp">1 day ago</p>
-                </div>
+                <% findPost.comments.forEach((elt) => { %>
+                    <div class="container-comment">
+                        <hr class="gray">
+                        <p><%=elt.text%></p>
+                        <p class="text-timestamp"><%=elt.date%></p>
+                    </div>
+                <% }); %>
             </div>
         </div>
     </div>
