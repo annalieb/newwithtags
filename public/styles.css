@@ -98,7 +98,7 @@ hr.gray {
 }
 
 /* FORM */
-select, input[type="text"] {
+select, input[type="text"], input[type="password"] {
 	width: 50%;
 	background-color: #F5F5F5;
 	border-radius: 10px; 

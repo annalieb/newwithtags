@@ -15,6 +15,8 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const flash = require('express-flash');
 const multer = require('multer');
+const bcrypt = require('bcrypt');
+const ROUNDS = 15;
 
 // our modules loaded from cwd
 
@@ -340,7 +342,7 @@ app.post('/create', async (req, res) => {
     let postID = await incrCounter(counters, POSTS);
     let posts = db.collection(POSTS);
 
-    let city = req.body.citytoLowerCase();
+    let city = req.body.city.toLowerCase();
     let tags = req.body.tags.split(" ");
     let caption = req.body.description;
     let imageUpload = req.body.imageUpload;
@@ -390,6 +392,71 @@ app.post('/comment/:postID', async (req, res) => {
 
     return res.redirect("/post-single/" + postID);
 });
+
+// render login page 
+app.get("/login", (req, res) => {
+    return res.render("login.ejs", {});
+})
+
+// process user login
+app.post("/login", async (req, res) => {
+    username = req.body.username;
+    password = req.body.password;
+    const db = await Connection.open(mongoUri, DB);
+    let userdict = await db.collection(USERS).findOne({userID: username}, {projection: {password: 1}});
+    let correctPassword = userdict.password;
+    result = await bcrypt.compare(password, correctPassword);
+    console.log('login status:', "\t", result);
+    if (result == true) {
+        console.log("succesful login for", username);
+        req.session.uid = username;
+        req.session.logged_in = true;
+        return res.redirect("/")
+    } else {
+        console.log("failed login for", username);
+        // todo: flash error
+        return res.redirect("/")
+    }
+});
+
+// helper function to create a new user
+async function insertUser(username, firstName, lastName, email, password){
+    const db = await Connection.open(mongoUri, DB);
+
+    let dateObj = new Date(); 
+    let the_day = dateObj.getDate();
+    let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
+    let the_year = dateObj.getFullYear();
+    let date = the_year + "-" + the_month + "-" + the_day
+
+    // insert if username does not exist
+    let users = db.collection(USERS)
+    await users.updateOne({
+        userID: username
+    }, 
+    { $setOnInsert: {
+        userID: username,
+        userFirstName: firstName, 
+        userLastName: lastName, 
+        password: password,
+        email: email, 
+        dateCreated: date
+    }}, 
+    {upsert: true});
+}
+
+// endpoint to create a new user
+app.post("/join", async (req, res) => {
+    let hash = await bcrypt.hash(req.body.password, ROUNDS);
+    insertUser(
+        req.body.username, 
+        req.body.first, 
+        req.body.last, 
+        req.body.email, 
+        hash); 
+    console.log('signup/stored', "\t", hash);
+    return res.render("login.ejs", {});
+  });
 
 // shows how logins might work by setting a value in the session
 // This is a conventional, non-Ajax, login, so it redirects to main page 

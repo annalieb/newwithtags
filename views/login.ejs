@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <!-- load bootstrap stylesheet (css) -->
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <!-- load local stylesheet (css) -->
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- loading jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <%- include("partials/navbar.ejs") %>
+    <h2>Login:</h2>
+    <p>
+      <form action="/login" method="POST">
+          <label> Username
+              <input type="text" name="username" required>
+          </label>
+          <label> Password
+              <input type="password" name="password" required>
+          </label>
+        <button type="submit">login</button>
+      </form>
+    </p>
+    <br>
+
+    <h3>New to nwt? Join here:</h3>
+    <p>
+      <form action="/join" method="POST">
+          <label> Username
+              <input type="text" name="username" required>
+          </label>
+          <label> First name
+            <input type="text" name="first" required>
+          </label>
+          <label> Last name
+            <input type="text" name="last" required>
+          </label>
+          <label> Email
+            <input type="text" name="email" required>
+          </label>
+          <label> Password
+              <input type="password" name="password" required>
+          </label>
+        <button type="submit">join</button>
+      </form>
+    </p>
+
+    <!-- load local js -->
+    <script src="/main.js"></script>
+    <!-- load bootstrap js -->
+    <script src="../bootstrap.min.js"></script>
+</bodys>
+</html>
+
+
