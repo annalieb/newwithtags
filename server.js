@@ -178,18 +178,10 @@ app.get('/tag/:tags', async(req, res) => {
 })
 
 
-// main page. This shows the use of session cookies
-app.get('/', async (req, res) => {
-    let uid = req.session.uid || 'unknown';
-    let visits = req.session.visits || 0;
-    visits++;
-    req.session.visits = visits;
-    console.log('uid', uid);
 
-    const db = await Connection.open(mongoUri, DB);
+async function sortPostsByLikes () {
+    const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const posts = db.collection(POSTS);
-    const likes = db.collection(LIKES);
-    
     let sortedPosts = await posts.aggregate([
         {
             $lookup: {
