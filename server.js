@@ -20,6 +20,7 @@ const multer = require('multer');
 
 const { Connection } = require('./connection');
 const cs304 = require('./cs304');
+const { devNull } = require('os');
 
 // Create and configure the app
 
@@ -86,6 +87,26 @@ app.post('/insert', async (req, res) => {
     return res.redirect('/');
 });
 
+app.get('/searchCity/', async(req, res) => {
+    const cityTag = req.query.city;
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const postsDB = db.collection(POSTS);
+
+    let findCity = await postsDB.find({city: cityTag}).toArray();
+    console.log(findCity);
+
+    if (findCity.length == 0){
+    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+
+    } else {
+        let redirectURL = "/city/" + cityTag;
+        res.redirect(redirectURL);
+    }
+
+});
+
+
 /**
  * handles search city lookup
  */
@@ -98,16 +119,34 @@ app.get('/city/:city', async(req, res) => {
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
+    console.log(findCity);
     if (findCity.length == 0){
         return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
     } else {
-        let imageOut = findCity[0].imageURL;
-        let pID = findCity[0].postId;
+        // let imageOut = findCity[0].imageURL;
+        // let pID = findCity[0].postId;
 
-        let redirectURL = "/city/" + cityTag;
+        return res.render('search.ejs', {posts: findCity});
+    }
+});
+
+app.get('/searchTags/', async(req, res) => {
+    const styleTag = req.query.tags;
+    console.log(`you submitted ${styleTag}`);
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const postsDB = db.collection(POSTS);
+
+    let findTag = await postsDB.find({tags: styleTag}).toArray();
+    console.log(findTag);
+
+    if (findTag.length == 0){
+    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+
+    } else {
+        let noHash = styleTag.split("#")[1];
+        let redirectURL = "/tag/" + noHash;
         res.redirect(redirectURL);
-
-        return res.render('search.ejs', {imageLoad: imageOut, id: pID});
     }
 });
 
@@ -115,13 +154,26 @@ app.get('/city/:city', async(req, res) => {
  * handles search tag lookup
  */
 app.get('/tag/:tags', async(req, res) => {
-    const styleTag = req.params.tags;
-    const db = await Connection.open(mongoUri, "newwithtags");
+    const styleTag = "#" + req.params.tags;
+    console.log(styleTag);
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
     const postsDB = db.collection(POSTS);
 
-    let findTag = await postsDB.find({tags: styleTag}).toArray(); // need to check what styleTag looks like to edit find()
+    let findTag = await postsDB.find({tags: styleTag}).toArray();
+    // let findTag = await postsDB.aggregate([
+    //     {$group: {_id: "$city"}}
+    // ]).toArray();
+    console.log(findTag);
 
-    return res.render();
+    if (findTag.length == 0){
+        return res.render('search.ejs', {searchError: "Sorry, this tag does not exist."});
+    } else {
+        // let imageOut = findCity[0].imageURL;
+        // let pID = findCity[0].postId;
+        
+        return res.render('search.ejs', {posts: findTag});
+    }
 })
 
 
