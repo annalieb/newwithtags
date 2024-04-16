@@ -93,7 +93,19 @@ async function main() {
         date: "2023-12-20 3:55:43"}, 
         {text: "Love your coat!", 
         userID: 124, 
-        date: "2023-12-20 4:30:52"}
+        date: "2023-12-20 4:30:52"},
+        {text: "hey gurl", 
+        userID: 125, 
+        date: "2023-12-20 4:30:52"},
+        {text: "Love your coat!", 
+        userID: 126, 
+        date: "2023-12-20 4:18:56"},
+        {text: "hi!", 
+        userID: 124, 
+        date: "2023-12-20 4:30:52"},
+        {text: "cuteeeeee!", 
+        userID: 123, 
+        date: "2023-12-20 4:24:52"}
     ], 
     tags: [
         "#businesscasual", 
