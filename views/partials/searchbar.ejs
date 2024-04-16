@@ -41,12 +41,12 @@
                                 <a class="city-tag"><%=elt._id%></a>
                             <% }); %>
                         
-                            <form id="searchCity" method="GET" action="/city/">
+                            <form id="searchCity" method="GET" action="/searchCity/">
                                 <p >
                                     <label>Search...
-                                        <input style="width: 100%" type="text" required city="city">
+                                        <input style="width: 100%" type="text" required name="city">
                                     </label>
-                                    <input  type="submit" value="search" id="searchCityButton">
+                                    <input  type="submit" value="Search" id="searchCityButton">
                                 </p>
                             </form>
                         </div>

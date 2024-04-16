@@ -74,36 +74,27 @@ async function incrCounter(counters, key) {
     let result = await counters.findOneAndUpdate({collection: key},
                                                  {$inc: {counter: 1}}, 
                                                  {returnDocument: "after"});
-    console.log(result);
+    //console.log(result);
     return result.counter;
 }
 
-// Insert a new recipe into the database
-app.post('/insert', async (req, res) => {
-    let db = await Connection.open(mongoUri, DB)
-    let counters = db.collection(COUNTERS);
-    let newId = await incrCounter(counters, 'recipe');
-    recipes.insert({rid: newId, name: req.body.name});
-    return res.redirect('/');
-});
-
 app.get('/searchCity/', async(req, res) => {
     const cityTag = req.query.city;
+    console.log(cityTag);
 
-    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
     console.log(findCity);
 
     if (findCity.length == 0){
-    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
-
+        req.flash('error', "Sorry, this city does not exist.");
+        return res.redirect('/');
     } else {
         let redirectURL = "/city/" + cityTag;
         res.redirect(redirectURL);
-    }
-
+    };
 });
 
 
@@ -177,8 +168,10 @@ app.get('/tag/:tags', async(req, res) => {
     }
 })
 
-
-
+/**
+ * 
+ * @returns 
+ */
 async function sortPostsByLikes () {
     const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const posts = db.collection(POSTS);
@@ -206,6 +199,7 @@ async function sortPostsByLikes () {
 
 /**
  * Function to sort all posts by date created, in descending order from most liked to least liked
+ * @returns 
  */
 async function sortPostsByNewest () {
     const db = await Connection.open(mongoUri, DB);
@@ -301,10 +295,10 @@ app.get('/', async (req, res) => {
     let sortedCities = await sortCitiesByNumPosts();
     let sortedTags = await sortTagsByNumPosts(); 
 
-    console.log(sortedPostsByLiked);
+    /* console.log(sortedPostsByLiked);
     console.log(sortedPostsByNewest);
     console.log(sortedCities);
-    console.log(sortedTags);
+    console.log(sortedTags); */
     
 
     if (sortedCities.length > 5) {
@@ -325,12 +319,12 @@ app.get('/post-single', (req, res) => {
 
 app.get('/post-single/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
-    console.log(postID);
+    //console.log(postID);
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
     let findPost = await posts.findOne({postID: postID}); 
-    console.log(findPost);
+    //console.log(findPost);
 
     return res.render('post-single.ejs', {findPost});
 });
@@ -351,19 +345,9 @@ app.post('/create', async (req, res) => {
     let caption = req.body.description;
     let imageUpload = req.body.imageUpload;
 
-    // do date and time
-    let dateObj = new Date(); 
-    let the_day = dateObj.getDate();
-    let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
-    let the_year = dateObj.getFullYear();
+    let date = getDateAndTime();
 
-    let the_hour = dateObj.getHours();
-    let the_minute = dateObj.getMinutes();
-    let the_second = dateObj.getSeconds();
-
-    let date = the_year + "-" + the_month + "-" + the_day + " " + the_hour + ":" + the_minute + ":" + the_second;
-
-    console.log(postID, city, tags, caption, imageUpload, date);
+    //console.log(postID, city, tags, caption, imageUpload, date);
     
     let insertPost = await posts.insertOne({postID: postID, 
                                             imageURL: imageUpload, 
@@ -372,7 +356,7 @@ app.post('/create', async (req, res) => {
                                             city: city, 
                                             date: date,
                                             caption: caption});
-    console.log("inserting post", insertPost);
+    //console.log("inserting post", insertPost);
 
     return res.render('create.ejs');
     
@@ -386,13 +370,13 @@ app.post('/comment/:postID', async (req, res) => {
     let commentText = req.body.comment;
     let user = parseInt(req.session.uid);
     let postID = parseInt(req.params.postID);
-    console.log(postID);
+    //console.log(postID);
 
     let date = getDateAndTime();
 
     let comment = {text: commentText, userID: user, date: date}
     
-    console.log(comment);
+    //console.log(comment);
 
     let db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
@@ -402,7 +386,7 @@ app.post('/comment/:postID', async (req, res) => {
         { $push: { comments: comment } }
     );
 
-    console.log("successfully added comment?:", addComment)
+    //console.log("successfully added comment?:", addComment)
 
     return res.redirect("/post-single/" + postID);
 });
