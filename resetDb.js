@@ -4,6 +4,8 @@ const { Connection } = require('./connection');
 const cs304 = require('./cs304');
 
 const mongoUri = cs304.getMongoUri();
+const bcrypt = require('bcrypt');
+const ROUNDS = 15;
 
 const DBname = "newwithtags";
 const POSTS = "posts";
@@ -69,10 +71,10 @@ async function main() {
     imageURL: "../assets/uploads/img1.jpeg",
     comments: [
         {text: "I love this city!!", 
-        userID: 123, 
+        userID: "mo104", 
         date: "2023-12-20 3:55:43"}, 
         {text: "Love your coat!", 
-        userID: 124, 
+        userID: "mm124", 
         date: "2023-12-20 4:30:52"}
     ], 
     tags: [
@@ -89,22 +91,22 @@ async function main() {
     imageURL: "../assets/uploads/img2.jpeg",
     comments: [
         {text: "beautiful", 
-        userID: 123, 
+        userID: "mo104", 
         date: "2023-12-20 3:55:43"}, 
         {text: "Love your coat!", 
-        userID: 124, 
+        userID: "mm124", 
         date: "2023-12-20 4:30:52"},
         {text: "hey gurl", 
-        userID: 125, 
+        userID: "sl120", 
         date: "2023-12-20 4:30:52"},
         {text: "Love your coat!", 
-        userID: 126, 
+        userID: "al117", 
         date: "2023-12-20 4:18:56"},
         {text: "hi!", 
-        userID: 124, 
+        userID: "mm124", 
         date: "2023-12-20 4:30:52"},
         {text: "cuteeeeee!", 
-        userID: 123, 
+        userID: "mo104", 
         date: "2023-12-20 4:24:52"}
     ], 
     tags: [
@@ -122,7 +124,7 @@ async function main() {
     imageURL: "../assets/uploads/img3.jpeg",
     comments: [
         {text: "this is so cool", 
-        userID: 123, 
+        userID: "mo104", 
         date: "2023-12-20 3:55:43"}, 
     ], 
     tags: [
@@ -136,48 +138,50 @@ async function main() {
   };
 
   // sample users
+
+  // all users will have the same password for now: 
   const user1 = {
-    userID: 123, 
+    userID: "mo104", 
     userFirstName: "Maria", 
     userLastName: "Ordal", 
-    password: "ilovefashion", 
+    password: await bcrypt.hash("123456", ROUNDS), 
     email: "mo104@wellesley.edu",
     dateCreated: "2023-12-20"
   };
   const user2 = {
-    userID: 124, 
+    userID: "mm124", 
     userFirstName: "Maya",
     userLastName: "Mau",
-    password: "hello123",
+    password: await bcrypt.hash("123456", ROUNDS),
     email: "mm124@wellesley.edu",
     dateCreated: "2023-11-20"
   };
 
   const user3 = {
-    userID: 125, 
+    userID: "sl120", 
     userFirstName: "Soo",
     userLastName: "Lee",
-    password: "thisismypassword",
+    password: await bcrypt.hash("123456", ROUNDS),
     email: "sl120@wellesley.edu",
     dateCreated: "2024-04-16"
   };
 
   const user4 = {
-    userID: 126, 
+    userID: "al117", 
     userFirstName: "Anna",
     userLastName: "Lieb",
-    password: "hellothere",
+    password: await bcrypt.hash("123456", ROUNDS),
     email: "al117@wellesley.edu",
     dateCreated: "2024-04-17"
   };
 
   // sample likes
-  const like1 = {postID: 20001, userID: 123};
-  const like2 = {postID: 20002, userID: 124};
-  const like3 = {postID: 20002, userID: 123};
-  const like4 = {postID: 20003, userID: 125};
-  const like5 = {postID: 20003, userID: 126};
-  const like6 = {postID: 20003, userID: 123};
+  const like1 = {postID: 20001, userID: "mo104"};
+  const like2 = {postID: 20002, userID: "mm124"};
+  const like3 = {postID: 20002, userID: "mo104"};
+  const like4 = {postID: 20003, userID: "sl120"};
+  const like5 = {postID: 20003, userID: "al117"};
+  const like6 = {postID: 20003, userID: "mo104"};
 
 
   let lsPosts = [post1, post2, post3];
