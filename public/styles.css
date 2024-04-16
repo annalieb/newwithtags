@@ -185,6 +185,29 @@ form label {
 	margin-bottom: 43px;
 }
 
+.container-comments {
+	max-height: 500px; 
+	margin-bottom: 43px;
+    overflow-y: auto; 
+}
+
+.container-comments::-webkit-scrollbar {
+	width: 5px;
+}
+
+.container-comments::-webkit-scrollbar-track {
+    background-color: white; 
+}
+
+.container-comments::-webkit-scrollbar-thumb {
+    background-color: #F5F5F5; 
+	border-radius: 3px;
+}
+
+.container-comments::-webkit-scrollbar-thumb:hover {
+    background-color: #e0e0e0; 
+}
+
 form {
 	display: block;
 }

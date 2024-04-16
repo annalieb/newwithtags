@@ -43,13 +43,23 @@
         
                 <hr>
                 <p class="bold">Comments</p>
-                <% findPost.comments.forEach((elt) => { %>
-                    <div class="container-comment">
-                        <hr class="gray">
-                        <p><%=elt.text%></p>
-                        <p class="text-timestamp"><%=elt.date%></p>
-                    </div>
-                <% }); %>
+                <div class="container-comments">
+                    <% findPost.comments.forEach((elt) => { %>
+                        <div class="container-comment">
+                            <hr class="gray">
+                            <p><%=elt.text%></p>
+                            <p class="text-timestamp"><%=elt.date%></p>
+                        </div>
+                    <% }); %>
+                </div>
+                <form id="addComment" >
+                    <p>
+                        <label>Say something
+                            <input style="width: 100%" type="text">
+                        </label>
+                        <input  type="submit" value="Comment" id="addComment">
+                    </p>
+                </form>
             </div>
         </div>
     </div>
