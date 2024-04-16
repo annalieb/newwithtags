@@ -20,7 +20,7 @@ const multer = require('multer');
 
 const { Connection } = require('./connection');
 const cs304 = require('./cs304');
-const { add } = require('lodash');
+const { devNull } = require('os');
 
 // Create and configure the app
 
@@ -78,6 +78,35 @@ async function incrCounter(counters, key) {
     return result.counter;
 }
 
+// Insert a new recipe into the database
+app.post('/insert', async (req, res) => {
+    let db = await Connection.open(mongoUri, DB)
+    let counters = db.collection(COUNTERS);
+    let newId = await incrCounter(counters, 'recipe');
+    recipes.insert({rid: newId, name: req.body.name});
+    return res.redirect('/');
+});
+
+app.get('/searchCity/', async(req, res) => {
+    const cityTag = req.query.city;
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const postsDB = db.collection(POSTS);
+
+    let findCity = await postsDB.find({city: cityTag}).toArray();
+    console.log(findCity);
+
+    if (findCity.length == 0){
+    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+
+    } else {
+        let redirectURL = "/city/" + cityTag;
+        res.redirect(redirectURL);
+    }
+
+});
+
+
 /**
  * handles search city lookup
  */
@@ -90,16 +119,34 @@ app.get('/city/:city', async(req, res) => { // CHANGE BACK
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
+    console.log(findCity);
     if (findCity.length == 0){
         return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
     } else {
-        let imageOut = findCity[0].imageURL;
-        let pID = findCity[0].postId;
+        // let imageOut = findCity[0].imageURL;
+        // let pID = findCity[0].postId;
 
-        let redirectURL = "/city/" + cityTag;
+        return res.render('search.ejs', {posts: findCity});
+    }
+});
+
+app.get('/searchTags/', async(req, res) => {
+    const styleTag = req.query.tags;
+    console.log(`you submitted ${styleTag}`);
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const postsDB = db.collection(POSTS);
+
+    let findTag = await postsDB.find({tags: styleTag}).toArray();
+    console.log(findTag);
+
+    if (findTag.length == 0){
+    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+
+    } else {
+        let noHash = styleTag.split("#")[1];
+        let redirectURL = "/tag/" + noHash;
         res.redirect(redirectURL);
-
-        return res.render('search.ejs', {imageLoad: imageOut, id: pID});
     }
 });
 
@@ -108,19 +155,37 @@ app.get('/city/:city', async(req, res) => { // CHANGE BACK
  * handles search tag lookup
  */
 app.get('/tag/:tags', async(req, res) => {
-    const styleTag = req.params.tags;
-    const db = await Connection.open(mongoUri, "newwithtags");
+    const styleTag = "#" + req.params.tags;
+    console.log(styleTag);
+
+    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
     const postsDB = db.collection(POSTS);
 
-    let findTag = await postsDB.find({tags: styleTag}).toArray(); // need to check what styleTag looks like to edit find()
+    let findTag = await postsDB.find({tags: styleTag}).toArray();
+    // let findTag = await postsDB.aggregate([
+    //     {$group: {_id: "$city"}}
+    // ]).toArray();
+    console.log(findTag);
 
-    return res.render();
+    if (findTag.length == 0){
+        return res.render('search.ejs', {searchError: "Sorry, this tag does not exist."});
+    } else {
+        // let imageOut = findCity[0].imageURL;
+        // let pID = findCity[0].postId;
+        
+        return res.render('search.ejs', {posts: findTag});
+    }
 })
 
-/**
- * Function to sort all posts by likes, in descending order from most liked to least liked
- */
-async function sortPostsByLikes () {
+
+// main page. This shows the use of session cookies
+app.get('/', async (req, res) => {
+    let uid = req.session.uid || 'unknown';
+    let visits = req.session.visits || 0;
+    visits++;
+    req.session.visits = visits;
+    console.log('uid', uid);
+
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
     const likes = db.collection(LIKES);
