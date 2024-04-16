@@ -52,10 +52,10 @@
                         </div>
                     <% }); %>
                 </div>
-                <form id="addComment" >
+                <form id="addComment" method="POST" action="/comment/<%= findPost.postID %>">
                     <p>
                         <label>Say something
-                            <input style="width: 100%" type="text">
+                            <input style="width: 100%" type="text" name="comment">
                         </label>
                         <input  type="submit" value="Comment" id="addComment">
                     </p>

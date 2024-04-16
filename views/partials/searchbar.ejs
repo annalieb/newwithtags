@@ -1,0 +1,70 @@
+<div class="container-fluid">
+
+    <div class="row">
+        
+            <div class="session col-12" style="display: flex; flex-wrap: wrap">
+               
+                    <div class="question" style="display: flex; width: 100%">
+                        <div class="col-lg-2 col-md-2 col-sm-4" style="padding-left: 0px">
+                            <p class="bold">Sort</p> 
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-6" style="padding-left: 0px">
+                            <p class="bold">Filter</p> 
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-2" style="padding-right: 0px; display: flex; justify-content: flex-end;">
+                            <div class="arrow-container">
+                                <img src="../assets/arrow-down.svg" style="margin-top: 4px;height:9px; width:14px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content" style="display: flex; width: 100%; margin-bottom: 15px">
+                        <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px">
+                            <p>Sort by</p> 
+                            <form>
+                                <label>
+                                    <input type="radio" name="Newest" value="Newest">
+                                    Newest
+                                </label>
+                            
+                                <label>
+                                    <input type="radio" name="Liked" value="Liked">
+                                    Most liked
+                                </label>
+                            </form>
+                            
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12" style="padding-left: 0px">
+                            <p>Select city</p> 
+
+                            <% cities.forEach((elt) => { %>
+                                <a class="city-tag"><%=elt._id%></a>
+                            <% }); %>
+                        
+                            <form id="searchCity" method="GET" action="/city/">
+                                <p >
+                                    <label>Search...
+                                        <input style="width: 100%" type="text" required city="city">
+                                    </label>
+                                    <input  type="submit" value="search" id="searchCityButton">
+                                </p>
+                            </form>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12" style="padding-left: 0px">
+                            <p>Select tags</p> 
+
+                            <% tags.forEach((elt) => { %>
+                                <a class="component-tag"><%=elt._id.slice(1)%></a>
+                            <% }); %>
+
+                        </div>
+        
+                    </div>
+             
+        
+            </div>
+  
+
+
+    </div>

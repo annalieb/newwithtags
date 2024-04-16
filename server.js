@@ -20,6 +20,7 @@ const multer = require('multer');
 
 const { Connection } = require('./connection');
 const cs304 = require('./cs304');
+const { add } = require('lodash');
 
 // Create and configure the app
 
@@ -77,24 +78,15 @@ async function incrCounter(counters, key) {
     return result.counter;
 }
 
-// Insert a new recipe into the database
-app.post('/insert', async (req, res) => {
-    let db = await Connection.open(mongoUri, DB)
-    let counters = db.collection(COUNTERS);
-    let newId = await incrCounter(counters, 'recipe');
-    recipes.insert({rid: newId, name: req.body.name});
-    return res.redirect('/');
-});
-
 /**
  * handles search city lookup
  */
-app.get('/city/:city', async(req, res) => {
+app.get('/city/:city', async(req, res) => { // CHANGE BACK
     const cityTag = req.params.city;
     console.log('hello');
     console.log(`PRINT: ${req}`)
     console.log(`you submitted ${cityTag}`);
-    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const postsDB = db.collection(POSTS);
 
     let findCity = await postsDB.find({city: cityTag}).toArray();
@@ -111,6 +103,7 @@ app.get('/city/:city', async(req, res) => {
     }
 });
 
+
 /**
  * handles search tag lookup
  */
@@ -124,21 +117,14 @@ app.get('/tag/:tags', async(req, res) => {
     return res.render();
 })
 
-
-// main page. This shows the use of session cookies
-app.get('/', async (req, res) => {
-    let uid = req.session.uid || 'unknown';
-    let visits = req.session.visits || 0;
-    visits++;
-    req.session.visits = visits;
-    console.log('uid', uid);
-
+/**
+ * Function to sort all posts by likes, in descending order from most liked to least liked
+ */
+async function sortPostsByLikes () {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
     const likes = db.collection(LIKES);
-
-    // aggregation pipeline to get an array of all the posts 
-    // from the posts collection, sorted in descending order of likes
+    
     let sortedPosts = await posts.aggregate([
         {
             $lookup: {
@@ -158,9 +144,122 @@ app.get('/', async (req, res) => {
         }
     ]).toArray();
 
-    console.log(sortedPosts);
+    return sortedPosts;
+};
 
-    return res.render('index.ejs', {uid, visits, posts: sortedPosts});
+/**
+ * Function to sort all posts by date created, in descending order from most liked to least liked
+ */
+async function sortPostsByNewest () {
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+    
+    let sortedPosts = await posts.aggregate([
+        {
+            $sort: {date: 1} // sort posts by num of likes in decr. order
+        }
+    ]).toArray();
+
+    return sortedPosts;
+};
+
+/**
+ * Function to sort all the cities used in the database by most used to least used. 
+ * @returns an array of sorted cities and the number of times they're used.
+ */
+async function sortCitiesByNumPosts() {
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+    const likes = db.collection(LIKES);
+
+    let sortedCities = await posts.aggregate([
+        {
+            $group: {_id: "$city", count: {$sum: 1}}
+        }, 
+        {
+            $sort: {count: -1}
+        },
+        {
+            $project: {city: 1, count: 1}
+        }
+    ]).toArray();
+    
+    return sortedCities;
+};
+
+/**
+ * Function to sort all the tags used in the database by most used to least used. 
+ * @returns an array of sorted tags and the number of times they're used.
+ */
+async function sortTagsByNumPosts() {
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    let sortedTags = await posts.aggregate([
+        {
+            $unwind: "$tags"
+        },
+        {
+            $group: {_id: "$tags", count: {$sum: 1}}
+        }, 
+        {
+            $sort: {count: -1}
+        },
+        {
+            $project: {tags: 1, count: 1}
+        }
+    ]).toArray();
+
+    return sortedTags;
+};
+
+/**
+ * Gets the current date and time as a string in the format "YY-MM-DD HH-MM-SS"
+ * @returns the current date and time as a formatted string
+ */
+function getDateAndTime() {
+    let dateObj = new Date(); 
+    let the_day = dateObj.getDate();
+    let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
+    let the_year = dateObj.getFullYear();
+
+    let the_hour = dateObj.getHours();
+    let the_minute = dateObj.getMinutes();
+    let the_second = dateObj.getSeconds();
+
+    let date = the_year + "-" + the_month + "-" + the_day + " " + the_hour + ":" + the_minute + ":" + the_second;
+    return date;
+}
+
+// main page. This shows the use of session cookies
+app.get('/', async (req, res) => {
+    let uid = req.session.uid || 'unknown';
+    let visits = req.session.visits || 0;
+    visits++;
+    req.session.visits = visits;
+    console.log('uid', uid);
+
+    let sortedPostsByLiked = await sortPostsByLikes();
+    let sortedPostsByNewest = await sortPostsByNewest();
+    let sortedCities = await sortCitiesByNumPosts();
+    let sortedTags = await sortTagsByNumPosts(); 
+
+    console.log(sortedPostsByLiked);
+    console.log(sortedPostsByNewest);
+    console.log(sortedCities);
+    console.log(sortedTags);
+    
+
+    if (sortedCities.length > 5) {
+        sortedCities = sortedCities.slice(0,5);
+    };
+    if (sortedTags.length > 5) {
+        sortedTags = sortedTags.slice(0,5);
+    };
+
+    return res.render('index.ejs', {uid, visits, posts: sortedPostsByLiked, 
+                                    cities: sortedCities, 
+                                    tags: sortedTags});
 });
 
 app.get('/post-single', (req, res) => {
@@ -190,7 +289,7 @@ app.post('/create', async (req, res) => {
     let postID = await incrCounter(counters, POSTS);
     let posts = db.collection(POSTS);
 
-    let city = req.body.city;
+    let city = req.body.citytoLowerCase();
     let tags = req.body.tags.split(" ");
     let caption = req.body.description;
     let imageUpload = req.body.imageUpload;
@@ -206,9 +305,6 @@ app.post('/create', async (req, res) => {
     let the_second = dateObj.getSeconds();
 
     let date = the_year + "-" + the_month + "-" + the_day + " " + the_hour + ":" + the_minute + ":" + the_second;
-
-    console.log(date);
-
 
     console.log(postID, city, tags, caption, imageUpload, date);
     
@@ -227,6 +323,31 @@ app.post('/create', async (req, res) => {
 
 app.get('/profile', (req, res) => {
     return res.render('profile.ejs');
+});
+
+app.post('/comment/:postID', async (req, res) => {
+    let commentText = req.body.comment;
+    let user = parseInt(req.session.uid);
+    let postID = parseInt(req.params.postID);
+    console.log(postID);
+
+    let date = getDateAndTime();
+
+    let comment = {text: commentText, userID: user, date: date}
+    
+    console.log(comment);
+
+    let db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    let addComment = await posts.updateOne(
+        { postID: postID },
+        { $push: { comments: comment } }
+    );
+
+    console.log("successfully added comment?:", addComment)
+
+    return res.redirect("/post-single/" + postID);
 });
 
 // shows how logins might work by setting a value in the session
