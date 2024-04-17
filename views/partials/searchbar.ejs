@@ -56,6 +56,15 @@
                         <a class="component-tag"><%=elt._id%></a>
                     <% }); %>
 
+                    <form id="searchTag" method="GET" action="/searchTags/">
+                        <p >
+                            <label>Search...
+                                <input style="width: 100%" type="text" required name="tags">
+                            </label>
+                            <input  type="submit" value="Search" id="searchTagButton">
+                        </p>
+                    </form>
+
                 </div>
 
             </div>
