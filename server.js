@@ -302,7 +302,10 @@ app.get('/', async (req, res) => {
                                     tags: sortedTags});
 });
 
-// 
+/**
+ * Action Get from Search Bar Form for Filtering Cities
+ * Redirects URL to filteres city image gallery, flashes error message if none found.
+ */
 app.get('/searchCity/', async(req, res) => {
     const cityTag = req.query.city.toLowerCase();
 
@@ -320,7 +323,10 @@ app.get('/searchCity/', async(req, res) => {
     };
 });
 
-// handles search city
+/**
+ * Renders Filtered Image City Gallery
+ * Recalculates the top 5 cities when rendered
+ */
 app.get('/city/:city', async(req, res) => { 
     let city = req.params.city;
     const db = await Connection.open(mongoUri, DB); 
@@ -342,7 +348,10 @@ app.get('/city/:city', async(req, res) => {
     }
 });
 
-//
+/**
+ * Action Get from Search Bar Form for Filtering Style Tags
+ * Redirects URL to filteres image gallery with certain tags, flashes error message if none found.
+ */
 app.get('/searchTags/', async(req, res) => {
     const styleTag = req.query.tags.toLowerCase();
     console.log(`you submitted ${styleTag}`);
@@ -362,7 +371,10 @@ app.get('/searchTags/', async(req, res) => {
     }
 });
 
-//handles search tag lookup 
+/**
+ * Renders Filtered Tagged Image Gallery
+ * Recalculates the top 5 tags when rendered
+ */
 app.get('/tag/:tag', async(req, res) => {
     const styleTag = req.params.tag;
 
