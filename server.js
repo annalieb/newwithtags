@@ -413,7 +413,10 @@ app.get('/post-single/:id', async (req, res) => {
     return res.render('post-single.ejs', {findPost, uid: req.session.uid, logged_in: req.session.logged_in});
 });
 
-//
+/**
+ * Renders the create page to make a new post. 
+ * If the user is not logged in, redirects to the home and flashes an error message. 
+ */
 app.get('/create', (req, res) => {
     if (req.session.logged_in == true) {
         return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
@@ -424,7 +427,10 @@ app.get('/create', (req, res) => {
     
 });
 
-//
+/**
+ * Post request to update the database with a new post created with the create page. 
+ * Handles file upload and flashes an error if the upload fails. 
+ */
 app.post('/create', upload.single('imageUpload'), async (req, res) => {
     const uid = req.session.uid;
 
@@ -465,7 +471,10 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     };
 });
 
-//
+/**
+ * Renders the profile page, which shows the logged in user's information. 
+ * If the user is not logged in, redirects to the home and flashes an error message. 
+ */
 app.get('/profile', async (req, res) => {
     if (req.session.logged_in) {
         var db = await Connection.open(mongoUri, DB);
@@ -478,7 +487,11 @@ app.get('/profile', async (req, res) => {
     };
 });
 
-/* */
+/**
+ * Post request to handle commenting. 
+ * Adds the comment to the database of comments if the user is logged in. 
+ * If the user is not logged in, redirects to the home and flashes an error message. 
+ */
 app.post('/comment/:postID', async (req, res) => {
     if (req.session.logged_in) {
         let commentText = req.body.comment;
@@ -510,7 +523,10 @@ app.get("/login", (req, res) => {
     return res.render("login.ejs", {uid: req.session.uid, logged_in: req.session.logged_in});
 })
 
-// process user login
+/**
+ * Processes a user login. 
+ * If the user enters an incorrect username or password, flashes an error message. 
+ */
 app.post("/login", async (req, res) => {
     username = req.body.username;
     password = req.body.password;
@@ -542,7 +558,10 @@ app.post("/login", async (req, res) => {
     
 });
 
-// endpoint to create a new user
+/**
+ * Creates a new user in the database. 
+ * If the username already exists, it does nothing. 
+ */
 app.post("/join", async (req, res) => {
     let hash = await bcrypt.hash(req.body.password, ROUNDS);
     insertUser (
