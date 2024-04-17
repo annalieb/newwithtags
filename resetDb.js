@@ -81,7 +81,7 @@ async function main() {
         "cottagecore", 
         "fairycore"
     ],
-    city: "BOSTON",
+    city: "boston",
     date: "2023-12-10 3:26:23",
     caption: "new city!! (this is the least liked post)"
   };
@@ -114,7 +114,7 @@ async function main() {
         "city",
         "corporate"
     ],
-    city: "BOSTON",
+    city: "boston",
     date: "2023-12-20 3:26:23",
     caption: "check out my new coat! (this is the middle liked post)"
   };
@@ -132,7 +132,7 @@ async function main() {
         "pastel",
         "balletflats"
     ],
-    city: "SEATTLE",
+    city: "seattle",
     date: "2023-12-30 3:26:23",
     caption: "this city is so incredibly rainy but beautiful. (this is the most liked post)"
   };
