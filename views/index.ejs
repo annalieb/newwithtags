@@ -27,30 +27,20 @@
             <% }); %>
         </div>
         
+        <div class="row">
+            <div class="col-12">
+                
+                <div id="logged-in">
+                <p>You are logged in as <span id="login-uid"><%= uid %></span>
+                    <form method="post" action="/logout/"><input type="submit" value="logout"></form></p>
+                </div>
+                <div id="not-logged-in">
+                <p>You are not logged in.</p>
+                
+                </div>
+            </div>
+        </div>
     </div>
-
-
-    <div id="logged-in">
-    <p>You are logged in as <span id="login-uid"><%= uid %></span>
-        <form method="post" action="/logout/"><input type="submit" value="logout"></form></p>
-    </div>
-    <div id="not-logged-in">
-    <p>You are not logged in.</p>
-    <form id="login_form" method="post" action="/set-uid/">
-        <p><label>uid <input name="uid"></label></p>
-        <input type="button" id="login-ajax" value="ajax">
-    </form>
-    </div>
-
-    <div class="col-6" style="background-color: red">
-        <p>You have visited <%= visits %> times.</p>
-    </div>
-
-    <h2>Links</h2>
-
-    <p><a href="/form/">a pizza form</a></p>
-    
-    <p><a href="/staffList/">staff listing</a></p>
 
     <!-- load local js -->
     <script src="/main.js"></script>

@@ -237,7 +237,7 @@ async function sortPostsByLikes () {
 
 /**
  * Function to sort all posts by date created, in descending order from most liked to least liked
- * @returns 
+ * @returns an array 
  */
 async function sortPostsByNewest () {
     const db = await Connection.open(mongoUri, DB);
@@ -333,12 +333,6 @@ app.get('/', async (req, res) => {
     let sortedCities = await sortCitiesByNumPosts();
     let sortedTags = await sortTagsByNumPosts(); 
 
-    /* console.log(sortedPostsByLiked);
-    console.log(sortedPostsByNewest);
-    console.log(sortedCities);
-    console.log(sortedTags); */
-    
-
     if (sortedCities.length > 5) {
         sortedCities = sortedCities.slice(0,5);
     };
@@ -375,7 +369,7 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     const uid = req.session.uid;
     console.log("entered post for create")
 
-    if (!uid) {
+    if (!logged_in) {
         req.flash('info', "You are not logged in");
         return res.redirect('/login');
     };
@@ -410,7 +404,6 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 
     console.log("inserting post", insertPost);
 
-    //return res.sendFile(path.join(__dirname, pathname));
     return res.render('create.ejs');
     
 });
@@ -423,14 +416,11 @@ app.post('/comment/:postID', async (req, res) => {
     let commentText = req.body.comment;
     let user = parseInt(req.session.uid);
     let postID = parseInt(req.params.postID);
-    //console.log(postID);
 
     let date = getDateAndTime();
 
     let comment = {text: commentText, userID: user, date: date}
     
-    //console.log(comment);
-
     let db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
@@ -438,8 +428,6 @@ app.post('/comment/:postID', async (req, res) => {
         { postID: postID },
         { $push: { comments: comment } }
     );
-
-    //console.log("successfully added comment?:", addComment)
 
     return res.redirect("/post-single/" + postID);
 });
@@ -522,52 +510,6 @@ function isAuthorizedToView(viewerId, ownerId) {
     return viewerId === ownerId;
 };
 
-// the photos of the logged-in user
-
-/* app.get('/myphotos', async (req, res) => {
-    const db = await Connection.open(mongoUri, DB);
-    const fileCol = db.collection(FILES);
-    const uid = req.session.uid;
-    console.log(uid);
-    if (!uid) {
-        console.log("not logged in");
-        req.flash('info', "You are not logged in");
-        return res.redirect('/login');
-    }
-    const uploads = await db.collection(FILES).find({owner: username}).toArray();
-    const users = await db.collection(USERS).find({}).toArray();
-    //const userId = req.session.userId;
-    //return res.render('auth.ejs', {username, userId, users, uploads});
-}); */
-
-// The :username in the URL (endpoint) is the username of the person
-// whose photos we want to view.
-
-/* app.get('/photos/:username', async (req, res) => {
-    const photoOwner = req.params.username; // username of owner of photos
-    const username = req.session.username;   // 
-    if (!username) {
-        console.log("not logged in");
-        req.flash('info', "You are not logged in");
-        return res.redirect('/login');
-    }
-    if (!isAuthorizedToView(username, photoOwner)) {
-        console.log("not authorized");
-        req.flash('info', "You are not allowed to view this person's photos")
-        // send them to the main page
-        return res.redirect('/')
-    }
-    // database lookup
-    const db = await Connection.open(mongoUri, DB);
-    const fileCol = db.collection(FILES);
-    const uploads = await db.collection(FILES).find({owner: photoOwner}).toArray();
-    const users = await db.collection(USERS).find({}).toArray();
-    const userId = req.session.userId;
-    return res.render('auth.ejs', {username, userId, users, uploads});
-}); */
-
-
-
 
 // shows how logins might work by setting a value in the session
 // This is a conventional, non-Ajax, login, so it redirects to main page 
@@ -583,7 +525,7 @@ app.post('/set-uid-ajax/', (req, res) => {
     console.log(Object.keys(req.body));
     console.log(req.body);
     let uid = req.body.uid;
-    if(!uid) {
+    if(!logged_in) {
         res.send({error: 'no uid'}, 400);
         return;
     }
@@ -599,19 +541,6 @@ app.post('/logout/', (req, res) => {
     req.session.uid = false;
     req.session.logged_in = false;
     res.redirect('/');
-});
-
-// two kinds of forms (GET and POST), both of which are pre-filled with data
-// from previous request, including a SELECT menu. Everything but radio buttons
-
-app.get('/form/', (req, res) => {
-    console.log('get form');
-    return res.render('form.ejs', {action: '/form/', data: req.query });
-});
-
-app.post('/form/', (req, res) => {
-    console.log('post form');
-    return res.render('form.ejs', {action: '/form/', data: req.body });
 });
 
 
