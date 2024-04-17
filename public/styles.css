@@ -39,7 +39,13 @@ h1, .bold {
 }
 
 h2 {
+	font-weight: 600;
 	font-size: 24px;
+}
+
+h3 {
+	font-weight: 600;
+	font-size: 14px;
 }
 
 .text-timestamp {
@@ -107,11 +113,15 @@ select, input[type="text"], input[type="password"] {
 	font-size: 12px;
 }
 
+.full-width {
+	width: 85% !important;
+}
+
 input[type="file"] {
 	font-size: 12px;
 }
 
-input[type="submit"] {
+input[type="submit"], button {
 	color: white;
 	background-color: black; 
 	font-weight: 600;
@@ -179,6 +189,8 @@ form label {
 
 .gallery-image img {
 	width: 100%;
+	aspect-ratio: 1/1;
+	object-fit: cover
 }
 
 .container-comment {
@@ -250,5 +262,7 @@ label, select, input {
 
 /* SMALL SCREEN SIZE */
 @media (max-width: 767px) {
-	
+	.full-width {
+		width: 100% !important;
+	}
 }

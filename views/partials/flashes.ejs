@@ -1,17 +1,27 @@
-<div>
-    <% if (messages.error) { %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <% if (messages.error) { %>
         <div id="errors">
           <% messages.error.forEach( msg => {%>
-          <p><%= msg %></p>
+          <h2 style="padding-bottom: 20px"><%= msg %></h2>
           <% }) %>
+          <!-- <p style="padding-bottom: 20px">
+            Go back into filters and try searching again!
+          </p> -->
         </div>
-        <% } %>
-      
-    <% if (messages.info) { %>
+      <% } %>
+        
+      <% if (messages.info) { %>
         <div id="info">
           <% messages.info.forEach( msg => {%>
-          <p><%= msg %></p>
+          <h2 style="padding-bottom: 20px"><%= msg %></h2>
+          <!-- <p style="padding-bottom: 20px">
+            Go back into filters and try searching again!
+          </p> -->
           <% }) %>
         </div>
-        <% } %>
+      <% } %>
     </div>
+  </div>
+</div>
