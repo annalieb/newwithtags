@@ -150,7 +150,7 @@ app.get('/city/:city', async(req, res) => { // CHANGE BACK
     let findCity = await postsDB.find({city: cityTag}).toArray();
     console.log(findCity);
     if (findCity.length == 0){
-        flash("error", "Sorry, this city does not exist.")
+        req.flash("error", "Sorry, this city does not exist.")
         return res.redirect('index.ejs');
     } else {
         // let imageOut = findCity[0].imageURL;
@@ -178,7 +178,7 @@ app.get('/searchTags/', async(req, res) => {
     console.log(findTag);
 
     if (findTag.length == 0){
-        flash("error", "Sorry, this city does not exist.")
+        req.flash("error", "Sorry, this city does not exist.")
         return res.redirect('index.ejs');
     } else {
         let redirectURL = "/tag/" + styleTag;
@@ -201,7 +201,7 @@ app.get('/tag/:tag', async(req, res) => {
     console.log(findTag);
 
     if (findTag.length == 0){
-        flash("error", "Sorry, this tag does not exist.")
+        req.flash("error", "Sorry, this tag does not exist.")
         return res.redirect('index.ejs');
     } else {
         let sortedPostsByLiked = await sortPostsByLikes();
@@ -356,7 +356,7 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/post-single', (req, res) => {
-    return res.render('post-single.ejs', {uid: uid, logged_in: logged_in});
+    return res.render('post-single.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
 });
 
 app.get('/post-single/:id', async (req, res) => {
@@ -368,7 +368,7 @@ app.get('/post-single/:id', async (req, res) => {
     let findPost = await posts.findOne({postID: postID}); 
     //console.log(findPost);
 
-    return res.render('post-single.ejs', {findPost, uid: uid, logged_in: logged_in});
+    return res.render('post-single.ejs', {findPost, uid: req.session.uid, logged_in: req.session.logged_in});
 });
 
 app.get('/create', (req, res) => {
@@ -432,23 +432,29 @@ app.get('/profile', async (req, res) => {
 });
 
 app.post('/comment/:postID', async (req, res) => {
-    let commentText = req.body.comment;
-    let user = parseInt(req.session.uid);
-    let postID = parseInt(req.params.postID);
+    if (req.session.logged_in) {
+        let commentText = req.body.comment;
+        let user = parseInt(req.session.uid);
+        let postID = parseInt(req.params.postID);
 
-    let date = getDateAndTime();
+        let date = getDateAndTime();
 
-    let comment = {text: commentText, userID: user, date: date}
-    
-    let db = await Connection.open(mongoUri, DB);
-    const posts = db.collection(POSTS);
+        let comment = {text: commentText, userID: user, date: date}
+        
+        let db = await Connection.open(mongoUri, DB);
+        const posts = db.collection(POSTS);
 
-    let addComment = await posts.updateOne(
-        { postID: postID },
-        { $push: { comments: comment } }
-    );
+        let addComment = await posts.updateOne(
+            { postID: postID },
+            { $push: { comments: comment } }
+        );
 
-    return res.redirect("/post-single/" + postID);
+        return res.redirect("/post-single/" + postID);
+    } else {
+        let postID = parseInt(req.params.postID);
+        req.flash("error", "Error: Please log in to leave a comment."); 
+        return res.redirect("/post-single/" + postID);
+    }
 });
 
 // render login page 
@@ -469,14 +475,14 @@ app.post("/login", async (req, res) => {
         console.log("succesful login for", username);
         req.session.uid = username;
         req.session.logged_in = true;
-        flash("info", `Logged in as {username}.`)
+        req.flash("info", `Logged in as {username}.`)
         return res.redirect("/")
     } else {
         console.log("failed login for", username);
         req.session.uid = false;
         req.session.logged_in = false;
-        flash("error", "Login failed. Check your username and password and try again.")
-        return res.redirect("/")
+        req.flash("error", "Login failed. Check your username and password and try again.")
+        return res.redirect("/login")
     }
 });
 
