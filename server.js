@@ -460,8 +460,8 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
                                             date: date,
                                             caption: caption});
 
-    if (insertPost.acknowledged) { // if succesfully inserted, redirect to the new post's post-single page
-        console.log('succesfully inserted post');
+    if (insertPost.acknowledged) { // if successfully inserted, redirect to the new post's post-single page
+        console.log('successfully inserted post');
         req.flash("info", "Successfully posted.");
         return res.redirect('/post-single/' + postID);
     } else {
@@ -543,7 +543,7 @@ app.post("/login", async (req, res) => {
         result = await bcrypt.compare(password, correctPassword);
         console.log('login status:', "\t", result);
         if (result == true) {
-            console.log("succesful login for", username);
+            console.log("successful login for", username);
             req.session.uid = username;
             req.session.logged_in = true;
             req.flash("info", `Logged in as ` + username + '.');

@@ -14,8 +14,8 @@ const LIKES = "likes";
 
 /**
  * Lists all documents from the specified collection in the specified database.
- * @param {*} db 
- * @param {*} collection 
+ * @param {database} db 
+ * @param {collection}} collection 
  * @returns 
  */
 async function findDocuments(db, collection) {
