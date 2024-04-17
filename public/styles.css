@@ -190,7 +190,8 @@ form label {
 .gallery-image img {
 	width: 100%;
 	aspect-ratio: 1/1;
-	object-fit: cover
+	object-fit: cover;
+	margin-bottom: 30px;
 }
 
 .container-comment {

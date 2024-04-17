@@ -26,34 +26,10 @@
                 </div>
             <% }); %>
         </div>
-        
-        <div class="row">
-            <div class="col-12">
-                
-                <div id="logged-in">
-                <p>You are logged in as <span id="login-uid"><%= uid %></span>
-                    <form method="post" action="/logout/"><input type="submit" value="logout"></form></p>
-                </div>
-                <div id="not-logged-in">
-                <p>You are not logged in.</p>
-                
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- load local js -->
     <script src="/main.js"></script>
-    <script>
-        var uid = "<%= uid %>";
-        if(uid !== 'unknown') {
-            $("#logged-in").show();
-            $("#not-logged-in").hide();
-        } else {
-            $("#logged-in").hide();
-            $("#not-logged-in").show();
-        }
-    </script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
 </body>

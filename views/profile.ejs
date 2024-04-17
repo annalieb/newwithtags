@@ -17,7 +17,7 @@
         
             <div class="col-lg-4 col-md-4 col-sm-12">
              
-                <h1>Posted by you</h1>
+                <h1>Posted by <%=user.userFirstName%></h1>
                 <div class="container-comment">
                     <p class="selector">Posted</p>
                     <p class="selector">Liked</p>
@@ -25,11 +25,13 @@
                 </div>
         
                 <hr>
-                <h2 class="bold">Profile</h2>
+                <h2 class="bold">Profile details</h2>
+                <p>Visible only to you</p>
                 <p style="margin-bottom:5px">Email</p>
-                <p class="text-timestamp">example@email.com</p>
+                <p class="text-timestamp"><%=user.email%></p>
                 <p style="margin-bottom:5px">Since</p>
-                <p class="text-timestamp">November 22, 2023</p>
+                <p class="text-timestamp"><%=user.dateCreated%></p>
+                <form method="post" action="/logout"><input type="submit" value="logout"></form></p>
             </div>
 
             <div class="col-lg-8 col-md-8 col-sm-12 container-image">

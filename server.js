@@ -150,12 +150,20 @@ app.get('/city/:city', async(req, res) => { // CHANGE BACK
     let findCity = await postsDB.find({city: cityTag}).toArray();
     console.log(findCity);
     if (findCity.length == 0){
-        return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
+        flash("error", "Sorry, this city does not exist.")
+        return res.redirect('index.ejs');
     } else {
         // let imageOut = findCity[0].imageURL;
         // let pID = findCity[0].postId;
 
-        return res.render('search.ejs', {posts: findCity});
+        let sortedPostsByLiked = await sortPostsByLikes();
+        let sortedPostsByNewest = await sortPostsByNewest();
+        let sortedCities = await sortCitiesByNumPosts();
+        let sortedTags = await sortTagsByNumPosts(); 
+        
+        return res.render('index.ejs', {posts: findCity, 
+            cities: sortedCities, tags: sortedTags, 
+            uid: req.session.uid, logged_in: req.session.logged_in});
     }
 });
 
@@ -170,11 +178,10 @@ app.get('/searchTags/', async(req, res) => {
     console.log(findTag);
 
     if (findTag.length == 0){
-    return res.render('search.ejs', {searchError: "Sorry, this city does not exist."});
-
+        flash("error", "Sorry, this city does not exist.")
+        return res.redirect('index.ejs');
     } else {
-        let noHash = styleTag.split("#")[1];
-        let redirectURL = "/tag/" + noHash;
+        let redirectURL = "/tag/" + styleTag;
         res.redirect(redirectURL);
     }
 });
@@ -183,26 +190,28 @@ app.get('/searchTags/', async(req, res) => {
 /**
  * handles search tag lookup
  */
-app.get('/tag/:tags', async(req, res) => {
-    const styleTag = "#" + req.params.tags;
+app.get('/tag/:tag', async(req, res) => {
+    const styleTag = req.params.tag;
     console.log(styleTag);
 
-    const db = await Connection.open(mongoUri, "newwithtags"); // connects to newwithtags database
+    const db = await Connection.open(mongoUri, DB); 
     const postsDB = db.collection(POSTS);
 
     let findTag = await postsDB.find({tags: styleTag}).toArray();
-    // let findTag = await postsDB.aggregate([
-    //     {$group: {_id: "$city"}}
-    // ]).toArray();
     console.log(findTag);
 
     if (findTag.length == 0){
-        return res.render('search.ejs', {searchError: "Sorry, this tag does not exist."});
+        flash("error", "Sorry, this tag does not exist.")
+        return res.redirect('index.ejs');
     } else {
-        // let imageOut = findCity[0].imageURL;
-        // let pID = findCity[0].postId;
+        let sortedPostsByLiked = await sortPostsByLikes();
+        let sortedPostsByNewest = await sortPostsByNewest();
+        let sortedCities = await sortCitiesByNumPosts();
+        let sortedTags = await sortTagsByNumPosts(); 
         
-        return res.render('search.ejs', {posts: findTag});
+        return res.render('index.ejs', {posts: findTag, 
+            cities: sortedCities, tags: sortedTags, 
+            uid: req.session.uid, logged_in: req.session.logged_in});
     }
 })
 
@@ -322,7 +331,8 @@ function getDateAndTime() {
 
 // main page. This shows the use of session cookies
 app.get('/', async (req, res) => {
-    let uid = req.session.uid || 'unknown';
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
     let visits = req.session.visits || 0;
     visits++;
     req.session.visits = visits;
@@ -340,13 +350,13 @@ app.get('/', async (req, res) => {
         sortedTags = sortedTags.slice(0,5);
     };
 
-    return res.render('index.ejs', {uid, visits, posts: sortedPostsByLiked, 
+    return res.render('index.ejs', {uid: uid, logged_in: logged_in, visits: visits, posts: sortedPostsByLiked, 
                                     cities: sortedCities, 
                                     tags: sortedTags});
 });
 
 app.get('/post-single', (req, res) => {
-    return res.render('post-single.ejs');
+    return res.render('post-single.ejs', {uid: uid, logged_in: logged_in});
 });
 
 app.get('/post-single/:id', async (req, res) => {
@@ -358,21 +368,22 @@ app.get('/post-single/:id', async (req, res) => {
     let findPost = await posts.findOne({postID: postID}); 
     //console.log(findPost);
 
-    return res.render('post-single.ejs', {findPost});
+    return res.render('post-single.ejs', {findPost, uid: uid, logged_in: logged_in});
 });
 
 app.get('/create', (req, res) => {
-    return res.render('create.ejs');
+    if (req.session.logged_in == true) {
+        return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
+    } else {
+        req.flash('error', "You are not logged in. Please log in to create a post. ");
+        return res.redirect("/");
+    }
+    
 });
 
 app.post('/create', upload.single('imageUpload'), async (req, res) => {
     const uid = req.session.uid;
-    console.log("entered post for create")
-
-    if (!logged_in) {
-        req.flash('info', "You are not logged in");
-        return res.redirect('/login');
-    };
+    console.log("entered post for create");
 
     let db = await Connection.open(mongoUri, DB);
     let counters = db.collection(COUNTERS);
@@ -404,12 +415,20 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 
     console.log("inserting post", insertPost);
 
-    return res.render('create.ejs');
+    return res.redirect('create.ejs');
     
 });
 
-app.get('/profile', (req, res) => {
-    return res.render('profile.ejs');
+app.get('/profile', async (req, res) => {
+    if (req.session.logged_in) {
+        var db = await Connection.open(mongoUri, DB);
+        const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
+        console.log("CURRENT USER", currentUser);
+        return res.render('profile.ejs', {user: currentUser, uid: req.session.uid, logged_in: req.session.logged_in});
+    } else {
+        req.flash('error', "Please log in to view your profile.");
+        return res.redirect("/");
+    }
 });
 
 app.post('/comment/:postID', async (req, res) => {
@@ -434,7 +453,7 @@ app.post('/comment/:postID', async (req, res) => {
 
 // render login page 
 app.get("/login", (req, res) => {
-    return res.render("login.ejs", {});
+    return res.render("login.ejs", {uid: req.session.uid, logged_in: req.session.logged_in});
 })
 
 // process user login
@@ -453,6 +472,8 @@ app.post("/login", async (req, res) => {
         return res.redirect("/")
     } else {
         console.log("failed login for", username);
+        req.session.uid = false;
+        req.session.logged_in = false;
         // todo: flash error
         return res.redirect("/")
     }
@@ -494,10 +515,9 @@ app.post("/join", async (req, res) => {
         req.body.email, 
         hash); 
     console.log('signup/stored', "\t", hash);
-    return res.render("login.ejs", {});
+    req.flash('info', `Account created for {req.body.first}. You are now logged in. `);
+    return res.redirect("/");
   });
-
-
 
 /**
  * 
@@ -510,33 +530,23 @@ function isAuthorizedToView(viewerId, ownerId) {
     return viewerId === ownerId;
 };
 
-
-// shows how logins might work by setting a value in the session
-// This is a conventional, non-Ajax, login, so it redirects to main page 
-app.post('/set-uid/', (req, res) => {
-    console.log('in set-uid');
-    req.session.uid = req.body.uid;
-    req.session.logged_in = true;
-    res.redirect('/');
-});
-
 // shows how logins might work via Ajax
-app.post('/set-uid-ajax/', (req, res) => {
-    console.log(Object.keys(req.body));
-    console.log(req.body);
-    let uid = req.body.uid;
-    if(!logged_in) {
-        res.send({error: 'no uid'}, 400);
-        return;
-    }
-    req.session.uid = req.body.uid;
-    req.session.logged_in = true;
-    console.log('logged in via ajax as ', req.body.uid);
-    res.send({error: false});
-});
+// app.post('/set-uid-ajax/', (req, res) => {
+//     console.log(Object.keys(req.body));
+//     console.log(req.body);
+//     let uid = req.body.uid;
+//     if(!logged_in) {
+//         res.send({error: 'no uid'}, 400);
+//         return;
+//     }
+//     req.session.uid = req.body.uid;
+//     req.session.logged_in = true;
+//     console.log('logged in via ajax as ', req.body.uid);
+//     res.send({error: false});
+// });
 
 // conventional non-Ajax logout, so redirects
-app.post('/logout/', (req, res) => {
+app.post('/logout', (req, res) => {
     console.log('in logout');
     req.session.uid = false;
     req.session.logged_in = false;

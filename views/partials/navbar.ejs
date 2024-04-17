@@ -1,23 +1,37 @@
 <div class="container-fluid">
-    <nav class="navbar row">
-   
-        <a href="/">
-          <img  src="../../assets/logo-primary-vector.svg" class="nav-logo" alt="logo">
-        </a>
-      
-      <ul class="nav-items">
-        <li>
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li>
-          <a class="nav-link" href="/create">Create</a>
-        </li>
-        <li>
-          <a class="nav-link" href="/profile">My posts</a>
-        </li>
-      </ul>
-    </nav>
+  <nav class="navbar row">
+
+    <a href="/">
+      <img src="../../assets/logo-primary-vector.svg" class="nav-logo" alt="logo">
+    </a>
+
+    <ul class="nav-items">
+      <li>
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li>
+        <a class="nav-link" href="/create">Create</a>
+      </li>
+      <li class="logged-in">
+        <a class="nav-link" href="/profile">My posts</a>
+      </li>
+      <li class="not-logged-in">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+    </ul>
+  </nav>
 
 </div>
 
 <hr style="margin-top: 10px">
+
+<script>
+  var logged_in = "<%= logged_in %>";
+  if (logged_in !== 'false') {
+    $(".logged-in").show();
+    $(".not-logged-in").hide();
+  } else {
+    $(".logged-in").hide();
+    $(".not-logged-in").show();
+  }
+</script>
