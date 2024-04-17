@@ -469,12 +469,13 @@ app.post("/login", async (req, res) => {
         console.log("succesful login for", username);
         req.session.uid = username;
         req.session.logged_in = true;
+        flash("info", `Logged in as {username}.`)
         return res.redirect("/")
     } else {
         console.log("failed login for", username);
         req.session.uid = false;
         req.session.logged_in = false;
-        // todo: flash error
+        flash("error", "Login failed. Check your username and password and try again.")
         return res.redirect("/")
     }
 });
