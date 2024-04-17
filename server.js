@@ -429,7 +429,7 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 
     console.log('file', req.file);
 
-    let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#');
+    let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#' && elt != '#');
     let tags = tagsWithHash.map((elt) => {return elt.slice(1)});
 
     let date = getDateAndTime();
@@ -488,7 +488,7 @@ app.post('/comment/:postID', async (req, res) => {
         return res.redirect("/post-single/" + postID);
     } else {
         let postID = parseInt(req.params.postID);
-        req.flash("error", "Error: Please log in to leave a comment."); 
+        req.flash("error", "Please log in to leave a comment."); 
         return res.redirect("/post-single/" + postID);
     }
 });
