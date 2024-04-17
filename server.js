@@ -65,6 +65,42 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
+
+// file upload
+
+/**
+ * 
+ * @param {*} dateObj 
+ * @returns 
+ */
+function timeString(dateObj) {
+    if( !dateObj) {
+        dateObj = new Date();
+    };
+    d2 = (val) => val < 10 ? '0'+val : ''+val;
+    let hh = d2(dateObj.getHours());
+    let mm = d2(dateObj.getMinutes());
+    let ss = d2(dateObj.getSeconds());
+    return hh+mm+ss;
+}
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './public/assets/uploads/')
+    },
+    filename: function (req, file, cb) {
+        let parts = file.originalname.split('.');
+        let ext = parts[parts.length-1];
+        let hhmmss = timeString();
+        cb(null, file.fieldname + '-' + hhmmss + '.' + ext);
+    }
+});
+
+var upload = multer({ storage: storage,
+                    // max fileSize in bytes
+                    limits: {fileSize: 100_000_000 }
+});
+
 /**
  * 
  * @param {*} counters 
@@ -335,7 +371,15 @@ app.get('/create', (req, res) => {
     return res.render('create.ejs');
 });
 
-app.post('/create', async (req, res) => {
+app.post('/create', upload.single('imageUpload'), async (req, res) => {
+    const uid = req.session.uid;
+    console.log("entered post for create")
+
+    if (!uid) {
+        req.flash('info', "You are not logged in");
+        return res.redirect('/login');
+    };
+
     let db = await Connection.open(mongoUri, DB);
     let counters = db.collection(COUNTERS);
 
@@ -343,9 +387,14 @@ app.post('/create', async (req, res) => {
     let posts = db.collection(POSTS);
 
     let city = req.body.city.toLowerCase();
-    let tags = req.body.tags.split(" ");
+    let tagsInitial = req.body.tags.split(" ");
     let caption = req.body.description;
-    let imageUpload = req.body.imageUpload;
+    let imageUpload = '/assets/uploads/' + req.file.filename;
+
+    console.log('file', req.file);
+
+    let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#');
+    let tags = tagsWithHash.map((elt) => {return elt.slice(1)});
 
     let date = getDateAndTime();
 
@@ -358,8 +407,10 @@ app.post('/create', async (req, res) => {
                                             city: city, 
                                             date: date,
                                             caption: caption});
-    //console.log("inserting post", insertPost);
 
+    console.log("inserting post", insertPost);
+
+    //return res.sendFile(path.join(__dirname, pathname));
     return res.render('create.ejs');
     
 });
@@ -457,6 +508,66 @@ app.post("/join", async (req, res) => {
     console.log('signup/stored', "\t", hash);
     return res.render("login.ejs", {});
   });
+
+
+
+/**
+ * 
+ * @param {*} viewerId 
+ * @param {*} ownerId 
+ * @returns 
+ */
+function isAuthorizedToView(viewerId, ownerId) {
+    console.log('auth?', viewerId, ownerId);
+    return viewerId === ownerId;
+};
+
+// the photos of the logged-in user
+
+/* app.get('/myphotos', async (req, res) => {
+    const db = await Connection.open(mongoUri, DB);
+    const fileCol = db.collection(FILES);
+    const uid = req.session.uid;
+    console.log(uid);
+    if (!uid) {
+        console.log("not logged in");
+        req.flash('info', "You are not logged in");
+        return res.redirect('/login');
+    }
+    const uploads = await db.collection(FILES).find({owner: username}).toArray();
+    const users = await db.collection(USERS).find({}).toArray();
+    //const userId = req.session.userId;
+    //return res.render('auth.ejs', {username, userId, users, uploads});
+}); */
+
+// The :username in the URL (endpoint) is the username of the person
+// whose photos we want to view.
+
+/* app.get('/photos/:username', async (req, res) => {
+    const photoOwner = req.params.username; // username of owner of photos
+    const username = req.session.username;   // 
+    if (!username) {
+        console.log("not logged in");
+        req.flash('info', "You are not logged in");
+        return res.redirect('/login');
+    }
+    if (!isAuthorizedToView(username, photoOwner)) {
+        console.log("not authorized");
+        req.flash('info', "You are not allowed to view this person's photos")
+        // send them to the main page
+        return res.redirect('/')
+    }
+    // database lookup
+    const db = await Connection.open(mongoUri, DB);
+    const fileCol = db.collection(FILES);
+    const uploads = await db.collection(FILES).find({owner: photoOwner}).toArray();
+    const users = await db.collection(USERS).find({}).toArray();
+    const userId = req.session.userId;
+    return res.render('auth.ejs', {username, userId, users, uploads});
+}); */
+
+
+
 
 // shows how logins might work by setting a value in the session
 // This is a conventional, non-Ajax, login, so it redirects to main page 

@@ -25,7 +25,8 @@
                 <h1>Share a look</h1>
                 <form id="create-form"
                     method="POST"
-                    action="/create">
+                    action="/create"
+                    enctype="multipart/form-data">
                     <label for="city">
                         <p class="bold" style="margin-bottom: 5px;">City</p>
                         <p class="text-timestamp">Select from the dropdown</p>
@@ -58,7 +59,7 @@
                         <p class="bold" style="margin-bottom: 5px;">Image</p>
                         <p class="text-timestamp">Choose an image to upload</p>
                     </label>
-                    <input type="file" id="imageUpload" name="imageUpload">
+                    <input type="file" accept="image/*" id="imageUpload" name="imageUpload">
 
                     <br>
 
