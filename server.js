@@ -466,7 +466,7 @@ app.get('/profile', async (req, res) => {
     };
 });
 
-//
+/* */
 app.post('/comment/:postID', async (req, res) => {
     if (req.session.logged_in) {
         let commentText = req.body.comment;
@@ -504,22 +504,30 @@ app.post("/login", async (req, res) => {
     password = req.body.password;
     const db = await Connection.open(mongoUri, DB);
     let userdict = await db.collection(USERS).findOne({userID: username}, {projection: {password: 1}});
-    let correctPassword = userdict.password;
-    result = await bcrypt.compare(password, correctPassword);
-    console.log('login status:', "\t", result);
-    if (result == true) {
-        console.log("succesful login for", username);
-        req.session.uid = username;
-        req.session.logged_in = true;
-        req.flash("info", `Logged in as ` + username + '.');
-        return res.redirect("/");
-    } else {
+    if (userdict == null) {
         console.log("failed login for", username);
         req.session.uid = false;
         req.session.logged_in = false;
         req.flash("error", "Login failed. Check your username and password and try again.")
         return res.redirect("/login");
-    }
+    } else {
+        let correctPassword = userdict.password;
+        result = await bcrypt.compare(password, correctPassword);
+        console.log('login status:', "\t", result);
+        if (result == true) {
+            console.log("succesful login for", username);
+            req.session.uid = username;
+            req.session.logged_in = true;
+            req.flash("info", `Logged in as ` + username + '.');
+            return res.redirect("/");
+        } else {
+            console.log("failed login for", username);
+            req.session.uid = false;
+            req.session.logged_in = false;
+            req.flash("error", "Login failed. Check your username and password and try again.")
+            return res.redirect("/login");
+    }}
+    
 });
 
 // endpoint to create a new user
