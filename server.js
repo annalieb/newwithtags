@@ -596,6 +596,7 @@ app.post('/logout', (req, res) => {
     console.log('in logout');
     req.session.uid = false;
     req.session.logged_in = false;
+    req.flash("error", "Successfully logged out.")
     res.redirect('/');
 });
 
