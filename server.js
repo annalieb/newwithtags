@@ -176,7 +176,7 @@ async function sortPostsByNewest () {
     
     let sortedPosts = await posts.aggregate([
         {
-            $sort: {date: 1} // sort posts by num of likes in decr. order
+            $sort: {date: -1} // sort posts by num of likes in decr. order
         }
     ]).toArray();
 
