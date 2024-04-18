@@ -1,5 +1,4 @@
 <div class="row">
-    
     <div class="session col-12" style="display: flex; flex-wrap: wrap">
         
             <div class="question" style="display: flex; width: 100%">
@@ -18,16 +17,18 @@
             <div class="content" style="display: flex; width: 100%;">
                 <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px">
                     <p>Sort by</p> 
-                    <form>
+                    <form method="GET" action="/sort">
                         <label>
-                            <input type="radio" name="Newest" value="Newest">
+                            <input type="radio" name="sortBy" value="Newest">
                             Newest
                         </label>
                     
                         <label>
-                            <input type="radio" name="Liked" value="Liked">
+                            <input type="radio" name="sortBy" value="Liked">
                             Most liked
                         </label>
+                        <input type="submit" value="Sort" id="sortButton">
+
                     </form>
                     
                 </div>
@@ -68,12 +69,7 @@
                 </div>
 
             </div>
-        
-
     </div>
-
-
-
 </div>
 </div>
 <hr style="margin: 10px 0px 40px 0px">

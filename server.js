@@ -397,6 +397,45 @@ app.get('/tag/:tag', async(req, res) => {
     };
 });
 
+// Get to sort posts on the home page by either newest or most liked.
+app.get('/sort', async (req,res) => {
+    let sortBy = req.query.sortBy;
+    console.log(sortBy);
+
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
+    let visits = req.session.visits || 0;
+    visits++;
+    req.session.visits = visits;
+    console.log('uid', uid);
+
+    let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+
+    if (sortBy == "Newest") {
+        console.log('newest');
+        let sortedPostsByNewest = await sortPostsByNewest();
+
+        return res.render('index.ejs', {uid: uid, 
+                                        logged_in: logged_in, 
+                                        visits: visits, 
+                                        posts: sortedPostsByNewest, 
+                                        cities: sortedCities, 
+                                        tags: sortedTags});
+    } else if (sortBy == "Liked") {
+        console.log('liked');
+        let sortedPostsByLiked = await sortPostsByLikes();
+        return res.render('index.ejs', {uid: uid, 
+                                        logged_in: logged_in, 
+                                        visits: visits, 
+                                        posts: sortedPostsByLiked, 
+                                        cities: sortedCities, 
+                                        tags: sortedTags});
+    } else {
+        req.flash("error", "Please select a sorting method.");
+        return res.redirect('/');
+    };
+}); 
+
 // get for /post-single
 app.get('/post-single', (req, res) => {
     return res.render('post-single.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
