@@ -36,6 +36,9 @@
                         <option value="Barcelona">Barcelona</option>
                         <option value="Seattle">Seattle</option>
                         <option value="Wellesley">Wellesley</option>
+                        <% cityList.forEach((elt) => { %>
+                            <option value=<%=elt%>><%=elt%></option>
+                        <% }) %>
                     </select>
 
                     <br>
