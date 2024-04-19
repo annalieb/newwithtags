@@ -37,7 +37,7 @@
                     <p>Select city</p> 
 
                     <% cities.forEach((elt) => { %>
-                        <a class="city-tag"><%=elt._id%></a>
+                        <a href="/city/<%= elt._id%>" class="city-tag"><%=elt._id%></a>
                     <% }); %>
                 
                     <form id="searchCity" method="GET" action="/searchCity/">
@@ -54,7 +54,7 @@
                     <p>Select tags</p> 
 
                     <% tags.forEach((elt) => { %>
-                        <a class="component-tag"><%=elt._id%></a>
+                        <a href="/tag/<%= elt._id%>" class="component-tag"><%=elt._id%></a>
                     <% }); %>
 
                     <form id="searchTag" method="GET" action="/searchTags/">

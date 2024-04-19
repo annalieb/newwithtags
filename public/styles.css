@@ -53,6 +53,7 @@ h3 {
 }
 
 .component-tag {
+	color: black;
 	display: inline-block;
 	font-family: "Suisse Int'l Mono";
 	text-transform: uppercase;
@@ -84,6 +85,7 @@ h3 {
 }
 
 .city-tag {
+	color: black;
 	display: inline-block;
 	font-family: "Graphik";
 	font-size: 12px;
