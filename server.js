@@ -64,7 +64,19 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
-const CITIES = ['Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai', 'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing', 'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane', 'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris', 'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou', 'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur', 'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad', 'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou', 'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago', 'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming', 'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston'];
+const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai', 
+                'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing', 
+                'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 
+                'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane', 
+                'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris', 
+                'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou', 
+                'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur', 
+                'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad', 
+                'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou', 
+                'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago', 
+                'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming', 
+                'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 
+                'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona'];
 
 
 // ================================================================
@@ -438,11 +450,6 @@ app.get('/sort', async (req,res) => {
     };
 }); 
 
-// get for /post-single
-app.get('/post-single', (req, res) => {
-    return res.render('post-single.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
-});
-
 // get for /post-single/:id for a specific post
 app.get('/post-single/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
@@ -464,8 +471,7 @@ app.get('/create', (req, res) => {
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
         return res.redirect("/");
-    }
-    
+    };
 });
 
 /**
@@ -493,7 +499,8 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 
     let date = getDateAndTime();
     
-    let insertPost = await posts.insertOne({postID: postID, 
+    let insertPost = await posts.insertOne({postID: postID,
+                                            userID: uid,
                                             imageURL: imageUpload, 
                                             comments: [],
                                             tags: tags,
@@ -510,6 +517,81 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
         req.flash("error", "Post failed. Please try again.");
         return res.redirect('/create');
     };
+});
+
+// Get for /edit/:id to render the edit page.
+app.get('/edit/:id', async (req,res) => {
+    let postID = parseInt(req.params.id);
+
+    let db = await Connection.open(mongoUri, DB);
+    let posts = db.collection(POSTS);
+
+    let post = await posts.findOne({postID: postID}); 
+
+    if (req.session.logged_in == true && req.session.uid == post.userID) {
+        return res.render('edit.ejs', {uid: req.session.uid, 
+                                        logged_in: req.session.logged_in, 
+                                        cityList: CITIES,
+                                        post: post});
+    } else {
+        if (req.session.logged_in != true) {
+            req.flash('error', "You are not logged in. Please log in to edit this post.");
+            return res.redirect("/login");
+        } else if (req.session.uid != post.userID) {
+            req.flash('error', "You do not have permission to edit this post.");
+            return res.redirect("/");
+        };
+    };
+});
+
+// Post for /edit/:id to get form data and actually edit the post.
+app.post('/edit/:id', async (req, res) => {
+    const postID = parseInt(req.params.id);
+
+    let db = await Connection.open(mongoUri, DB);
+    let posts = db.collection(POSTS);
+
+    let oldPost = await posts.findOne({postID: postID});
+
+    if (!oldPost) {
+        req.flash('error', 'Post not found.');
+        res.redirect('/');
+    };
+
+    let city = req.body.city.toLowerCase();
+    let tagsInitial = req.body.tags.split(" ");
+    let caption = req.body.description;
+
+    let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#' && elt != '#');
+    let tags = tagsWithHash.map((elt) => {return elt.slice(1)});
+    
+    let editPost = await posts.updateOne({postID: postID}, 
+                                        { $set: {
+                                            tags: tags,
+                                            city: city, 
+                                            caption: caption
+                                        }});
+
+    if (editPost.acknowledged) { // if successfully edited, redirect to the new post's post-single page
+        req.flash("info", "Successfully edited.");
+        return res.redirect('/post-single/' + postID);
+    } else {
+        req.flash("error", "Edit failed. Please try again.");
+        return res.redirect('/edit/' + postID);
+    };
+});
+
+//
+app.get('/post-single/:id', async (req, res) => {
+    const postID = parseInt(req.params.id);
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    let findPost = await posts.findOne({postID: postID}); 
+
+    return res.render('post-single.ejs', {findPost, 
+                                        uid: req.session.uid, 
+                                        logged_in: req.session.logged_in});
 });
 
 /**

@@ -68,6 +68,7 @@ async function main() {
   // sample posts
   const post1 = {
     postID: 20001,
+    userID: 'mo104',
     imageURL: "../assets/uploads/img1.jpeg",
     comments: [
         {text: "I love this city!!", 
@@ -83,11 +84,12 @@ async function main() {
     ],
     city: "boston",
     date: "2023-12-10 3:26:23",
-    caption: "new city!! (this is the least liked post)"
+    caption: "new city!!"
   };
 
   const post2 = {
     postID: 20002,
+    userID: 'mm124',
     imageURL: "../assets/uploads/img2.jpeg",
     comments: [
         {text: "beautiful", 
@@ -116,11 +118,12 @@ async function main() {
     ],
     city: "boston",
     date: "2023-12-20 3:26:23",
-    caption: "check out my new coat! (this is the middle liked post)"
+    caption: "check out my new coat!"
   };
 
   const post3 = {
     postID: 20003,
+    userID: 'sl120',
     imageURL: "../assets/uploads/img3.jpeg",
     comments: [
         {text: "this is so cool", 
@@ -134,7 +137,7 @@ async function main() {
     ],
     city: "seattle",
     date: "2023-12-30 3:26:23",
-    caption: "this city is so incredibly rainy but beautiful. (this is the most liked post)"
+    caption: "this city is so incredibly rainy but beautiful."
   };
 
   // sample users

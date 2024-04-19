@@ -24,18 +24,17 @@
         
             <div class="col-12">
                 <h1>Edit your look</h1>
-                <form id="create-form"
+                <form id="edit-form"
                     method="POST"
-                    action="/edit/<%= postID %>"
-                    enctype="multipart/form-data">
+                    action="/edit/<%= post.postID %>">
                     <label for="city">
                         <p class="bold" style="margin-bottom: 5px;">City</p>
                         <p class="text-timestamp">Select from the dropdown</p>
                     </label>
                     <select id="city" name="city">
-                        <option value="Barcelona">Barcelona</option>
-                        <option value="Seattle">Seattle</option>
-                        <option value="Wellesley">Wellesley</option>
+                        <% cityList.forEach((elt) => { %>
+                            <option value="<%= elt %>" <%= post.city === elt.toLowerCase() ? 'selected' : '' %>><%= elt %></option>
+                        <% }) %>
                     </select>
 
                     <br>
@@ -44,7 +43,7 @@
                         <p class="bold" style="margin-bottom: 5px;">Tags</p>
                         <p class="text-timestamp">Type each tag with a hashtag in the front, separated by a space.</p>
                     </label>
-                    <input type="text" id="tags" name="tags">
+                    <input type="text" id="tags" name="tags" value="<% post.tags.forEach((elt) => { %>#<%= elt %> <% }) %>">
 
                     <br>
 
@@ -52,23 +51,12 @@
                         <p class="bold" style="margin-bottom: 5px;">Description</p>
                         <p class="text-timestamp">Say whatever you’d like about the look!</p>
                     </label>
-                    <input type="text" id="description" name="description">
+                    <input type="text" id="description" name="description" value="<%= post.caption %>">
                     
                     <br>
 
-                    <label for="imageUpload">
-                        <p class="bold" style="margin-bottom: 5px;">Image</p>
-                        <p class="text-timestamp">Choose an image to upload</p>
-                    </label>
-                    <input type="file" accept="image/*" id="imageUpload" name="imageUpload">
-
-                    <br>
-
-                    <input type="submit" value="UPLOAD POST">
+                    <input type="submit" value="EDIT POST">
                 </form>
-                
-        
-            
             </div>
         </div>
     </div>
