@@ -54,7 +54,7 @@
                     <p>Select tags</p> 
 
                     <% tags.forEach((elt) => { %>
-                        <a href="/tag/<%= elt._id%>" class="component-tag"><%=elt._id%></a>
+                        <a href="/tag/<%= elt._id%>" class="component-tag">#<%=elt._id%></a>
                     <% }); %>
 
                     <form id="searchTag" method="GET" action="/searchTags/">

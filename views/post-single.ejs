@@ -33,7 +33,7 @@
                 <p>Tagged as</p>
                 <div class="container-comment">
                     <% findPost.tags.forEach((elt) => { %>
-                        <a href="/tag/<%= elt%>"><p class="component-tag"><%=elt%></p></a>
+                        <a href="/tag/<%= elt%>"><p class="component-tag">#<%=elt%></p></a>
                     <%}); %>
                 </div>
                 <div class="container-comment">
