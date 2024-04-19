@@ -22,7 +22,7 @@
         <div class="row">
             <% posts.forEach((elt) => { %>
                 <div class="col-lg-4 col-md-4 col-sm-6 gallery-image">
-                    <a href="post-single/<%= elt.postID%>"><img src=<%= elt.imageURL %>></a>
+                    <a href="/post-single/<%= elt.postID%>"><img src=<%= elt.imageURL %>></a>
                 </div>
             <% }); %>
         </div>
