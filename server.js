@@ -64,6 +64,8 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
+const CITIES = ['Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai', 'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing', 'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane', 'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris', 'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou', 'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur', 'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad', 'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou', 'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago', 'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming', 'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston'];
+
 
 // ================================================================
 // file upload functions and variables
@@ -458,7 +460,7 @@ app.get('/post-single/:id', async (req, res) => {
  */
 app.get('/create', (req, res) => {
     if (req.session.logged_in == true) {
-        return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in});
+        return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in, cityList: CITIES});
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
         return res.redirect("/");
