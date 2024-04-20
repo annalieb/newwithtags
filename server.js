@@ -494,8 +494,19 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 
     console.log('file', req.file);
 
+    // filter out any tags that don't start with # or are just #
     let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#' && elt != '#');
-    let tags = tagsWithHash.map((elt) => {return elt.slice(1)});
+
+    // find all the unique tags
+    let uniqueTags = [];
+    tagsWithHash.forEach((elt) => {
+        if (!uniqueTags.includes(elt)) {
+            uniqueTags.push(elt);
+        };
+    });
+
+    // get rid of # in front of tags
+    let tags = uniqueTags.map((elt) => {return elt.slice(1)});
 
     let date = getDateAndTime();
     
