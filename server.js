@@ -17,6 +17,7 @@ const flash = require('express-flash');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const ROUNDS = 15;
+const fs = require('node:fs/promises');
 
 // our modules loaded from cwd
 
@@ -490,7 +491,13 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     let city = req.body.city.toLowerCase();
     let tagsInitial = req.body.tags.split(" ");
     let caption = req.body.description;
-    let imageUpload = '/assets/uploads/' + req.file.filename;
+    let imageUpload = './public/assets/uploads/' + req.file.filename;
+
+    // change the permissions of the file to be world-readable
+    // this can be a relative or absolute pathname. 
+    // Here, I used a relative pathname
+    let val = await fs.chmod(imageUpload, 0o664);
+    console.log('chmod val', val);
 
     console.log('file', req.file);
 
@@ -512,7 +519,7 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     
     let insertPost = await posts.insertOne({postID: postID,
                                             userID: uid,
-                                            imageURL: imageUpload, 
+                                            imageURL: "../assets/uploads/"+req.file.filename, 
                                             comments: [],
                                             tags: tags,
                                             city: city, 
