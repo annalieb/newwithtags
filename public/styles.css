@@ -196,6 +196,17 @@ form label {
 	margin-bottom: 30px;
 }
 
+.gallery-image-profile img {
+	width: 100%;
+	aspect-ratio: 1/1;
+	object-fit: cover;
+	margin-bottom: 30px;
+}
+
+.gallery-image-profile {
+	padding: 0px 0px 0px 30px;
+}
+
 .container-comment {
 	margin-bottom: 43px;
 }
