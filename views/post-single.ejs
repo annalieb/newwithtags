@@ -16,18 +16,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12" style="padding-bottom: 10px">
-                <a>
-                    <img style="padding-right: 5px; margin-top:-3px" src="../assets/arrow-back.svg">
+                <a href="/" style="color: black;">
+                    <img style="padding-right: 5px; margin-top:-3px;" src="../assets/arrow-back.svg">
                     Back
                 </a>
             </div>
         
-            <div class="col-lg-8 col-md-8 col-sm-12 container-image">
+            <div class="col-lg-8 col-md-8 col-sm-12 container-image gallery-image">
                 <img src=<%= findPost.imageURL %>>
             </div>
         
             <div class="col-lg-4 col-md-4 col-sm-12">
-                <p>From the streets of</p>
+                <div class="container-head">
+                    <p>From the streets of</p>
+                    <img src="../assets/hamburger.svg">
+                </div>
+                
                 <h1><%=findPost.city%></h1>
                 <p class="text-timestamp" style="margin-bottom: 35px"><%=findPost.date%></p>
                 <p>Tagged as</p>
@@ -41,6 +45,8 @@
                         <%=findPost.caption%>
                     </p>
                 </div>
+
+                <img src="../assets/heart-empty.svg">
         
                 <hr>
                 <p class="bold">Comments</p>
