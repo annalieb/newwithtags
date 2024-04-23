@@ -139,8 +139,6 @@ form label {
 }
 
 /* NAV BAR */
-
-
 .navbar {
 	margin-top: 10px;
 }
@@ -194,6 +192,10 @@ form label {
 	aspect-ratio: 1/1;
 	object-fit: cover;
 	margin-bottom: 30px;
+}
+
+.container-head {
+	display: flex; justify-content: space-between;
 }
 
 .container-comment {
