@@ -43,14 +43,14 @@ console.log('main.js loaded');
 //     $("#dropDownMenu").toggleClass('visible');
 // });
 
-$(function() {
-    console.log("You Pressed it!")
-    $("#burger").menu();
-    $("#dropMenu").position({
-        my: "center",
-        at: "center",
-        of: "#burger"
-      });
-        // position: {my: "center top", at: "center bottom", of: "#burger"}
-});
+// $(function() {
+//     console.log("You Pressed it!")
+//     $("#burger").menu();
+//     $("#dropMenu").position({
+//         my: "center",
+//         at: "center",
+//         of: "#burger"
+//       });
+//         // position: {my: "center top", at: "center bottom", of: "#burger"}
+// });
 

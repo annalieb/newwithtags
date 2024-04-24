@@ -453,12 +453,43 @@ app.get('/post-single/:id', async (req, res) => {
 
     let findPost = await posts.findOne({postID: postID}); 
 
+    // calculate the number of likes
+    const likes = db.collection(LIKES);
+    var matched = await likes.find({postID: postID}).toArray();
+    var numLikes = matched.length
+
+    // check if this user has already liked the post 
+    var alreadyLiked = true;
+    var userLiked = await likes.findOne({postID: postID, userID: req.session.uid,});
+    if (userLiked == null) {
+        // if no one has liked the post, it is not alreadyLiked
+        alreadyLiked = false;
+    }
+
     return res.render('post-single.ejs', {
-        findPost, uid: 
-        req.session.uid, 
+        findPost, 
+        uid: req.session.uid, 
         logged_in: req.session.logged_in, 
-        postID: postID
+        postID: postID, 
+        numLikes: numLikes, 
+        alreadyLiked: alreadyLiked
     });
+});
+
+// Classic route for likes uses POST-Redirect-GET pattern to update database
+app.post('/likeClassic/:id', async (req,res) => {
+    const postID = parseInt(req.params.id);
+    if (req.session.logged_in == false) {
+        req.flash('error', "You are not logged in. Please log in to like this post.");
+        return res.redirect("/login");
+    } else {
+        const db = await Connection.open(mongoUri, DB);
+        const likeDoc = await db.collection(LIKES).insertOne(
+            {postID: postID, userID: req.session.uid},
+            {upsert: false});
+        console.log("User with ID", req.session.uid, "liked post with ID", postID);
+        return res.redirect("/post-single/" + postID);
+    }
 });
 
 /**

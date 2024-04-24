@@ -66,10 +66,19 @@
                     </p>
                 </div>
 
-                <button class="likeBtn" type="button" data-id="<%= postID %>">
-                    <img src="../assets/heart-empty.svg">
-                </button>
-                <p class="likeCount">0 Likes</p>
+                <% if( alreadyLiked ) { %>
+                    <button class="likeBtn alreadyLiked" type="button" data-id="<%= postID %>">
+                        <img src="../assets/heart-filled.svg">
+                    </button>
+                <% } else { %>
+                    <form method="post" action="/likeClassic/<%= postID %>">
+                        <button class="likeBtn notLiked" type="submit" data-id="<%= postID %>">
+                            <img src="../assets/heart-empty.svg">
+                        </button>
+                    </form>
+                <% } %>
+                
+                <p class="likeCount"><%=numLikes%> Likes</p>
         
                 <hr>
                 <p class="bold">Comments</p>
