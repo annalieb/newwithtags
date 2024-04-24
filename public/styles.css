@@ -114,8 +114,22 @@ h3 {
     margin-bottom: 0;
 }
 
+.likeBtn:hover {
+	cursor: pointer;
+}
+
+.like-del-edit {
+	display: flex; 
+	justify-content: space-between;
+}
+
+#edit-btn, #delete-btn {
+	margin: 0px 6px;
+}
+
 /* COMPONENTS */
 hr {
+	margin: 8px 0px;
 	border: 1px solid black;
 }
 
