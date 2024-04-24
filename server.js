@@ -453,7 +453,12 @@ app.get('/post-single/:id', async (req, res) => {
 
     let findPost = await posts.findOne({postID: postID}); 
 
-    return res.render('post-single.ejs', {findPost, uid: req.session.uid, logged_in: req.session.logged_in});
+    return res.render('post-single.ejs', {
+        findPost, uid: 
+        req.session.uid, 
+        logged_in: req.session.logged_in, 
+        postID: postID
+    });
 });
 
 /**
