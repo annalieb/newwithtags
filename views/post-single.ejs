@@ -32,25 +32,6 @@
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div>
                     <p style="display:inline-block;">From the streets of</p>
-                    <!-- <img style="float:right;" src="../assets/hamburger.svg"> -->
-                    <!-- <button type="button" id="burger" style="float:right;"><img src="../assets/hamburger.svg"></button>
-                    <div id="dropDownMenu">
-                        <p>Edit Post</p>
-                        <p>Delete Post</p>
-                    </div> -->
-
-                    <ul id="burger" style="list-style-type: none; float:right;">
-                        <li><a href="#"><img src="../assets/hamburger.svg"></a>
-                            <ul id="dropMenu" class="component-drop">
-                                <li>Edit Post</li>
-                                <li>Delete Post</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <!-- <div id="dropDownMenu">
-                        <p>Edit Post</p>
-                        <p>Delete Post</p>
-                    </div> -->
                 </div>
                 
                 <h1><%=findPost.city%></h1>
@@ -67,19 +48,30 @@
                     </p>
                 </div>
 
-                <% if( alreadyLiked ) { %>
-                    <button class="likeBtn alreadyLiked" type="button" data-id="<%= postID %>">
-                        <img src="../assets/heart-filled.svg">
-                    </button>
-                <% } else { %>
-                    <form method="post" action="/likeClassic/<%= postID %>">
-                        <button class="likeBtn notLiked" type="submit" data-id="<%= postID %>">
-                            <img src="../assets/heart-empty.svg">
-                        </button>
-                    </form>
-                <% } %>
-                
-                <p class="likeCount"><%=numLikes%> Likes</p>
+                <div class="like-del-edit">
+                    <div> <!-- Like button container -->
+                        <% if( alreadyLiked ) { %>
+                            <button class="likeBtn alreadyLiked" type="button" data-id="<%= postID %>">
+                                <img src="../assets/heart-filled.svg">
+                            </button>
+                        <% } else { %>
+                            <form style="display: inline-block;" method="post" action="/likeClassic/<%= postID %>">
+                                <button class="likeBtn notLiked" type="submit" data-id="<%= postID %>">
+                                    <img src="../assets/heart-empty.svg">
+                                </button>
+                            </form>
+                        <% } %>
+                        
+                        <p class="likeCount"><%=numLikes%> Likes</p>
+                    </div>
+
+                    <div> <!-- Edit and delete button container -->
+                        <% if( uid == findPost.userID ) { %>
+                            <img id="edit-btn" src="../assets/edit.svg">
+                            <img id="delete-btn" src="../assets/delete.svg">
+                        <% } %>
+                    </div>
+                </div>
         
                 <hr>
                 <p class="bold">Comments</p>
