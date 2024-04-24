@@ -18,11 +18,11 @@
         <div class="row" style="margin-top: 20px">
         
             <div class="col-lg-4 col-md-4 col-sm-12">
-             
+
                 <h1>Posted by <%=user.userFirstName%></h1>
                 <div class="container-comment">
-                    <p class="selector">Posted</p>
-                    <p class="selector">Liked</p>
+                    <p class="selector" href="/profile/posted">Posted</p>
+                    <p class="selector" href="/profile/liked">Liked</p>
         
                 </div>
         
@@ -39,25 +39,12 @@
 
             <div class="col-lg-8 col-md-8 col-sm-12" style="display: flex; flex-wrap: wrap;">
 
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-                <div class="col-6 gallery-image-profile">
-                    <img src="../assets/placeholder.png">
-                </div>
-
+                <% posts.forEach((elt) => { %>
+                    <div class="col-6 gallery-image-profile">
+                        <a href="/post-single/<%= elt.postID %>">
+                        <img src=<%= elt.imageURL %>>
+                    </div>
+                <%});%>
             </div>
     
         </div>
@@ -69,5 +56,6 @@
     <script src="../bootstrap.min.js"></script>
 </bodys>
 </html>
+
 
 

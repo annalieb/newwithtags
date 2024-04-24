@@ -644,19 +644,52 @@ app.get('/post-single/:id', async (req, res) => {
 });
 
 /**
- * Renders the profile page, which shows the logged in user's information. 
+ * Renders the profile page, which shows the logged in user's information and the user's posts. 
  * If the user is not logged in, redirects to the home and flashes an error message. 
  */
-app.get('/profile', async (req, res) => {
+app.get('/profile/posted', async (req, res) => {
     if (req.session.logged_in) {
-        var db = await Connection.open(mongoUri, DB);
+        const db = await Connection.open(mongoUri, DB);
+        const posts = db.collection(POSTS);
         const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
         console.log("CURRENT USER", currentUser);
-        return res.render('profile.ejs', {user: currentUser, uid: req.session.uid, logged_in: req.session.logged_in});
+
+        let userPosts = await posts.find({userID: currentUser.userID}).sort({date: -1}).toArray();
+
+        return res.render('profile.ejs', {user: currentUser, 
+                                            uid: req.session.uid, 
+                                            logged_in: req.session.logged_in,
+                                            posts: userPosts});
     } else {
         req.flash('error', "Please log in to view your profile.");
         return res.redirect("/login");
     };
+});
+
+//
+app.get('/profile/liked', async (req,res) => {
+    const db = await Connection.open(mongoUri, DB);
+    const likes = db.collection(LIKES);
+    const posts = db.collection(POSTS);
+    const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
+    let userLikedPostsID = await likes.find({userID: currentUser.userID}).project({postID: 1}).toArray();
+
+    let userLikedPosts = [];
+    userLikedPostsID.forEach( async (elt) => {
+        let individualPost = await posts.findOne({postID: elt.postID});
+        console.log("individualPost", individualPost);
+        userLikedPosts.push(individualPost);
+        console.log("userLikedPosts", userLikedPosts)
+        console.log('ehlo')
+    });
+
+    console.log('here')
+    console.log("userLikedPosts", userLikedPosts);
+
+    return res.render('profile.ejs', {user: currentUser,
+                                        uid: req.session.uid,
+                                        logged_in: req.session.logged_in,
+                                        posts: userLikedPosts});
 });
 
 /**
