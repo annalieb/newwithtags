@@ -35,3 +35,22 @@ $("#login-ajax").click(loginAjax);
 
 console.log('main.js loaded');
 
+
+/**
+ * HAMBURGER DROPDOWN
+ */
+// $("#burger").on('click', function() {
+//     $("#dropDownMenu").toggleClass('visible');
+// });
+
+$(function() {
+    console.log("You Pressed it!")
+    $("#burger").menu();
+    $("#dropMenu").position({
+        my: "center",
+        at: "center",
+        of: "#burger"
+      });
+        // position: {my: "center top", at: "center bottom", of: "#burger"}
+});
+

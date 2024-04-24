@@ -292,7 +292,6 @@ async function insertUser (username, firstName, lastName, email, password) {
 };
 
 
-
 // ================================================================
 // custom routes here
 

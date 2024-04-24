@@ -65,7 +65,17 @@ h3 {
 	margin-right: 5px;
 }
 
-
+.component-drop {
+	color: black;
+	display: inline-block;
+	font-size: 14px;
+	border: 1px solid black;
+	border-radius: 24px;
+	padding: 5px 10px;
+	margin-bottom: 10px;
+	margin-right: 5px;
+	list-style-type: none;
+}
 
 .selector {
 	display: inline-block;
