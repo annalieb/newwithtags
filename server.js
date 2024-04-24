@@ -481,7 +481,7 @@ app.post('/likeClassic/:id', async (req,res) => {
     const postID = parseInt(req.params.id);
     if (req.session.logged_in == false) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
-        return res.redirect("/login");
+        return res.redirect("/post-single/" + postID);
     } else {
         const db = await Connection.open(mongoUri, DB);
         const likeDoc = await db.collection(LIKES).insertOne(
@@ -501,7 +501,7 @@ app.get('/create', (req, res) => {
         return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in, cityList: CITIES});
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
-        return res.redirect("/");
+        return res.redirect("/login");
     };
 });
 
@@ -637,9 +637,10 @@ app.get('/post-single/:id', async (req, res) => {
 
     let findPost = await posts.findOne({postID: postID}); 
 
-    return res.render('post-single.ejs', {findPost, 
-                                        uid: req.session.uid, 
-                                        logged_in: req.session.logged_in});
+    return res.render('post-single.ejs', {
+        findPost, 
+        uid: req.session.uid, 
+        logged_in: req.session.logged_in});
 });
 
 /**
@@ -654,7 +655,7 @@ app.get('/profile', async (req, res) => {
         return res.render('profile.ejs', {user: currentUser, uid: req.session.uid, logged_in: req.session.logged_in});
     } else {
         req.flash('error', "Please log in to view your profile.");
-        return res.redirect("/");
+        return res.redirect("/login");
     };
 });
 
