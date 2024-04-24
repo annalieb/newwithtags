@@ -173,7 +173,19 @@ form label {
 .nav-items li {
 	display: inline;
 	float: right;
-	color: white;
+	color: black !important;
+	background-color: white; 
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 12px; 
+	font-size: 12px;
+	border: 2px solid black;
+	margin: 9px 0px 9px 18px;
+	padding: 0px 2px 0px 2px;
+}
+
+.nav-items li.active {
+	color: white !important;
 	background-color: black; 
 	font-weight: 600;
 	text-transform: uppercase;
@@ -184,9 +196,14 @@ form label {
 	padding: 0px 2px 0px 2px;
 }
 
-.nav-items a {
+.nav-items li.active a {
 	text-decoration: none;
 	color: white;
+}
+
+.nav-items li a {
+	text-decoration: none;
+	color: black;
 }
 
 /* CONTAINERS */

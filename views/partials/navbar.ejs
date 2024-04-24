@@ -6,16 +6,16 @@
     </a>
 
     <ul class="nav-items">
-      <li>
+      <li id="/">
         <a class="nav-link" href="/">Home</a>
       </li>
-      <li>
+      <li id="/create">
         <a class="nav-link" href="/create">Create</a>
       </li>
-      <li class="logged-in">
-        <a class="nav-link" href="/profile">My posts</a>
+      <li id="/profile" class="logged-in">
+        <a class="nav-link" href="/profile/posted">My posts</a>
       </li>
-      <li class="not-logged-in">
+      <li id="/login" class="not-logged-in">
         <a class="nav-link" href="/login">Login</a>
       </li>
     </ul>
@@ -33,5 +33,18 @@
   } else {
     $(".logged-in").hide();
     $(".not-logged-in").show();
+  }
+</script>
+
+<script>
+
+  let currentPage = window.location.pathname;
+  console.log("currentpage:");
+  console.log(currentPage);
+
+  let link = document.getElementById(currentPage);
+  console.log(link);
+  if (link) {
+    link.classList.add('active');
   }
 </script>
