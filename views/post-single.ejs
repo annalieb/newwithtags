@@ -67,9 +67,9 @@
 
                     <div> <!-- Edit and delete button container -->
                         <% if( uid == findPost.userID ) { %>
-                            <form style="display: inline-block;" method="post" action="/edit/<%= postID %>">
+                            <a style="display: inline-block;" href="/edit/<%= postID %>">
                                 <img id="edit-btn" src="../assets/edit.svg">
-                            </form>
+                            </a>
                             <form style="display: inline-block;" method="post" action="/delete/<%= postID %>">
                                 <img id="delete-btn" src="../assets/delete.svg">
                             </form>
