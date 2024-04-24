@@ -317,24 +317,42 @@ app.get('/', async (req, res) => {
 });
 
 /**
- * Action Get from Search Bar Form for Filtering Cities
- * Redirects URL to filteres city image gallery, flashes error message if none found.
+ * Action Get from Search Bar Form for Filtering Tags or Cities
+ * Redirects URL to filteres image gallery with certain tags/cities, flashes error message if none found.
  */
-app.get('/searchCity/', async(req, res) => {
-    const cityTag = req.query.city.toLowerCase();
-
-    const db = await Connection.open(mongoUri, DB);
+app.get('/search/', async(req, res) => {
+    const searched = req.query.search.toLowerCase();
+    console.log(searched);
+    const db = await Connection.open(mongoUri, DB); 
     const postsDB = db.collection(POSTS);
 
-    let findCity = await postsDB.find({city: cityTag}).toArray();
+    if (searched.charAt(0) == "#"){
+        console.log(`You submitted ${searched}`);
+        const styleTag = searched.split("#")[1];
 
-    if (findCity.length == 0){
-        req.flash('error', "Sorry, this city does not exist.");
-        return res.redirect('/');
+        let findTag = await postsDB.find({tags: styleTag}).toArray();
+        console.log(findTag);
+
+        if (findTag.length == 0){
+            req.flash("error", "Sorry, this tag does not exist.")
+            return res.redirect('/');
+        } else {
+            let redirectURL = "/tag/" + styleTag;
+            res.redirect(redirectURL);
+        }
     } else {
-        let redirectURL = "/city/" + cityTag;
-        res.redirect(redirectURL);
-    };
+        console.log(`You submitted ${searched}`);
+
+        let findCity = await postsDB.find({city: searched}).toArray();
+
+        if (findCity.length == 0){
+            req.flash('error', "Sorry, this city does not exist.");
+            return res.redirect('/');
+        } else {
+            let redirectURL = "/city/" + searched;
+            res.redirect(redirectURL);
+        };
+    }
 });
 
 /**
@@ -359,29 +377,6 @@ app.get('/city/:city', async(req, res) => {
                                         posts: findCity, 
                                         cities: sortedCities, 
                                         tags: sortedTags});
-    }
-});
-
-/**
- * Action Get from Search Bar Form for Filtering Style Tags
- * Redirects URL to filteres image gallery with certain tags, flashes error message if none found.
- */
-app.get('/searchTags/', async(req, res) => {
-    const styleTag = req.query.tags.toLowerCase();
-    console.log(`you submitted ${styleTag}`);
-
-    const db = await Connection.open(mongoUri, DB); 
-    const postsDB = db.collection(POSTS);
-
-    let findTag = await postsDB.find({tags: styleTag}).toArray();
-    console.log(findTag);
-
-    if (findTag.length == 0){
-        req.flash("error", "Sorry, this tag does not exist.")
-        return res.redirect('/');
-    } else {
-        let redirectURL = "/tag/" + styleTag;
-        res.redirect(redirectURL);
     }
 });
 

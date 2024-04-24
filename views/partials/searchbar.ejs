@@ -40,12 +40,12 @@
                         <a href="/city/<%= elt._id%>" class="city-tag"><%=elt._id%></a>
                     <% }); %>
                 
-                    <form id="searchCity" method="GET" action="/searchCity/">
+                    <form id="search" method="GET" action="/search/">
                         <p >
                             <label>Search...
-                                <input style="width: 100%" type="text" required name="city">
+                                <input style="width: 100%" type="text" required name="search">
                             </label>
-                            <input  type="submit" value="Search" id="searchCityButton">
+                            <input  type="submit" value="Search" id="searchButton">
                         </p>
                     </form>
                 </div>
@@ -56,16 +56,6 @@
                     <% tags.forEach((elt) => { %>
                         <a href="/tag/<%= elt._id%>" class="component-tag">#<%=elt._id%></a>
                     <% }); %>
-
-                    <form id="searchTag" method="GET" action="/searchTags/">
-                        <p >
-                            <label>Search...
-                                <input style="width: 100%" type="text" required name="tags">
-                            </label>
-                            <input  type="submit" value="Search" id="searchTagButton">
-                        </p>
-                    </form>
-
                 </div>
 
             </div>
