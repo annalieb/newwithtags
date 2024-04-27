@@ -79,6 +79,7 @@ const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou',
                 'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 
                 'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona'];
 
+const numButtons = 5;
 
 // ================================================================
 // file upload functions and variables
@@ -306,7 +307,7 @@ app.get('/', async (req, res) => {
 
     let sortedPostsByLiked = await sortPostsByLikes();
 
-    let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+    let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
     return res.render('index.ejs', {uid: uid, 
                                     logged_in: logged_in, 
@@ -344,7 +345,7 @@ app.get('/search/', async(req, res) => {
                 req.flash("error", "Sorry, these tags do not exist.")
                 return res.redirect('/');
             } else {
-                let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+                let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
         
                 return res.render('index.ejs', {uid: req.session.uid, 
                                                 logged_in: req.session.logged_in,
@@ -371,7 +372,7 @@ app.get('/search/', async(req, res) => {
                 req.flash("error", "Sorry, these tags do not exist.")
                 return res.redirect('/');
             } else {
-                let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+                let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
         
                 return res.render('index.ejs', {uid: req.session.uid, 
                                                 logged_in: req.session.logged_in,
@@ -426,7 +427,7 @@ app.get('/city/:city', async(req, res) => {
         req.flash("error", "Sorry, this city does not exist.")
         return res.redirect('/');
     } else {
-        let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+        let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
         
         return res.render('index.ejs', {uid: req.session.uid, 
                                         logged_in: req.session.logged_in,
@@ -453,7 +454,7 @@ app.get('/tag/:tag', async(req, res) => {
         req.flash("error", "Sorry, this tag does not exist.")
         return res.redirect('/');
     } else {
-        let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+        let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
         
         return res.render('index.ejs', {uid: req.session.uid, 
                                         logged_in: req.session.logged_in,
@@ -475,7 +476,7 @@ app.get('/sort', async (req,res) => {
     req.session.visits = visits;
     console.log('uid', uid);
 
-    let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+    let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
     if (sortBy == "Newest") {
         console.log('newest');
