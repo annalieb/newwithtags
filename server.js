@@ -668,7 +668,14 @@ app.post('/edit/:id', async (req, res) => {
     let caption = req.body.description;
 
     let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#' && elt != '#');
-    let tags = tagsWithHash.map((elt) => {return elt.slice(1)});
+    let tagsWithoutHash = tagsWithHash.map((elt) => {return elt.slice(1)});
+    let tags = [];
+
+    tagsWithoutHash.forEach((elt) => { // get rid of duplicate tags
+        if (!tags.includes(elt)) {
+            tags.push(elt);
+        };
+    });
     
     let editPost = await posts.updateOne({postID: postID}, 
                                         { $set: {
