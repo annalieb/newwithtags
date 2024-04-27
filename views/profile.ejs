@@ -19,10 +19,10 @@
         
             <div class="col-lg-4 col-md-4 col-sm-12">
 
-                <h1>Posted by <%=user.userFirstName%></h1>
+                <h1><%= action %> by <%=user.userFirstName%></h1>
                 <div class="container-comment">
-                    <p class="selector" href="/profile/posted">Posted</p>
-                    <p class="selector" href="/profile/liked">Liked</p>
+                    <a class="selector" href="/profile/posted">Posted</a>
+                    <a class="selector" href="/profile/liked">Liked</a>
         
                 </div>
         

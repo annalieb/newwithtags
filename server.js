@@ -656,10 +656,12 @@ app.get('/profile/posted', async (req, res) => {
 
         let userPosts = await posts.find({userID: currentUser.userID}).sort({date: -1}).toArray();
 
+        console.log(userPosts)
         return res.render('profile.ejs', {user: currentUser, 
                                             uid: req.session.uid, 
                                             logged_in: req.session.logged_in,
-                                            posts: userPosts});
+                                            posts: userPosts,
+                                            action: "Posted"});
     } else {
         req.flash('error', "Please log in to view your profile.");
         return res.redirect("/login");
@@ -672,24 +674,40 @@ app.get('/profile/liked', async (req,res) => {
     const likes = db.collection(LIKES);
     const posts = db.collection(POSTS);
     const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
-    let userLikedPostsID = await likes.find({userID: currentUser.userID}).project({postID: 1}).toArray();
 
-    let userLikedPosts = [];
-    userLikedPostsID.forEach( async (elt) => {
-        let individualPost = await posts.findOne({postID: elt.postID});
-        console.log("individualPost", individualPost);
-        userLikedPosts.push(individualPost);
-        console.log("userLikedPosts", userLikedPosts)
-        console.log('ehlo')
-    });
+    //let userLikedPosts = [];
 
-    console.log('here')
-    console.log("userLikedPosts", userLikedPosts);
+    let userLikedPosts = await likes.aggregate([
+        {
+            $match: {
+                userID: req.session.uid
+            }
+        },
+        {
+            $lookup: {
+                from: "posts",
+                localField: "postID",
+                foreignField: "postID",
+                as: "likedPosts"
+            },
+        },
+        {
+            $unwind: "$likedPosts"
+        },
+        {
+            $replaceRoot: {
+                newRoot: "$likedPosts"
+            }
+        }
+    ]).toArray();
+
+    console.log(userLikedPosts);
 
     return res.render('profile.ejs', {user: currentUser,
                                         uid: req.session.uid,
                                         logged_in: req.session.logged_in,
-                                        posts: userLikedPosts});
+                                        posts: userLikedPosts,
+                                        action: "Liked"});
 });
 
 /**
