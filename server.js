@@ -326,6 +326,62 @@ app.get('/search/', async(req, res) => {
     const db = await Connection.open(mongoUri, DB); 
     const postsDB = db.collection(POSTS);
 
+    if(searched.includes(",")){
+        console.log("You are searching multiple tags!")
+        console.log(searched.split(","));
+        var searchList = searched.split(",");
+        if(searchList[0].includes("#")){ //filters multiple tags
+            var tagList = [];
+            searchList.forEach((elt) => {
+                tagList.push(elt.split("#")[1])
+            })
+            console.log(tagList);
+
+            let findTags = await postsDB.find({tags: {$in: tagList}}).toArray();
+            console.log(findTags);
+
+            if (findTags.length == 0){
+                req.flash("error", "Sorry, these tags do not exist.")
+                return res.redirect('/');
+            } else {
+                let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+        
+                return res.render('index.ejs', {uid: req.session.uid, 
+                                                logged_in: req.session.logged_in,
+                                                posts: findTags, 
+                                                cities: sortedCities, 
+                                                tags: sortedTags});
+            }
+        } else {
+            console.log("hello")
+            const searchedCity = searchList[0];
+            // console.log(city);
+
+            var tagList = [];
+            var restSearch = searchList.slice(1);
+            restSearch.forEach((elt) => {
+                tagList.push(elt.split("#")[1])
+            })
+            // console.log(tagList);
+
+            let findPosts = await postsDB.find({$or:[{city: searchedCity}, {tags: {$in: tagList}}]}).toArray();
+            console.log(findPosts);
+
+            if (findPosts.length == 0){
+                req.flash("error", "Sorry, these tags do not exist.")
+                return res.redirect('/');
+            } else {
+                let [sortedCities, sortedTags] = await getNumCitiesAndTags(5);
+        
+                return res.render('index.ejs', {uid: req.session.uid, 
+                                                logged_in: req.session.logged_in,
+                                                posts: findPosts, 
+                                                cities: sortedCities, 
+                                                tags: sortedTags});
+            }
+        }
+    }
+
     if (searched.charAt(0) == "#"){
         console.log(`You submitted ${searched}`);
         const styleTag = searched.split("#")[1];
@@ -383,6 +439,7 @@ app.get('/city/:city', async(req, res) => {
 /**
  * Renders Filtered Tagged Image Gallery
  * Recalculates the top 5 tags when rendered
+ * have it be query string instead of limiting to one tag
  */
 app.get('/tag/:tag', async(req, res) => {
     const styleTag = req.params.tag;
