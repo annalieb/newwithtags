@@ -325,6 +325,7 @@ app.get('/', async (req, res) => {
  * Redirects URL to filteres image gallery with certain tags/cities, flashes error message if none found.
  */
 app.get('/search/', async(req, res) => {
+    console.log("req.query.search", req.query.search)
     const searched = req.query.search.toLowerCase();
     console.log(searched);
     const db = await Connection.open(mongoUri, DB); 
