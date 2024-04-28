@@ -69,7 +69,7 @@ async function main() {
   const post1 = {
     postID: 20001,
     userID: 'mo104',
-    imageURL: "../assets/uploads/img1.jpeg",
+    imageURL: "../assets/uploads/img1.png",
     comments: [
         {text: "I love this city!!", 
         userID: "mo104", 
@@ -90,7 +90,7 @@ async function main() {
   const post2 = {
     postID: 20002,
     userID: 'mm124',
-    imageURL: "../assets/uploads/img2.jpeg",
+    imageURL: "../assets/uploads/img2.png",
     comments: [
         {text: "beautiful", 
         userID: "mo104", 
@@ -124,7 +124,7 @@ async function main() {
   const post3 = {
     postID: 20003,
     userID: 'sl120',
-    imageURL: "../assets/uploads/img3.jpeg",
+    imageURL: "../assets/uploads/img3.png",
     comments: [
         {text: "this is so cool", 
         userID: "mo104", 
