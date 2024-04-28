@@ -150,6 +150,9 @@ async function getNumCitiesAndTags(n) {
         sortedTags = sortedTags.slice(0,n);
     };
 
+    console.log("sortedCities", sortedCities)
+    console.log("sortedTags", sortedTags)
+
     return [sortedCities, sortedTags];
 };
 

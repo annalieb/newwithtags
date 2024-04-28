@@ -608,9 +608,36 @@ async function main() {
         "outdoors",
         "athleisure"
     ],
-    city: "new york ciyt",
+    city: "new york city",
     date: "2023-12-15 10:25:27",
     caption: "out on a quick walk!"
+  };
+
+  const post23 = {
+    postID: 20023,
+    userID: 'mm124',
+    imageURL: "../assets/uploads/img23.png",
+    comments: [
+        {text: "omg so cute!!", 
+        userID: "al117", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "love ur top", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"},
+        {text: "gorgeous", 
+        userID: "sl120", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "europe",
+        "cottagecore",
+        "longskirt",
+        "bows",
+        "crochet"
+    ],
+    city: "madrid",
+    date: "2024-01-20 10:25:27",
+    caption: "nighttime outing!"
   };
 
   // sample users
@@ -701,18 +728,20 @@ async function main() {
   const like47 = {postID: 20021, userID: "mm124"};
   const like48 = {postID: 20021, userID: "mo104"};
   const like49 = {postID: 20022, userID: "mo104"};
+  const like50 = {postID: 20023, userID: "mm124"};
+  const like51 = {postID: 20023, userID: "al117"};
 
 
   let lsPosts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10,
                 post11, post12, post13, post14, post15, post16, post17, post18, post19,
-                post20, post21, post22];
+                post20, post21, post22, post23];
   let lsUsers = [user1, user2, user3, user4];
   let lsLikes = [like1, like2, like3, like4, like5, like6, like7, like8, like9, like10,
                 like11, like12, like13, like14, like15, like16, like17, like18, like19,
                 like20, like21, like22, like23, like24, like25, like26, like27, like28,
                 like29, like30, like31, like32, like33, like34, like35, like36, like37,
                 like38, like39, like40, like41, like42, like43, like44, like45, like46,
-                like47, like48, like49];
+                like47, like48, like49, like50, like51];
 
   // delete all data from each collection
   let deletePosts = await deleteDocuments(myDB, POSTS);
