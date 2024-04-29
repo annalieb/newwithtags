@@ -82,9 +82,18 @@
                 <div class="container-comments">
                     <% findPost.comments.forEach((elt) => { %>
                         <div class="container-comment">
-                            <hr class="gray">
-                            <p><%=elt.text%></p>
-                            <p class="text-timestamp"><%=elt.date%></p>
+                            <% if (elt.userID == uid) { %>
+                                <hr class="gray">
+                                <div class="full-width" style="display: flex; justify-content: space-between;">
+                                    <p><%=elt.text%></p>
+                                    <img style="height: 18px" src="../assets/comment-tag-you.svg">
+                                </div>
+                                <p class="text-timestamp"><%=elt.date%></p>
+                            <% } else { %>
+                                <hr class="gray">
+                                <p><%=elt.text%></p>
+                                <p class="text-timestamp"><%=elt.date%></p>
+                            <% } %>
                         </div>
                     <% }); %>
                 </div>

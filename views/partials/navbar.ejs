@@ -12,7 +12,7 @@
       <li id="/create">
         <a class="nav-link" href="/create">Create</a>
       </li>
-      <li id="/profile" class="logged-in">
+      <li id="/profile/posted" class="logged-in">
         <a class="nav-link" href="/profile/posted">My posts</a>
       </li>
       <li id="/login" class="not-logged-in">
@@ -23,7 +23,7 @@
 
 </div>
 
-<hr style="margin-top: 10px">
+<hr style="margin-top: 10px; margin-bottom: 15px">
 
 <script>
   var logged_in = "<%= logged_in %>";
@@ -46,5 +46,9 @@
   console.log(link);
   if (link) {
     link.classList.add('active');
+  }
+  if (currentPage == "/profile/liked") {
+    let linkProfileLiked = document.getElementById("/profile/posted");
+    linkProfileLiked.classList.add('active');
   }
 </script>
