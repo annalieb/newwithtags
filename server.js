@@ -140,15 +140,8 @@ async function incrCounter (counters, key) {
  * @returns an array of cities and an array of tags, both of length n.
  */
 async function getNumCitiesAndTags(n) {
-    let sortedCities = await sortCitiesByNumPosts();
-    let sortedTags = await sortTagsByNumPosts(); 
-
-    if (sortedCities.length > n) {
-        sortedCities = sortedCities.slice(0,n);
-    };
-    if (sortedTags.length > n) {
-        sortedTags = sortedTags.slice(0,n);
-    };
+    let sortedCities = await sortCitiesByNumPosts(n);
+    let sortedTags = await sortTagsByNumPosts(n); 
 
     console.log("sortedCities", sortedCities)
     console.log("sortedTags", sortedTags)
@@ -206,7 +199,7 @@ async function sortPostsByNewest () {
  * Function to sort all the cities used in the database by most used to least used. 
  * @returns an array of sorted cities and the number of times they're used.
  */
-async function sortCitiesByNumPosts() {
+async function sortCitiesByNumPosts(n) {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
@@ -220,7 +213,7 @@ async function sortCitiesByNumPosts() {
         {
             $project: {city: 1, count: 1}
         }
-    ]).toArray();
+    ]).limit(n).toArray();
     
     return sortedCities;
 };
@@ -229,7 +222,7 @@ async function sortCitiesByNumPosts() {
  * Function to sort all the tags used in the database by most used to least used. 
  * @returns an array of sorted tags and the number of times they're used.
  */
-async function sortTagsByNumPosts() {
+async function sortTagsByNumPosts(n) {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
@@ -246,7 +239,7 @@ async function sortTagsByNumPosts() {
         {
             $project: {tags: 1, count: 1}
         }
-    ]).toArray();
+    ]).limit(n).toArray();
 
     return sortedTags;
 };
