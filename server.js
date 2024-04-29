@@ -702,21 +702,6 @@ app.post('/edit/:id', async (req, res) => {
     };
 });
 
-//
-/* app.get('/post-single/:id', async (req, res) => {
-    const postID = parseInt(req.params.id);
-    const db = await Connection.open(mongoUri, DB);
-    const posts = db.collection(POSTS);
-
-    let findPost = await posts.findOne({postID: postID}); 
-
-    return res.render('post-single.ejs', {
-        findPost, 
-        uid: req.session.uid, 
-        logged_in: req.session.logged_in,
-    });
-}); */
-
 /**
  * Renders the profile page, which shows the logged in user's information and the user's posts. 
  * If the user is not logged in, redirects to the home and flashes an error message. 
