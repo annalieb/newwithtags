@@ -517,6 +517,12 @@ app.get('/post-single/:id', async (req, res) => {
     var matched = await likes.find({postID: postID}).toArray();
     var numLikes = matched.length
 
+    let likeString = "Likes";
+
+    if (numLikes == 1) {
+        likeString = "Like";
+    };
+
     // check if this user has already liked the post 
     var alreadyLiked = true;
     var userLiked = await likes.findOne({postID: postID, userID: req.session.uid,});
@@ -531,6 +537,7 @@ app.get('/post-single/:id', async (req, res) => {
         logged_in: req.session.logged_in, 
         postID: postID, 
         numLikes: numLikes, 
+        likeString: likeString,
         alreadyLiked: alreadyLiked
     });
 });
@@ -696,7 +703,7 @@ app.post('/edit/:id', async (req, res) => {
 });
 
 //
-app.get('/post-single/:id', async (req, res) => {
+/* app.get('/post-single/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
@@ -706,8 +713,9 @@ app.get('/post-single/:id', async (req, res) => {
     return res.render('post-single.ejs', {
         findPost, 
         uid: req.session.uid, 
-        logged_in: req.session.logged_in});
-});
+        logged_in: req.session.logged_in,
+    });
+}); */
 
 /**
  * Renders the profile page, which shows the logged in user's information and the user's posts. 
