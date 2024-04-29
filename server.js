@@ -77,7 +77,7 @@ const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou',
                 'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago', 
                 'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming', 
                 'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 
-                'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona'];
+                'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona', 'Copenhagen'];
 
 const numButtons = 5;
 

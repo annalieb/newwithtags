@@ -434,6 +434,15 @@ async function main() {
         date: "2023-12-20 3:55:43"},
         {text: "stunning", 
         userID: "sl120", 
+        date: "2026-12-20 3:55:43"},
+        {text: "absolutely gorgeous", 
+        userID: "al117", 
+        date: "2026-12-20 3:55:43"},
+        {text: "wow where is ur dress from??", 
+        userID: "mm124", 
+        date: "2026-12-20 3:55:43"},
+        {text: "so cool", 
+        userID: "mm124", 
         date: "2026-12-20 3:55:43"}
     ], 
     tags: [
@@ -664,6 +673,194 @@ async function main() {
     caption: "fit today!"
   };
 
+  const post25 = {
+    postID: 20025,
+    userID: 'mo104',
+    imageURL: "../assets/uploads/img25.png",
+    comments: [
+        {text: "u look so cute!", 
+        userID: "al117", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "love ur top", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "fairycore"
+          ],
+    city: "new york city",
+    date: "2023-07-12 10:25:27",
+    caption: "felt cute!"
+  };
+
+  const post26 = {
+    postID: 20026,
+    userID: 'mo104',
+    imageURL: "../assets/uploads/img26.png",
+    comments: [], 
+    tags: [
+        "fairycore",
+        "cottagecore"
+          ],
+    city: "copenhagen",
+    date: "2023-11-12 10:25:27",
+    caption: "loved this field"
+  };
+
+  const post27 = {
+    postID: 20027,
+    userID: 'mm124',
+    imageURL: "../assets/uploads/img27.png",
+    comments: [
+        {text: "so cool", 
+        userID: "al117", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "love ur vest omg where is it from", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "y2k",
+        "edgy"
+          ],
+    city: "shanghai",
+    date: "2023-12-12 10:25:27",
+    caption: "felt cool"
+  };
+
+  const post28 = {
+    postID: 20028,
+    userID: 'sl120',
+    imageURL: "../assets/uploads/img28.png",
+    comments: [
+        {text: "oh my god u look so cool", 
+        userID: "al117", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "wow what a cool fit", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "edgy",
+        "sheer",
+        "platforms"
+          ],
+    city: "beijing",
+    date: "2023-10-02 10:25:27",
+    caption: "felt cute might delete later"
+  };
+
+  const post29 = {
+    postID: 20029,
+    userID: 'al117',
+    imageURL: "../assets/uploads/img29.png",
+    comments: [
+        {text: "so cute!!", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "very cool", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "y2k",
+        "city",
+        "streetwear"
+          ],
+    city: "new york city",
+    date: "2023-11-02 10:25:27",
+    caption: "cafe fit!!"
+  };
+
+  const post30 = {
+    postID: 20030,
+    userID: 'al117',
+    imageURL: "../assets/uploads/img30.png",
+    comments: [
+        {text: "absolutely the coolest", 
+        userID: "sl120", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "love ur jeans!", 
+        userID: "sl120", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "city",
+        "streetwear"
+          ],
+    city: "new york city",
+    date: "2023-11-02 10:25:27",
+    caption: "got new sunglasses"
+  };
+
+  const post31 = {
+    postID: 20031,
+    userID: 'sl120',
+    imageURL: "../assets/uploads/img31.png",
+    comments: [
+        {text: "so cute!!", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"}, 
+        {text: "omg love ur boots where are they from", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"},
+        {text: "serving", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "y2k",
+        "streetwear",
+        "platforms"
+          ],
+    city: "new york city",
+    date: "2023-11-02 10:25:27",
+    caption: "today was such a nice day!"
+  };
+
+  const post32 = {
+    postID: 20032,
+    userID: 'al117',
+    imageURL: "../assets/uploads/img32.png",
+    comments: [
+        {text: "so cool!!", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "y2k",
+        "streetwear",
+        "denim"
+          ],
+    city: "london",
+    date: "2023-10-02 10:25:27",
+    caption: "this matching set is my favorite ever"
+  };
+
+  const post33 = {
+    postID: 20033,
+    userID: 'al117',
+    imageURL: "../assets/uploads/img33.png",
+    comments: [
+        {text: "jaw dropped", 
+        userID: "mm124", 
+        date: "2023-12-20 3:55:43"},
+        {text: "stunning!!", 
+        userID: "sl120", 
+        date: "2023-12-20 3:55:43"},
+        {text: "so cool!!", 
+        userID: "mo104", 
+        date: "2023-12-20 3:55:43"}
+    ], 
+    tags: [
+        "y2k",
+        "streetwear"
+          ],
+    city: "beijing",
+    date: "2023-07-02 10:25:27",
+    caption: "going out fit!"
+  };
+
   // sample users
 
   // all users will have the same password for now: 
@@ -758,17 +955,33 @@ async function main() {
   const like53 = {postID: 20024, userID: "mm124"};
   const like54 = {postID: 20024, userID: "mo104"};
   const like55 = {postID: 20024, userID: "sl120"};
+  const like56 = {postID: 20025, userID: "mm124"};
+  const like57 = {postID: 20027, userID: "mm124"};
+  const like58 = {postID: 20027, userID: "al117"};
+  const like59 = {postID: 20028, userID: "mo104"};
+  const like60 = {postID: 20029, userID: "sl120"};
+  const like61 = {postID: 20030, userID: "sl120"};
+  const like62 = {postID: 20030, userID: "mm124"};
+  const like63 = {postID: 20030, userID: "mo104"};
+  const like64 = {postID: 20030, userID: "al117"};
+  const like65 = {postID: 20031, userID: "al117"};
+  const like66 = {postID: 20032, userID: "mm124"};
+  const like67 = {postID: 20032, userID: "mo104"};
+  const like68 = {postID: 20033, userID: "mo104"};
 
   let lsPosts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10,
                 post11, post12, post13, post14, post15, post16, post17, post18, post19,
-                post20, post21, post22, post23, post24];
+                post20, post21, post22, post23, post24, post25, post26, post27, post28,
+                post29, post30, post31, post32, post33];
   let lsUsers = [user1, user2, user3, user4];
   let lsLikes = [like1, like2, like3, like4, like5, like6, like7, like8, like9, like10,
                 like11, like12, like13, like14, like15, like16, like17, like18, like19,
                 like20, like21, like22, like23, like24, like25, like26, like27, like28,
                 like29, like30, like31, like32, like33, like34, like35, like36, like37,
                 like38, like39, like40, like41, like42, like43, like44, like45, like46,
-                like47, like48, like49, like50, like51, like52, like53, like54, like55];
+                like47, like48, like49, like50, like51, like52, like53, like54, like55,
+                like56, like57, like58, like59, like60, like61, like62, like63, like64,
+                like65, like66, like67, like68];
 
   // delete all data from each collection
   let deletePosts = await deleteDocuments(myDB, POSTS);
