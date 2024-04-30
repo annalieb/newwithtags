@@ -562,7 +562,7 @@ app.get('/post-single/:id', async (req, res) => {
 // Classic route for likes uses POST-Redirect-GET pattern to update database
 app.post('/likeClassic/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
-    if (req.session.logged_in == false || typeof req.session.uid != "number") {
+    if (req.session.logged_in == false) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
