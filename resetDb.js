@@ -69,7 +69,7 @@ async function main() {
   const post1 = {
     postID: 20001,
     userID: 'mo104',
-    imageURL: "../assets/uploads/img1.png",
+    imageURL: "../assets/uploads/img1.jpeg",
     comments: [
         {text: "I love this city!!", 
         userID: "mo104", 
