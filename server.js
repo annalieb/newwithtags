@@ -826,7 +826,7 @@ app.get('/profile/liked', async (req, res) => {
 app.post('/comment/:postID', async (req, res) => {
     if (req.session.logged_in) {
         let commentText = req.body.comment;
-        let user = parseInt(req.session.uid);
+        let user = req.session.uid;
         let postID = parseInt(req.params.postID);
 
         let date = getDateAndTime();
