@@ -562,7 +562,7 @@ app.get('/post-single/:id', async (req, res) => {
 // Classic route for likes uses POST-Redirect-GET pattern to update database
 app.post('/likeClassic/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
-    if (req.session.logged_in == false || typeof req.session.uid != "number" ) {
+    if (req.session.logged_in == false || typeof req.session.uid != "number") {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
@@ -725,6 +725,29 @@ app.post('/edit/:id', async (req, res) => {
     };
 });
 
+/* Confirmation page to delete a post */
+app.get("/delete/:id", async (req, res) => {
+    const db = await Connection.open(mongoUri, DB);
+    var post = await db.collection(POSTS).findOne({ postID: parseInt(req.params.id) });
+    console.log(post);
+    return res.render('delete.ejs', {
+        uid: req.session.uid,
+        logged_in: req.session.logged_in,
+        post: post
+    })
+})
+
+/* Functionality to delete a post. Takes the ID of the post to delete. 
+Removes it from the database and flashes a confirmation message on the home page. */
+app.post("/delete/:id", async (req, res) => {
+    var postID = parseInt(req.params.id);
+    let db = await Connection.open(mongoUri, DB);
+    let deleted = await db.collection(POSTS).deleteOne({ postID: postID });
+    console.log("Deleted", deleted.deletedCount, "post with ID", postID);
+    req.flash("info", "Deleted post.");
+    return res.redirect("/");
+})
+
 /**
  * Renders the profile page, which shows the logged in user's information and the user's posts. 
  * If the user is not logged in, redirects to the home and flashes an error message. 
@@ -752,14 +775,13 @@ app.get('/profile/posted', async (req, res) => {
     };
 });
 
-//
+/* On the profile page, get the list of posts that the user has liked. 
+Then, render the profile page (profile.ejs) with a gallery of liked posts. */
 app.get('/profile/liked', async (req, res) => {
     const db = await Connection.open(mongoUri, DB);
     const likes = db.collection(LIKES);
     const posts = db.collection(POSTS);
     const currentUser = await db.collection(USERS).findOne({ userID: req.session.uid });
-
-    //let userLikedPosts = [];
 
     let userLikedPosts = await likes.aggregate([
         {
@@ -888,22 +910,6 @@ app.post("/join", async (req, res) => {
     req.flash('info', 'Account created for ' + req.body.first + '. You are now logged in.');
     return res.redirect("/");
 });
-
-
-// shows how logins might work via Ajax
-// app.post('/set-uid-ajax/', (req, res) => {
-//     console.log(Object.keys(req.body));
-//     console.log(req.body);
-//     let uid = req.body.uid;
-//     if(!logged_in) {
-//         res.send({error: 'no uid'}, 400);
-//         return;
-//     }
-//     req.session.uid = req.body.uid;
-//     req.session.logged_in = true;
-//     console.log('logged in via ajax as ', req.body.uid);
-//     res.send({error: false});
-// });
 
 // conventional non-Ajax logout, so redirects
 app.post('/logout', (req, res) => {

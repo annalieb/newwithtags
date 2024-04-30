@@ -70,8 +70,8 @@
                             <a style="display: inline-block;" href="/edit/<%= postID %>">
                                 <img id="edit-btn" src="../assets/edit.svg">
                             </a>
-                            <form style="display: inline-block;" method="post" action="/delete/<%= postID %>">
-                                <img id="delete-btn" src="../assets/delete.svg">
+                            <form style="display: inline-block;" method="GET" action="/delete/<%= postID %>">
+                                <button type="submit" id="delete-submit"><img id="delete-btn" src="../assets/delete.svg"></button>
                             </form>
                         <% } %>
                     </div>
