@@ -7,7 +7,7 @@
 
 // standard modules, loaded from node_modules
 const path = require('path');
-require("dotenv").config({ path: path.join(process.env.HOME, '.cs304env')});
+require("dotenv").config({ path: path.join(process.env.HOME, '.cs304env') });
 const express = require('express');
 const morgan = require('morgan');
 const serveStatic = require('serve-static');
@@ -65,19 +65,19 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
-const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai', 
-                'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing', 
-                'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 
-                'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane', 
-                'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris', 
-                'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou', 
-                'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur', 
-                'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad', 
-                'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou', 
-                'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago', 
-                'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming', 
-                'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj', 
-                'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona', 'Copenhagen'];
+const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai',
+    'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing',
+    'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul',
+    'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane',
+    'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris',
+    'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou',
+    'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur',
+    'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad',
+    'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou',
+    'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago',
+    'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming',
+    'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj',
+    'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona', 'Copenhagen'];
 
 const numButtons = 5;
 
@@ -93,28 +93,29 @@ function timeString(dateObj) {
     if (!dateObj) {
         dateObj = new Date();
     };
-    d2 = (val) => val < 10 ? '0'+val : ''+val;
+    d2 = (val) => val < 10 ? '0' + val : '' + val;
     let hh = d2(dateObj.getHours());
     let mm = d2(dateObj.getMinutes());
     let ss = d2(dateObj.getSeconds());
-    return hh+mm+ss;
+    return hh + mm + ss;
 }
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './public/assets/uploads/')
+        cb(null, './public/assets/uploads/')
     },
     filename: function (req, file, cb) {
         let parts = file.originalname.split('.');
-        let ext = parts[parts.length-1];
+        let ext = parts[parts.length - 1];
         let hhmmss = timeString();
         cb(null, file.fieldname + '-' + hhmmss + '.' + ext);
     }
 });
 
-var upload = multer({ storage: storage,
-                    // max fileSize in bytes
-                    limits: {fileSize: 100_000_000 }
+var upload = multer({
+    storage: storage,
+    // max fileSize in bytes
+    limits: { fileSize: 100_000_000 }
 });
 
 
@@ -128,10 +129,10 @@ var upload = multer({ storage: storage,
  * @param {string} key 
  * @returns the document after the update
  */
-async function incrCounter (counters, key) {
-    let result = await counters.findOneAndUpdate({collection: key},
-                                                 {$inc: {counter: 1}}, 
-                                                 {returnDocument: "after"});
+async function incrCounter(counters, key) {
+    let result = await counters.findOneAndUpdate({ collection: key },
+        { $inc: { counter: 1 } },
+        { returnDocument: "after" });
     return result.counter;
 };
 
@@ -141,7 +142,7 @@ async function incrCounter (counters, key) {
  */
 async function getNumCitiesAndTags(n) {
     let sortedCities = await sortCitiesByNumPosts(n);
-    let sortedTags = await sortTagsByNumPosts(n); 
+    let sortedTags = await sortTagsByNumPosts(n);
 
     console.log("sortedCities", sortedCities)
     console.log("sortedTags", sortedTags)
@@ -153,7 +154,7 @@ async function getNumCitiesAndTags(n) {
  * Function to sort all posts in database by likes in decreasing order
  * @returns an array of sorted posts
  */
-async function sortPostsByLikes () {
+async function sortPostsByLikes() {
     const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const posts = db.collection(POSTS);
     let sortedPosts = await posts.aggregate([
@@ -171,7 +172,7 @@ async function sortPostsByLikes () {
             }
         },
         {
-            $sort: {numLikes: -1} // sort posts by num of likes in decr. order
+            $sort: { numLikes: -1 } // sort posts by num of likes in decr. order
         }
     ]).toArray();
 
@@ -182,13 +183,13 @@ async function sortPostsByLikes () {
  * Function to sort all posts by date created, in descending order from most liked to least liked
  * @returns an array 
  */
-async function sortPostsByNewest () {
+async function sortPostsByNewest() {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
-    
+
     let sortedPosts = await posts.aggregate([
         {
-            $sort: {date: -1} // sort posts by num of likes in decr. order
+            $sort: { date: -1 } // sort posts by num of likes in decr. order
         }
     ]).toArray();
 
@@ -205,16 +206,16 @@ async function sortCitiesByNumPosts(n) {
 
     let sortedCities = await posts.aggregate([
         {
-            $group: {_id: "$city", count: {$sum: 1}}
-        }, 
-        {
-            $sort: {count: -1}
+            $group: { _id: "$city", count: { $sum: 1 } }
         },
         {
-            $project: {city: 1, count: 1}
+            $sort: { count: -1 }
+        },
+        {
+            $project: { city: 1, count: 1 }
         }
     ]).limit(n).toArray();
-    
+
     return sortedCities;
 };
 
@@ -231,13 +232,13 @@ async function sortTagsByNumPosts(n) {
             $unwind: "$tags"
         },
         {
-            $group: {_id: "$tags", count: {$sum: 1}}
-        }, 
-        {
-            $sort: {count: -1}
+            $group: { _id: "$tags", count: { $sum: 1 } }
         },
         {
-            $project: {tags: 1, count: 1}
+            $sort: { count: -1 }
+        },
+        {
+            $project: { tags: 1, count: 1 }
         }
     ]).limit(n).toArray();
 
@@ -249,7 +250,7 @@ async function sortTagsByNumPosts(n) {
  * @returns the current date and time as a formatted string
  */
 function getDateAndTime() {
-    let dateObj = new Date(); 
+    let dateObj = new Date();
     let the_day = dateObj.getDate();
     let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
     let the_year = dateObj.getFullYear();
@@ -263,10 +264,10 @@ function getDateAndTime() {
 };
 
 // helper function to create a new user
-async function insertUser (username, firstName, lastName, email, password) {
+async function insertUser(username, firstName, lastName, email, password) {
     const db = await Connection.open(mongoUri, DB);
 
-    let dateObj = new Date(); 
+    let dateObj = new Date();
     let the_day = dateObj.getDate();
     let the_month = dateObj.getMonth() + 1; // Add 1 because Jan is 0, etc.
     let the_year = dateObj.getFullYear();
@@ -276,16 +277,18 @@ async function insertUser (username, firstName, lastName, email, password) {
     let users = db.collection(USERS)
     await users.updateOne({
         userID: username
-    }, 
-    { $setOnInsert: {
-        userID: username,
-        userFirstName: firstName, 
-        userLastName: lastName, 
-        password: password,
-        email: email, 
-        dateCreated: date
-    }}, 
-    {upsert: true});
+    },
+        {
+            $setOnInsert: {
+                userID: username,
+                userFirstName: firstName,
+                userLastName: lastName,
+                password: password,
+                email: email,
+                dateCreated: date
+            }
+        },
+        { upsert: true });
 };
 
 
@@ -305,19 +308,21 @@ app.get('/', async (req, res) => {
 
     let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
-    return res.render('index.ejs', {uid: uid, 
-                                    logged_in: logged_in, 
-                                    visits: visits, 
-                                    posts: sortedPostsByLiked, 
-                                    cities: sortedCities, 
-                                    tags: sortedTags});
+    return res.render('index.ejs', {
+        uid: uid,
+        logged_in: logged_in,
+        visits: visits,
+        posts: sortedPostsByLiked,
+        cities: sortedCities,
+        tags: sortedTags
+    });
 });
 
 /**
  * Action Get from Search Bar Form for Filtering Tags or Cities
  * Redirects URL to filteres image gallery with certain tags/cities, flashes error message if none found.
  */
-app.get('/search/', async(req, res) => {
+app.get('/search/', async (req, res) => {
     const search = req.query.search;
     if (!search) {
         console.log("Search is missing from query string; ignoring this request to /search");
@@ -325,34 +330,36 @@ app.get('/search/', async(req, res) => {
     };
 
     const searched = search.toLowerCase();
-    const db = await Connection.open(mongoUri, DB); 
+    const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
-    if(searched.includes(",")){
+    if (searched.includes(",")) {
         console.log("You are searching multiple tags!")
         console.log(searched.split(","));
         var searchList = searched.split(",");
-        if(searchList[0].includes("#")){ //filters multiple tags
+        if (searchList[0].includes("#")) { //filters multiple tags
             var tagList = [];
             searchList.forEach((elt) => {
                 tagList.push(elt.split("#")[1])
             })
             console.log(tagList);
 
-            let findTags = await postsDB.find({tags: {$in: tagList}}).toArray();
+            let findTags = await postsDB.find({ tags: { $in: tagList } }).toArray();
             console.log(findTags);
 
-            if (findTags.length == 0){
+            if (findTags.length == 0) {
                 req.flash("error", "Sorry, these tags do not exist.")
                 return res.redirect('/');
             } else {
                 let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        
-                return res.render('index.ejs', {uid: req.session.uid, 
-                                                logged_in: req.session.logged_in,
-                                                posts: findTags, 
-                                                cities: sortedCities, 
-                                                tags: sortedTags});
+
+                return res.render('index.ejs', {
+                    uid: req.session.uid,
+                    logged_in: req.session.logged_in,
+                    posts: findTags,
+                    cities: sortedCities,
+                    tags: sortedTags
+                });
             }
         } else {
             console.log("hello")
@@ -366,32 +373,34 @@ app.get('/search/', async(req, res) => {
             })
             // console.log(tagList);
 
-            let findPosts = await postsDB.find({$or:[{city: searchedCity}, {tags: {$in: tagList}}]}).toArray();
+            let findPosts = await postsDB.find({ $or: [{ city: searchedCity }, { tags: { $in: tagList } }] }).toArray();
             console.log(findPosts);
 
-            if (findPosts.length == 0){
+            if (findPosts.length == 0) {
                 req.flash("error", "Sorry, these tags do not exist.")
                 return res.redirect('/');
             } else {
                 let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        
-                return res.render('index.ejs', {uid: req.session.uid, 
-                                                logged_in: req.session.logged_in,
-                                                posts: findPosts, 
-                                                cities: sortedCities, 
-                                                tags: sortedTags});
+
+                return res.render('index.ejs', {
+                    uid: req.session.uid,
+                    logged_in: req.session.logged_in,
+                    posts: findPosts,
+                    cities: sortedCities,
+                    tags: sortedTags
+                });
             }
         }
     }
 
-    if (searched.charAt(0) == "#"){
+    if (searched.charAt(0) == "#") {
         console.log(`You submitted ${searched}`);
         const styleTag = searched.split("#")[1];
 
-        let findTag = await postsDB.find({tags: styleTag}).toArray();
+        let findTag = await postsDB.find({ tags: styleTag }).toArray();
         console.log(findTag);
 
-        if (findTag.length == 0){
+        if (findTag.length == 0) {
             req.flash("error", "Sorry, this tag does not exist.")
             return res.redirect('/');
         } else {
@@ -401,9 +410,9 @@ app.get('/search/', async(req, res) => {
     } else {
         console.log(`You submitted ${searched}`);
 
-        let findCity = await postsDB.find({city: searched}).toArray();
+        let findCity = await postsDB.find({ city: searched }).toArray();
 
-        if (findCity.length == 0){
+        if (findCity.length == 0) {
             req.flash('error', "Sorry, this city does not exist.");
             return res.redirect('/');
         } else {
@@ -417,24 +426,26 @@ app.get('/search/', async(req, res) => {
  * Renders Filtered Image City Gallery
  * Recalculates the top 5 cities when rendered
  */
-app.get('/city/:city', async(req, res) => { 
+app.get('/city/:city', async (req, res) => {
     let city = req.params.city;
-    const db = await Connection.open(mongoUri, DB); 
+    const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
-    let findCity = await postsDB.find({city: city}).toArray();
+    let findCity = await postsDB.find({ city: city }).toArray();
 
-    if (findCity.length == 0){
+    if (findCity.length == 0) {
         req.flash("error", "Sorry, this city does not exist.")
         return res.redirect('/');
     } else {
         let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        
-        return res.render('index.ejs', {uid: req.session.uid, 
-                                        logged_in: req.session.logged_in,
-                                        posts: findCity, 
-                                        cities: sortedCities, 
-                                        tags: sortedTags});
+
+        return res.render('index.ejs', {
+            uid: req.session.uid,
+            logged_in: req.session.logged_in,
+            posts: findCity,
+            cities: sortedCities,
+            tags: sortedTags
+        });
     }
 });
 
@@ -443,30 +454,32 @@ app.get('/city/:city', async(req, res) => {
  * Recalculates the top 5 tags when rendered
  * have it be query string instead of limiting to one tag
  */
-app.get('/tag/:tag', async(req, res) => {
+app.get('/tag/:tag', async (req, res) => {
     const styleTag = req.params.tag;
 
-    const db = await Connection.open(mongoUri, DB); 
+    const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
-    let findTag = await postsDB.find({tags: styleTag}).toArray();
+    let findTag = await postsDB.find({ tags: styleTag }).toArray();
 
     if (findTag.length == 0) {
         req.flash("error", "Sorry, this tag does not exist.")
         return res.redirect('/');
     } else {
         let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        
-        return res.render('index.ejs', {uid: req.session.uid, 
-                                        logged_in: req.session.logged_in,
-                                        posts: findTag, 
-                                        cities: sortedCities, 
-                                        tags: sortedTags});
+
+        return res.render('index.ejs', {
+            uid: req.session.uid,
+            logged_in: req.session.logged_in,
+            posts: findTag,
+            cities: sortedCities,
+            tags: sortedTags
+        });
     };
 });
 
 // Get to sort posts on the home page by either newest or most liked.
-app.get('/sort', async (req,res) => {
+app.get('/sort', async (req, res) => {
     let sortBy = req.query.sortBy;
     console.log(sortBy);
 
@@ -483,26 +496,30 @@ app.get('/sort', async (req,res) => {
         console.log('newest');
         let sortedPostsByNewest = await sortPostsByNewest();
 
-        return res.render('index.ejs', {uid: uid, 
-                                        logged_in: logged_in, 
-                                        visits: visits, 
-                                        posts: sortedPostsByNewest, 
-                                        cities: sortedCities, 
-                                        tags: sortedTags});
+        return res.render('index.ejs', {
+            uid: uid,
+            logged_in: logged_in,
+            visits: visits,
+            posts: sortedPostsByNewest,
+            cities: sortedCities,
+            tags: sortedTags
+        });
     } else if (sortBy == "Liked") {
         console.log('liked');
         let sortedPostsByLiked = await sortPostsByLikes();
-        return res.render('index.ejs', {uid: uid, 
-                                        logged_in: logged_in, 
-                                        visits: visits, 
-                                        posts: sortedPostsByLiked, 
-                                        cities: sortedCities, 
-                                        tags: sortedTags});
+        return res.render('index.ejs', {
+            uid: uid,
+            logged_in: logged_in,
+            visits: visits,
+            posts: sortedPostsByLiked,
+            cities: sortedCities,
+            tags: sortedTags
+        });
     } else {
         req.flash("error", "Please select a sorting method.");
         return res.redirect('/');
     };
-}); 
+});
 
 // get for /post-single/:id for a specific post
 app.get('/post-single/:id', async (req, res) => {
@@ -510,11 +527,11 @@ app.get('/post-single/:id', async (req, res) => {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
-    let findPost = await posts.findOne({postID: postID}); 
+    let findPost = await posts.findOne({ postID: postID });
 
     // calculate the number of likes
     const likes = db.collection(LIKES);
-    var matched = await likes.find({postID: postID}).toArray();
+    var matched = await likes.find({ postID: postID }).toArray();
     var numLikes = matched.length
 
     let likeString = "Likes";
@@ -525,34 +542,34 @@ app.get('/post-single/:id', async (req, res) => {
 
     // check if this user has already liked the post 
     var alreadyLiked = true;
-    var userLiked = await likes.findOne({postID: postID, userID: req.session.uid,});
+    var userLiked = await likes.findOne({ postID: postID, userID: req.session.uid, });
     if (userLiked == null) {
         // if no one has liked the post, it is not alreadyLiked
         alreadyLiked = false;
     }
 
     return res.render('post-single.ejs', {
-        findPost, 
-        uid: req.session.uid, 
-        logged_in: req.session.logged_in, 
-        postID: postID, 
-        numLikes: numLikes, 
+        findPost,
+        uid: req.session.uid,
+        logged_in: req.session.logged_in,
+        postID: postID,
+        numLikes: numLikes,
         likeString: likeString,
         alreadyLiked: alreadyLiked
     });
 });
 
 // Classic route for likes uses POST-Redirect-GET pattern to update database
-app.post('/likeClassic/:id', async (req,res) => {
+app.post('/likeClassic/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
-    if (req.session.logged_in == false) {
+    if (req.session.logged_in == false || typeof req.session.uid != "number" ) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
         const db = await Connection.open(mongoUri, DB);
         const likeDoc = await db.collection(LIKES).insertOne(
-            {postID: postID, userID: req.session.uid},
-            {upsert: false});
+            { postID: postID, userID: req.session.uid },
+            { upsert: false });
         console.log("User with ID", req.session.uid, "liked post with ID", postID);
         return res.redirect("/post-single/" + postID);
     }
@@ -564,7 +581,7 @@ app.post('/likeClassic/:id', async (req,res) => {
  */
 app.get('/create', (req, res) => {
     if (req.session.logged_in == true) {
-        return res.render('create.ejs', {uid: req.session.uid, logged_in: req.session.logged_in, cityList: CITIES});
+        return res.render('create.ejs', { uid: req.session.uid, logged_in: req.session.logged_in, cityList: CITIES });
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
         return res.redirect("/login");
@@ -609,18 +626,20 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     });
 
     // get rid of # in front of tags
-    let tags = uniqueTags.map((elt) => {return elt.slice(1)});
+    let tags = uniqueTags.map((elt) => { return elt.slice(1) });
 
     let date = getDateAndTime();
-    
-    let insertPost = await posts.insertOne({postID: postID,
-                                            userID: uid,
-                                            imageURL: "../assets/uploads/"+req.file.filename, 
-                                            comments: [],
-                                            tags: tags,
-                                            city: city, 
-                                            date: date,
-                                            caption: caption});
+
+    let insertPost = await posts.insertOne({
+        postID: postID,
+        userID: uid,
+        imageURL: "../assets/uploads/" + req.file.filename,
+        comments: [],
+        tags: tags,
+        city: city,
+        date: date,
+        caption: caption
+    });
 
     if (insertPost.acknowledged) { // if successfully inserted, redirect to the new post's post-single page
         console.log('successfully inserted post');
@@ -634,19 +653,21 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
 });
 
 // Get for /edit/:id to render the edit page.
-app.get('/edit/:id', async (req,res) => {
+app.get('/edit/:id', async (req, res) => {
     let postID = parseInt(req.params.id);
 
     let db = await Connection.open(mongoUri, DB);
     let posts = db.collection(POSTS);
 
-    let post = await posts.findOne({postID: postID}); 
+    let post = await posts.findOne({ postID: postID });
 
     if (req.session.logged_in == true && req.session.uid == post.userID) {
-        return res.render('edit.ejs', {uid: req.session.uid, 
-                                        logged_in: req.session.logged_in, 
-                                        cityList: CITIES,
-                                        post: post});
+        return res.render('edit.ejs', {
+            uid: req.session.uid,
+            logged_in: req.session.logged_in,
+            cityList: CITIES,
+            post: post
+        });
     } else {
         if (req.session.logged_in != true) {
             req.flash('error', "You are not logged in. Please log in to edit this post.");
@@ -665,7 +686,7 @@ app.post('/edit/:id', async (req, res) => {
     let db = await Connection.open(mongoUri, DB);
     let posts = db.collection(POSTS);
 
-    let oldPost = await posts.findOne({postID: postID});
+    let oldPost = await posts.findOne({ postID: postID });
 
     if (!oldPost) {
         req.flash('error', 'Post not found.');
@@ -677,7 +698,7 @@ app.post('/edit/:id', async (req, res) => {
     let caption = req.body.description;
 
     let tagsWithHash = tagsInitial.filter((elt) => elt[0] == '#' && elt != '#');
-    let tagsWithoutHash = tagsWithHash.map((elt) => {return elt.slice(1)});
+    let tagsWithoutHash = tagsWithHash.map((elt) => { return elt.slice(1) });
     let tags = [];
 
     tagsWithoutHash.forEach((elt) => { // get rid of duplicate tags
@@ -685,13 +706,15 @@ app.post('/edit/:id', async (req, res) => {
             tags.push(elt);
         };
     });
-    
-    let editPost = await posts.updateOne({postID: postID}, 
-                                        { $set: {
-                                            tags: tags,
-                                            city: city, 
-                                            caption: caption
-                                        }});
+
+    let editPost = await posts.updateOne({ postID: postID },
+        {
+            $set: {
+                tags: tags,
+                city: city,
+                caption: caption
+            }
+        });
 
     if (editPost.acknowledged) { // if successfully edited, redirect to the new post's post-single page
         req.flash("info", "Successfully edited.");
@@ -710,17 +733,19 @@ app.get('/profile/posted', async (req, res) => {
     if (req.session.logged_in) {
         const db = await Connection.open(mongoUri, DB);
         const posts = db.collection(POSTS);
-        const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
+        const currentUser = await db.collection(USERS).findOne({ userID: req.session.uid });
         console.log("CURRENT USER", currentUser);
 
-        let userPosts = await posts.find({userID: currentUser.userID}).sort({date: -1}).toArray();
+        let userPosts = await posts.find({ userID: currentUser.userID }).sort({ date: -1 }).toArray();
 
         console.log(userPosts)
-        return res.render('profile.ejs', {user: currentUser, 
-                                            uid: req.session.uid, 
-                                            logged_in: req.session.logged_in,
-                                            posts: userPosts,
-                                            action: "Posted"});
+        return res.render('profile.ejs', {
+            user: currentUser,
+            uid: req.session.uid,
+            logged_in: req.session.logged_in,
+            posts: userPosts,
+            action: "Posted"
+        });
     } else {
         req.flash('error', "Please log in to view your profile.");
         return res.redirect("/login");
@@ -728,11 +753,11 @@ app.get('/profile/posted', async (req, res) => {
 });
 
 //
-app.get('/profile/liked', async (req,res) => {
+app.get('/profile/liked', async (req, res) => {
     const db = await Connection.open(mongoUri, DB);
     const likes = db.collection(LIKES);
     const posts = db.collection(POSTS);
-    const currentUser = await db.collection(USERS).findOne({userID: req.session.uid});
+    const currentUser = await db.collection(USERS).findOne({ userID: req.session.uid });
 
     //let userLikedPosts = [];
 
@@ -762,11 +787,13 @@ app.get('/profile/liked', async (req,res) => {
 
     console.log(userLikedPosts);
 
-    return res.render('profile.ejs', {user: currentUser,
-                                        uid: req.session.uid,
-                                        logged_in: req.session.logged_in,
-                                        posts: userLikedPosts,
-                                        action: "Liked"});
+    return res.render('profile.ejs', {
+        user: currentUser,
+        uid: req.session.uid,
+        logged_in: req.session.logged_in,
+        posts: userLikedPosts,
+        action: "Liked"
+    });
 });
 
 /**
@@ -782,8 +809,8 @@ app.post('/comment/:postID', async (req, res) => {
 
         let date = getDateAndTime();
 
-        let comment = {text: commentText, userID: user, date: date}
-        
+        let comment = { text: commentText, userID: user, date: date }
+
         let db = await Connection.open(mongoUri, DB);
         const posts = db.collection(POSTS);
 
@@ -795,14 +822,16 @@ app.post('/comment/:postID', async (req, res) => {
         return res.redirect("/post-single/" + postID);
     } else {
         let postID = parseInt(req.params.postID);
-        req.flash("error", "Please log in to leave a comment."); 
+        req.flash("error", "Please log in to leave a comment.");
         return res.redirect("/post-single/" + postID);
     }
 });
 
 // render login page 
 app.get("/login", (req, res) => {
-    return res.render("login.ejs", {uid: req.session.uid, logged_in: req.session.logged_in});
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
+    return res.render("login.ejs", { uid: uid, logged_in: logged_in });
 })
 
 /**
@@ -813,7 +842,7 @@ app.post("/login", async (req, res) => {
     username = req.body.username;
     password = req.body.password;
     const db = await Connection.open(mongoUri, DB);
-    let userdict = await db.collection(USERS).findOne({userID: username}, {projection: {password: 1}});
+    let userdict = await db.collection(USERS).findOne({ userID: username }, { projection: { password: 1 } });
     if (userdict == null) {
         console.log("failed login for", username);
         req.session.uid = false;
@@ -836,8 +865,9 @@ app.post("/login", async (req, res) => {
             req.session.logged_in = false;
             req.flash("error", "Login failed. Check your username and password and try again.")
             return res.redirect("/login");
-    }}
-    
+        }
+    }
+
 });
 
 /**
@@ -846,16 +876,18 @@ app.post("/login", async (req, res) => {
  */
 app.post("/join", async (req, res) => {
     let hash = await bcrypt.hash(req.body.password, ROUNDS);
-    insertUser (
-        req.body.username, 
-        req.body.first, 
-        req.body.last, 
-        req.body.email, 
-        hash); 
-    console.log('signup/stored', "\t", hash);
+    insertUser(
+        req.body.username,
+        req.body.first,
+        req.body.last,
+        req.body.email,
+        hash);
+    console.log('signup stored', "\t", hash);
+    req.session.uid = req.body.username;
+    req.session.logged_in = true;
     req.flash('info', 'Account created for ' + req.body.first + '. You are now logged in.');
     return res.redirect("/");
-  });
+});
 
 
 // shows how logins might work via Ajax
@@ -889,6 +921,6 @@ app.post('/logout', (req, res) => {
 const serverPort = cs304.getPort(8080);
 
 // this is last, because it never returns
-app.listen(serverPort, function() {
+app.listen(serverPort, function () {
     console.log(`open http://localhost:${serverPort}`);
 });
