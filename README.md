@@ -9,7 +9,7 @@ On newwithtags, users can upload pictures of outfits and tag them by location an
 1. Clone this GitHub repository. 
 2. On a Wellesley CS server account, run `node server.js` and open the given localhost address in your browser. 
 3. Navigate the website: 
-	1. First, you will land on the **home page** (the home route `/`). This page shows a gallery of all posts. By expanding the sort and filter section, you can choose to sort by newest or by most liked. Additionally, you can filter by city or by tag. Users can conduct searches using the text input for cities, or by clicking one of the featured city or tag buttons. 
+	1. First, you will land on the **home page** (the home route `/`). This page shows a gallery of all posts. By expanding the sort and filter section, you can choose to sort by newest or by most liked. Additionally, you can filter by city or by tag. Users can conduct searches using the text input for cities, or by clicking one of the featured city or tag buttons. To search for multiple tags and a location, enter search terms separated by a comma in the search bar.
 	2. View a **single post** by clicking on the image in the gallery (uses the `post-single/:id` route). This will take you to a more detailed image of the post, where you can view comments, likes, and the image caption. Notice that if you attempt to like or comment without being signed in, *it will not work*! You will receive an error message explaining that you must log in to like or comment.
 	3. **Log in** or create an account by navigating to the "login" option in the nav bar (or navigate directly to `/login`). Once you are logged in, you have unlocked full functionality of the website (ie. posting, commenting, liking, etc.). 
 	4. Once you're logged in, you will be able to **create a post** by selecting "Create" from the nav bar (or navigate directly to `/create`). You will notice that you can also edit and delete your posts once you have created them. Note that the edit and delete options will not be displayed on posts that you did not create. 
@@ -19,8 +19,9 @@ On newwithtags, users can upload pictures of outfits and tag them by location an
 
 ### Known bugs
 * Search criteria for city is very strict; the city name must be typed exactly as it is written in the database
+* You can either sort by newest/most liked OR apply a filter, but not both. Whenever you sort, it shows all posts and removes any filtering. 
 
 ### Future features
 * "Unlike" a post by clicking on the like button for a post that you have already liked
-* Implement Ajax for likes and comments
+* Implement Ajax version for likes and comments
 * Create system for reporting users for inappropriate conduct
