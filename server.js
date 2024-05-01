@@ -66,18 +66,17 @@ const USERS = 'users';
 const COUNTERS = 'counters';
 
 const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai',
-    'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York', 'Dhaka', 'Beijing',
-    'Kolkata', 'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul',
-    'Karachi', 'Bangalore', 'Ho Chi Min', 'Osaka', 'Chengdu', 'Tehran', 'Kinshasa', 'Rio de Jane',
-    'Chennai', "Xi'an", 'Lahore', 'Chongqing', 'Los Angeles', 'Baoding', 'London', 'Paris',
-    'Linyi', 'Dongguan', 'Hyderābād', 'Tianjin', 'Lima', 'Wuhan', 'Nanyang', 'Hangzhou',
-    'Foshan', 'Nagoya', 'Taipei', 'Tongshan', 'Luanda', 'Zhoukou', 'Ganzhou', 'Kuala Lumpur',
-    'Heze', 'Quanzhou', 'Chicago', 'Nanjing', 'Jining', 'Hanoi', 'Pune', 'Fuyang', 'Ahmedabad',
-    'Johannesburg', 'Bogotá', 'Dar es Salaam', 'Shenyang', 'Khartoum', 'Shangqiu', 'Cangzhou',
-    'Hong Kong', 'Shaoyang', 'Zhanjiang', 'Yancheng', 'Hengyang', 'Riyadh', 'Zhumadian', 'Santiago',
-    'Xingtai', 'Chattogran', 'Bijie', 'Shangrao', 'Zunyi', 'Sūrat', 'Surabaya', 'Huanggang', 'Maoming',
-    'Nanchong', 'Xinyang', 'Madrid', 'Baghdad', 'Qujing', 'Jieyang', 'Singapore', 'Prayagraj',
-    'Liaocheng', 'Dalian', 'Yulin', 'Changde', 'Qingdao', 'Douala', 'Houston', 'Barcelona', 'Copenhagen'];
+    'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York City', 'Beijing',
+    'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 'Milan',
+    'Bangalore', 'Osaka', 'Chengdu', 'Tehran', 'Rio de Jane',
+    'Chennai', 'Los Angeles', 'London', 'Paris',
+    'Linyi', 'Dongguan', 'Wuhan', 'Nanyang', 'Hangzhou',
+    'Foshan', 'Nagoya', 'Taipei', 'Zhoukou', 'Ganzhou', 
+    'Chicago', 'Nanjing', 'Fuyang', 
+    'Johannesburg', 'Bogotá', 'Shenyang', 'Shangqiu', 
+    'Hong Kong', 'Santiago',
+    'Madrid', 'Baghdad', 'Singapore', 
+    'Houston', 'Barcelona', 'Copenhagen'];
 
 const numButtons = 5;
 
@@ -141,7 +140,7 @@ async function incrCounter(counters, key) {
  * @returns an array of cities and an array of tags, both of length n.
  */
 async function getNumCitiesAndTags(n) {
-    let sortedCities = await sortCitiesByNumPosts(n);
+    let sortedCities = await sortUsedCitiesByNumPosts(n);
     let sortedTags = await sortTagsByNumPosts(n);
 
     console.log("sortedCities", sortedCities)
@@ -200,7 +199,7 @@ async function sortPostsByNewest() {
  * Function to sort all the cities used in the database by most used to least used. 
  * @returns an array of sorted cities and the number of times they're used.
  */
-async function sortCitiesByNumPosts(n) {
+async function sortUsedCitiesByNumPosts(n) {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
@@ -218,6 +217,48 @@ async function sortCitiesByNumPosts(n) {
 
     return sortedCities;
 };
+
+/**
+ * Function to sort all the cities that are both used and not used in the database by most used to least used. 
+ * @returns an array of sorted cities as strings
+ */
+async function sortCitiesByNumPosts(n) {
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+
+    let sortedCityDicts = await posts.aggregate([
+        {
+            $group: { _id: "$city", count: { $sum: 1 } }
+        },
+        {
+            $sort: { count: -1 }
+        },
+        {
+            $project: { city: 1}
+        }
+    ]).limit(n).toArray();
+
+    let sortedPresentCities = [];
+
+    sortedCityDicts.forEach((elt) => {
+        sortedPresentCities.push(elt._id);
+    });
+    
+    sortedPresentCities = capitalizeCities(sortedPresentCities);
+
+    console.log(sortedPresentCities);
+
+    let absentCities = CITIES.filter( (elt) => {
+        return !sortedPresentCities.includes(elt);
+    });
+
+    let sortedCities = sortedPresentCities.concat(absentCities);
+
+    return sortedCities;
+};
+
+
+
 
 /**
  * Function to sort all the tags used in the database by most used to least used. 
@@ -244,6 +285,25 @@ async function sortTagsByNumPosts(n) {
 
     return sortedTags;
 };
+
+/**
+ * Function to capitalize all words in all cities in an array 
+ * @param {array} cities 
+ * @returns a new array of newly-capitalized cities
+ */
+function capitalizeCities(cities) {
+    let capitalizedCities = [];
+    cities.forEach( (city) => {
+        let words = city.split(' ');
+        newWords = words.map( (word) => 
+            {return word.charAt(0).toUpperCase() + word.slice(1)}
+        );
+        console.log("a city split up into words:", newWords)
+        capitalizedCities.push(newWords.join(' '));
+    });
+
+    return capitalizedCities;
+}
 
 /**
  * Function to get the current date and time as a string in the format "YY-MM-DD HH-MM-SS"
@@ -579,9 +639,14 @@ app.post('/likeClassic/:id', async (req, res) => {
  * Renders the create page to make a new post. 
  * If the user is not logged in, redirects to the home and flashes an error message. 
  */
-app.get('/create', (req, res) => {
+app.get('/create', async (req, res) => {
     if (req.session.logged_in == true) {
-        return res.render('create.ejs', { uid: req.session.uid, logged_in: req.session.logged_in, cityList: CITIES });
+        let totalNumCities = CITIES.length;
+        let sortedCities = await sortCitiesByNumPosts(totalNumCities);
+        console.log(sortedCities)
+        return res.render('create.ejs', { uid: req.session.uid, 
+                                        logged_in: req.session.logged_in, 
+                                        cityList: sortedCities });
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
         return res.redirect("/login");
