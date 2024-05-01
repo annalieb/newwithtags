@@ -68,14 +68,14 @@ const COUNTERS = 'counters';
 const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai',
     'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York City', 'Beijing',
     'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 'Milan',
-    'Bangalore', 'Osaka', 'Chengdu', 'Tehran', 'Rio de Jane',
-    'Chennai', 'Los Angeles', 'London', 'Paris',
-    'Linyi', 'Dongguan', 'Wuhan', 'Nanyang', 'Hangzhou',
-    'Foshan', 'Nagoya', 'Taipei', 'Zhoukou', 'Ganzhou', 
-    'Chicago', 'Nanjing', 'Fuyang', 
-    'Johannesburg', 'Bogotá', 'Shenyang', 'Shangqiu', 
-    'Hong Kong', 'Santiago',
-    'Madrid', 'Baghdad', 'Singapore', 
+    'Bangalore', 'Osaka', 'Chengdu', 'Tehran', 'Rio de Jane', 'Toronto', 'Athens',
+    'Chennai', 'Los Angeles', 'London', 'Paris', 'Rome', 'Prague', 'Sydney', 'Lima',
+    'Wuhan', 'Nanyang', 'Hangzhou', 'Amsterdam', 'Dubai', 'Dublin', 'Stockholm', 'Cairo',
+    'Nagoya', 'Taipei', 'Berlin', 'Washington D.C.', 'Vienna', 'Lisbon', 'Edinburgh',
+    'Chicago', 'Nanjing', 'Fuyang', 'Montreal', 'Vilnius', 'Frankfurt', 'Vancouver',
+    'Johannesburg', 'Bogotá', 'Shenyang', 'Shangqiu', 'Melbourne', 'Venice',
+    'Hong Kong', 'Santiago', 'Orlando', 'Las Vegas', 'Miami', 'Orlando',
+    'Madrid', 'Baghdad', 'Singapore', 'San Francisco', 'Honolulu', 'Munich',
     'Houston', 'Barcelona', 'Copenhagen'];
 
 const numButtons = 5;
