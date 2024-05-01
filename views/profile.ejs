@@ -21,8 +21,10 @@
 
                 <h1><%= action %> by <%=user.userFirstName%></h1>
                 <div class="container-comment">
-                    <a class="selector" href="/profile/posted">Posted</a>
-                    <a class="selector" href="/profile/liked">Liked</a>
+
+                    <a id="posted" class="white-button" href="/profile/posted">Posted</a>
+
+                    <a id="liked" class="white-button" href="/profile/liked">Liked</a>
         
                 </div>
         
@@ -56,6 +58,27 @@
     <script src="../bootstrap.min.js"></script>
 </bodys>
 </html>
+
+<script>
+
+    let currentPage = window.location.pathname;
+    console.log("currentpage:");
+    console.log(currentPage);
+
+    if (currentPage == "/profile/liked") {
+      let buttonProfileLiked = document.getElementById("liked");
+      console.log(buttonProfileLiked);
+      buttonProfileLiked.classList.add('active');
+      console.log(buttonProfileLiked);
+    }
+    if (currentPage == "/profile/posted") {
+      let buttonProfilePosted = document.getElementById("posted");
+      console.log(buttonProfilePosted);
+      buttonProfilePosted.classList.add('active');
+      console.log(buttonProfilePosted);
+    }
+
+</script>
 
 
 

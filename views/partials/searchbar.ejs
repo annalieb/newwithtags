@@ -1,7 +1,7 @@
 <div class="row">
-    <div class="session col-12" style="display: flex; flex-wrap: wrap">
+    <div class="session col-12" style="display: flex; flex-wrap: wrap;">
         
-            <div class="question" style="display: flex; width: 100%">
+            <div class="question" style="display: flex; width: 100%;">
                 <div class="col-lg-2 col-md-2 col-sm-4" style="padding-left: 0px">
                     <h3>Sort</h3> 
                 </div>
@@ -15,31 +15,43 @@
                 </div>
             </div>
             <div class="content" style="display: flex; width: 100%;">
-                <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px">
-                    <p>Sort by</p> 
+                <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px; margin-bottom: 30px">
+
+                    <p style="margin-bottom: 8px">Sort by</p> 
                     <form method="GET" action="/sort">
-                        <label>
+                        <label class="radio">
                             <input type="radio" name="sortBy" value="Newest">
                             Newest
                         </label>
-                    
-                        <label>
+                        <br>
+                        <label class="radio" style="margin-bottom: 24px">
                             <input type="radio" name="sortBy" value="Liked">
                             Most liked
                         </label>
                         <input type="submit" value="Sort" id="sortButton">
-
                     </form>
                     
                 </div>
 
-                <div class="col-lg-4 col-md-4 col-sm-12" style="padding-left: 0px">
-                    <p>Select city</p> 
+                <div class="col-lg-4 col-md-4 col-sm-12" style="padding-left: 0px; margin-bottom: 30px">
+
+                    <p style="margin-bottom: 8px">Select city</p> 
 
                     <% cities.forEach((elt) => { %>
                         <a href="/city/<%= elt._id%>" class="city-tag"><%=elt._id%></a>
                     <% }); %>
                 
+
+                    <p style="margin-bottom: 8px">Select tags</p> 
+
+                    <% tags.forEach((elt) => { %>
+                        <a href="/tag/<%= elt._id%>" class="component-tag">#<%=elt._id%></a>
+                    <% }); %>
+
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12" style="padding-left: 0px; margin-bottom: 30px">
+
                     <form id="search" method="GET" action="/search/">
                         <p >
                             <label>Search...
@@ -48,14 +60,7 @@
                             <input  type="submit" value="Search" id="searchButton">
                         </p>
                     </form>
-                </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-12" style="padding-left: 0px">
-                    <p>Select tags</p> 
-
-                    <% tags.forEach((elt) => { %>
-                        <a href="/tag/<%= elt._id%>" class="component-tag">#<%=elt._id%></a>
-                    <% }); %>
+                    
                 </div>
 
             </div>
@@ -64,3 +69,15 @@
 </div>
 <hr style="margin: 10px 0px 40px 0px">
 <div class="container-fluid">
+
+<style>
+label.radio {
+    display: inline-flex;
+    align-items: center;
+}
+
+input[type="radio"] {
+    margin-right: 5px; 
+
+}
+</style>

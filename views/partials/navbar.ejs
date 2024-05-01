@@ -26,6 +26,7 @@
 <hr style="margin-top: 10px; margin-bottom: 15px">
 
 <script>
+
   var logged_in = "<%= logged_in %>";
   if (logged_in !== 'false') {
     $(".logged-in").show();
@@ -34,16 +35,13 @@
     $(".logged-in").hide();
     $(".not-logged-in").show();
   }
-</script>
-
-<script>
 
   let currentPage = window.location.pathname;
-  console.log("currentpage:");
-  console.log(currentPage);
+  /* console.log("currentpage:");
+  console.log(currentPage); */
 
   let link = document.getElementById(currentPage);
-  console.log(link);
+/*   console.log(link); */
   if (link) {
     link.classList.add('active');
   }
@@ -51,4 +49,5 @@
     let linkProfileLiked = document.getElementById("/profile/posted");
     linkProfileLiked.classList.add('active');
   }
+  
 </script>
