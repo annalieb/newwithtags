@@ -657,7 +657,8 @@ app.get('/post-single/:id', async (req, res) => {
 // Classic route for likes uses POST-Redirect-GET pattern to update database
 app.post('/likeClassic/:id', async (req, res) => {
     const postID = parseInt(req.params.id);
-    if (req.session.logged_in == false) {
+    console.log(req.session.logged_in)
+    if (!req.session.logged_in) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
@@ -676,8 +677,7 @@ app.post('/likeClassic/:id', async (req, res) => {
  */
 app.get('/create', async (req, res) => {
     if (req.session.logged_in == true) {
-        let totalNumCities = CITIES.length;
-        let sortedCities = await sortCitiesByNumPosts(totalNumCities);
+        let sortedCities = await sortCitiesByNumPosts(CITIES.length);
         console.log(sortedCities)
         return res.render('create.ejs', { uid: req.session.uid, 
                                         logged_in: req.session.logged_in, 
@@ -701,14 +701,15 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     let postID = await incrCounter(counters, POSTS);
     let posts = db.collection(POSTS);
 
-    let city = req.body.city.toLowerCase();
+    let city = req.body.city;
+    console.log(req.body)
+    console.log(city)
     let tagsInitial = req.body.tags.split(" ");
-    let caption = req.body.description;
+    let description = req.body.description;
+    let alttext = req.body.alttext;
     let imageUpload = './public/assets/uploads/' + req.file.filename;
 
     // change the permissions of the file to be world-readable
-    // this can be a relative or absolute pathname. 
-    // Here, I used a relative pathname
     let val = await fs.chmod(imageUpload, 0o664);
     console.log('chmod val', val);
 
@@ -738,7 +739,8 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
         tags: tags,
         city: city,
         date: date,
-        caption: caption
+        description: description,
+        alttext: alttext
     });
 
     if (insertPost.acknowledged) { // if successfully inserted, redirect to the new post's post-single page
@@ -760,12 +762,13 @@ app.get('/edit/:id', async (req, res) => {
     let posts = db.collection(POSTS);
 
     let post = await posts.findOne({ postID: postID });
+    let sortedCities = await sortCitiesByNumPosts(CITIES.length);
 
     if (req.session.logged_in == true && req.session.uid == post.userID) {
         return res.render('edit.ejs', {
             uid: req.session.uid,
             logged_in: req.session.logged_in,
-            cityList: CITIES,
+            cityList: sortedCities,
             post: post
         });
     } else {

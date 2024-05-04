@@ -29,7 +29,7 @@
                     </label>
                     <select id="city" name="city">
                         <% cityList.forEach((elt) => { %>
-                            <option value=<%=elt%>><%=elt%></option>
+                            <option value="<%=elt%>"><%=elt%></option>
                         <% }) %>
                     </select>
 
@@ -48,6 +48,14 @@
                         <p class="text-timestamp">Say whatever you’d like about the look!</p>
                     </label>
                     <input type="text" id="description" name="description">
+                    
+                    <br>
+
+                    <label for="alttext">
+                        <p class="bold" style="margin-bottom: 5px;">Alt Text</p>
+                        <p class="text-timestamp">Describe your image.</p>
+                    </label>
+                    <input type="text" id="alttext" name="alttext">
                     
                     <br>
 
