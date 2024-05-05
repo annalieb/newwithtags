@@ -399,7 +399,7 @@ app.get('/search/', async (req, res) => {
             })
             // console.log(tagList);
 
-            let findPosts = await postsDB.find({ $or: [{ city: searchedCity }, { tags: { $in: tagList } }] }).toArray();
+            let findPosts = await postsDB.find({ $and: [{ city: searchedCity }, { tags: { $in: tagList } }] }).toArray();
             console.log(findPosts);
 
             if (findPosts.length == 0) {
