@@ -608,7 +608,6 @@ app.get('/post-single/:id', async (req, res) => {
     var numLikes = matched.length
 
     let likeString = "Likes";
-
     if (numLikes == 1) {
         likeString = "Like";
     };
@@ -629,7 +628,6 @@ app.get('/post-single/:id', async (req, res) => {
         alreadyLiked = false;
     }
 
-
     return res.render('post-single.ejs', {
         findPost,
         uid: uid,
@@ -642,17 +640,16 @@ app.get('/post-single/:id', async (req, res) => {
     });
 });
 
-// Classic route for likes uses POST-Redirect-GET pattern to update database
-app.post('/likeClassic/:id', async (req, res) => {
+// Ajax route to like a post. Returns a json to update the page.
+app.post('/likeAjax/:id', async (req,res) => {
     var uid = req.session.uid || false;
     var logged_in = req.session.logged_in || false;
     var postID = parseInt(req.params.id);
     if (!logged_in) {
-        req.flash('error', "You are not logged in. Please log in to like this post.");
-        return res.redirect("/post-single/" + postID);
+        return res.json({error: true, action: "error"});
     } else {
-        await likePost(uid, postID);
-        return res.redirect("/post-single/" + postID);
+        var numLikes = await likePost(uid, postID);
+        return res.json({error: false, likes: numLikes, postID: postID, uid: uid, action: "like"});
     }
 });
 
@@ -663,20 +660,22 @@ async function likePost(uid, postID) {
         { postID: postID, userID: uid },
         { upsert: false });
     console.log("User with ID", uid, "liked post with ID", postID);
+    
+    var matched = await db.collection(LIKES).find({ postID: postID }).toArray();
+    var numLikes = matched.length;
+    return numLikes;
 }
 
-// Classic route for unliking uses POST-Redirect-GET pattern to update database
-app.post('/unlikeClassic/:id', async (req, res) => {
+// Ajax route to unlike a post. Returns a json to update the page.
+app.post('/unlikeAjax/:id', async (req,res) => {
     var uid = req.session.uid || false;
     var logged_in = req.session.logged_in || false;
     var postID = parseInt(req.params.id);
-    console.log("clicked the unlike button")
     if (!logged_in) {
-        req.flash('error', "You are not logged in. Please log in to like this post.");
-        return res.redirect("/post-single/" + postID);
+        return res.json({error: true, action: "error"});
     } else {
-        await unlikePost(uid, postID)
-        return res.redirect("/post-single/" + postID);
+        var numLikes = await unlikePost(uid, postID);
+        return res.json({error: false, likes: numLikes, postID: postID, uid: uid, action: "unlike"});
     }
 });
 
@@ -686,6 +685,10 @@ async function unlikePost(uid, postID) {
     var unlikeDoc = await db.collection(LIKES).deleteOne(
         { postID: postID, userID: uid });
     console.log("User with ID", uid, "unliked post with ID", postID);
+
+    var matched = await db.collection(LIKES).find({ postID: postID }).toArray();
+    var numLikes = matched.length;
+    return numLikes;
 }
 
 /**

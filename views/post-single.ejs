@@ -48,20 +48,17 @@
                     </p>
                 </div>
 
-                <div class="like-del-edit">
+                <div class="like-del-edit"  data-id="<%= postID %>">
                     <div> <!-- Like button container -->
+                        <!-- AJAX version -->
                         <% if( alreadyLiked ) { %>
-                            <form style="display: inline-block;" method="post" action="/unlikeClassic/<%= postID %>">
-                                <button class="likeBtn alreadyLiked" type="submit" data-id="<%= postID %>">
-                                    <img src="../assets/heart-filled.svg">
-                                </button>
-                            </form>
+                            <button class="likeBtn alreadyLiked" type="button">
+                                <img src="../assets/heart-filled.svg">
+                            </button>
                         <% } else { %>
-                            <form style="display: inline-block;" method="post" action="/likeClassic/<%= postID %>">
-                                <button class="likeBtn notLiked" type="submit" data-id="<%= postID %>">
-                                    <img src="../assets/heart-empty.svg">
-                                </button>
-                            </form>
+                            <button class="likeBtn notLiked" type="button">
+                                <img src="../assets/heart-empty.svg">
+                            </button>
                         <% } %>
                         
                         <p class="likeCount"><%=numLikes%> <%=likeString%></p>
@@ -115,6 +112,47 @@
     <script src="/main.js"></script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
+    <script>
+        var logged_in = "<%= logged_in %>";
+
+        /* Ajax version of liking */
+        $(".like-del-edit").on('click', '.notLiked', function (event) {
+            var postID = $(this).closest("[data-id]").attr("data-id");
+            $.post("/likeAjax/"+postID, {postID: postID}).then(processLike);
+            // $(this).find("img").attr("src", "../assets/heart-filled.svg");
+            // $(this).attr("class", "likeBtn alreadyLiked");
+        });
+
+        /* Ajax version of unliking */
+        $(".like-del-edit").on('click', '.alreadyLiked', function (event) {
+            var postID = $(this).closest("[data-id]").attr("data-id");
+            $.post("/unlikeAjax/"+postID, {postID: postID}).then(processLike);
+            // $(this).find("img").attr("src", "../assets/heart-empty.svg");
+            // $(this).attr("class", "likeBtn notLiked");
+        });
+
+        // update the number of likes displayed on the page
+        function processLike(resp) {
+            if (resp.error) {
+                alert('Error: Please log in to like a post.');
+            } else {
+                console.log("Liked post "+resp.postID+". Total likes: "+resp.likes);
+                var likeString = "Likes"
+                if (resp.likes == 1) {
+                    likeString = "Like"
+                }
+                $(".like-del-edit").find('.likeCount').text(resp.likes + " " + likeString);
+                if (resp.action == "like") {
+                    $(".likeBtn").find("img").attr("src", "../assets/heart-filled.svg");
+                    $(".likeBtn").attr("class", "likeBtn alreadyLiked");
+                } else if (resp.action == "unlike") {
+                    $(".likeBtn").find("img").attr("src", "../assets/heart-empty.svg");
+                    $(".likeBtn").attr("class", "likeBtn notLiked");
+                }
+            }
+        }
+
+    </script>
 </body>
 </html>
 
