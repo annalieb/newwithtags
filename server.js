@@ -454,7 +454,7 @@ app.get('/search/', async (req, res) => {
  * Recalculates the top 5 cities when rendered
  */
 app.get('/city/:city', async (req, res) => {
-    let city = req.params.city;
+    let city = req.params.city.toLowerCase();
     const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
@@ -723,7 +723,7 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     let postID = await incrCounter(counters, POSTS);
     let posts = db.collection(POSTS);
 
-    let city = req.body.city;
+    let city = req.body.city.toLowerCase();
     console.log(req.body)
     console.log(city)
     let tagsInitial = req.body.tags.split(" ");
