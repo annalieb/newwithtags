@@ -65,18 +65,18 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
-const CITIES = ['Wellesley', 'Boston', 'Tokyo', 'Jakarta', 'Delhi', 'Guangzhou', 'Mumbai', 'Manila', 'Shanghai',
-    'São Paulo', 'Seoul', 'Mexico City', 'Cairo', 'New York City', 'Beijing',
-    'Bangkok', 'Shenzhen', 'Moscow', 'Buenos Aires', 'Lagos', 'Istanbul', 'Milan',
-    'Bangalore', 'Osaka', 'Chengdu', 'Tehran', 'Rio de Jane', 'Toronto', 'Athens',
-    'Chennai', 'Los Angeles', 'London', 'Paris', 'Rome', 'Prague', 'Sydney', 'Lima',
-    'Wuhan', 'Nanyang', 'Hangzhou', 'Amsterdam', 'Dubai', 'Dublin', 'Stockholm', 'Cairo',
-    'Nagoya', 'Taipei', 'Berlin', 'Washington D.C.', 'Vienna', 'Lisbon', 'Edinburgh',
-    'Chicago', 'Nanjing', 'Fuyang', 'Montreal', 'Vilnius', 'Frankfurt', 'Vancouver',
-    'Johannesburg', 'Bogotá', 'Shenyang', 'Shangqiu', 'Melbourne', 'Venice',
-    'Hong Kong', 'Santiago', 'Orlando', 'Las Vegas', 'Miami', 'Orlando',
-    'Madrid', 'Baghdad', 'Singapore', 'San Francisco', 'Honolulu', 'Munich',
-    'Houston', 'Barcelona', 'Copenhagen'];
+const CITIES = ['wellesley', 'boston', 'tokyo', 'jakarta', 'delhi', 'guangzhou', 'mumbai', 'Manila', 'shanghai',
+    'são paulo', 'seoul', 'mexico city', 'cairo', 'new york city', 'beijing',
+    'bangkok', 'shenzhen', 'moscow', 'buenos aires', 'lagos', 'istanbul', 'milan',
+    'bangalore', 'osaka', 'chengdu', 'tehran', 'rio de jane', 'toronto', 'athens',
+    'chennai', 'los angeles', 'london', 'paris', 'rome', 'prague', 'sydney', 'lima',
+    'wuhan', 'nanyang', 'hangzhou', 'amsterdam', 'dubai', 'dublin', 'stockholm', 'cairo',
+    'nagoya', 'taipei', 'berlin', 'washington D.C.', 'vienna', 'lisbon', 'edinburgh',
+    'chicago', 'nanjing', 'fuyang', 'montreal', 'vilnius', 'frankfurt', 'vancouver',
+    'johannesburg', 'bogotá', 'shenyang', 'shangqiu', 'melbourne', 'venice',
+    'hong kong', 'santiago', 'orlando', 'las vegas', 'miami', 'orlando',
+    'madrid', 'baghdad', 'singapore', 'san francisco', 'honolulu', 'munich',
+    'houston', 'barcelona', 'copenhagen']; 
 
 const numButtons = 5;
 
@@ -117,8 +117,6 @@ var upload = multer({
     limits: { fileSize: 100_000_000 }
 });
 
-
-
 // ================================================================
 // helper functions
 
@@ -140,7 +138,7 @@ async function incrCounter(counters, key) {
  * @returns an array of cities and an array of tags, both of length n.
  */
 async function getNumCitiesAndTags(n) {
-    let sortedCities = await sortUsedCitiesByNumPosts(n);
+    let sortedCities = await sortCitiesByNumPosts(n);
     let sortedTags = await sortTagsByNumPosts(n);
 
     console.log("sortedCities", sortedCities)
@@ -179,29 +177,6 @@ async function sortPostsByLikes() {
 };
 
 /**
- * Function to sort all the cities used in the database by most used to least used. 
- * @returns an array of sorted cities and the number of times they're used.
- */
-async function sortUsedCitiesByNumPosts(n) {
-    const db = await Connection.open(mongoUri, DB);
-    const posts = db.collection(POSTS);
-
-    let sortedCities = await posts.aggregate([
-        {
-            $group: { _id: "$city", count: { $sum: 1 } }
-        },
-        {
-            $sort: { count: -1 }
-        },
-        {
-            $project: { city: 1, count: 1 }
-        }
-    ]).limit(n).toArray();
-
-    return sortedCities;
-};
-
-/**
  * Function to sort all the cities that are both used and not used in the database by most used to least used. 
  * @returns an array of sorted cities as strings
  */
@@ -219,7 +194,7 @@ async function sortCitiesByNumPosts(n) {
         {
             $project: { city: 1}
         }
-    ]).limit(n).toArray();
+    ]).toArray();
 
     let sortedPresentCities = [];
 
@@ -227,9 +202,6 @@ async function sortCitiesByNumPosts(n) {
         sortedPresentCities.push(elt._id);
     });
     
-    sortedPresentCities = capitalizeCities(sortedPresentCities);
-
-    console.log(sortedPresentCities);
 
     let absentCities = CITIES.filter( (elt) => {
         return !sortedPresentCities.includes(elt);
@@ -237,10 +209,8 @@ async function sortCitiesByNumPosts(n) {
 
     let sortedCities = sortedPresentCities.concat(absentCities);
 
-    return sortedCities;
+    return capitalizeCities(sortedCities.slice(0,n));
 };
-
-
 
 
 /**
@@ -251,7 +221,7 @@ async function sortTagsByNumPosts(n) {
     const db = await Connection.open(mongoUri, DB);
     const posts = db.collection(POSTS);
 
-    let sortedTags = await posts.aggregate([
+    let sortedTagDicts = await posts.aggregate([
         {
             $unwind: "$tags"
         },
@@ -266,8 +236,27 @@ async function sortTagsByNumPosts(n) {
         }
     ]).limit(n).toArray();
 
+    let sortedTags = [];
+    sortedTagDicts.forEach((elt) => {
+        sortedTags.push(elt._id);
+    });
+
     return sortedTags;
 };
+
+/**
+ * Function to capitalize all words in a single city string
+ * @param {string} city 
+ * @returns properly-capitalized string city
+ */
+function capitalizeCity(city) {
+    //console.log("this is a city",city);
+    let words = city.split(' ');
+    newWords = words.map( (word) => 
+            {return word.charAt(0).toUpperCase() + word.slice(1)}
+        );
+    return newWords.join(' ');
+}
 
 /**
  * Function to capitalize all words in all cities in an array 
@@ -277,12 +266,7 @@ async function sortTagsByNumPosts(n) {
 function capitalizeCities(cities) {
     let capitalizedCities = [];
     cities.forEach( (city) => {
-        let words = city.split(' ');
-        newWords = words.map( (word) => 
-            {return word.charAt(0).toUpperCase() + word.slice(1)}
-        );
-        console.log("a city split up into words:", newWords)
-        capitalizedCities.push(newWords.join(' '));
+        capitalizedCities.push(capitalizeCity(city));
     });
 
     return capitalizedCities;
@@ -351,12 +335,15 @@ app.get('/', async (req, res) => {
 
     let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
+    let capitalizedSortedCities = capitalizeCities(sortedCities);
+    console.log("capitalizedSortedCities", capitalizedSortedCities)
+
     return res.render('index.ejs', {
         uid: uid,
         logged_in: logged_in,
         visits: visits,
         posts: sortedPostsByLiked,
-        cities: sortedCities,
+        cities: capitalizedSortedCities,
         tags: sortedTags
     });
 });
@@ -650,7 +637,8 @@ app.get('/post-single/:id', async (req, res) => {
         postID: postID,
         numLikes: numLikes,
         likeString: likeString,
-        alreadyLiked: alreadyLiked
+        alreadyLiked: alreadyLiked,
+        capitalizeCity: capitalizeCity
     });
 });
 

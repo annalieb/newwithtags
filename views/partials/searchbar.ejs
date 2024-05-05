@@ -38,14 +38,14 @@
                     <p style="margin-bottom: 8px">Select city</p> 
 
                     <% cities.forEach((elt) => { %>
-                        <a href="/city/<%= elt._id%>" class="city-tag"><%=elt._id%></a>
+                        <a href="/city/<%= elt%>" class="city-tag"><%=elt%></a>
                     <% }); %>
                 
 
                     <p style="margin-bottom: 8px">Select tags</p> 
 
                     <% tags.forEach((elt) => { %>
-                        <a href="/tag/<%= elt._id%>" class="component-tag">#<%=elt._id%></a>
+                        <a href="/tag/<%= elt%>" class="component-tag">#<%=elt%></a>
                     <% }); %>
 
                 </div>
