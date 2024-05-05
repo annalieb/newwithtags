@@ -644,44 +644,49 @@ app.get('/post-single/:id', async (req, res) => {
 
 // Classic route for likes uses POST-Redirect-GET pattern to update database
 app.post('/likeClassic/:id', async (req, res) => {
-    let uid = req.session.uid || false;
-    let logged_in = req.session.logged_in || false;
-    const postID = parseInt(req.params.id);
+    var uid = req.session.uid || false;
+    var logged_in = req.session.logged_in || false;
+    var postID = parseInt(req.params.id);
     if (!logged_in) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
-        const db = await Connection.open(mongoUri, DB);
-        const likeDoc = await db.collection(LIKES).insertOne(
-            { postID: postID, userID: uid },
-            { upsert: false });
-        console.log("User with ID", req.session.uid, "liked post with ID", postID);
+        await likePost(uid, postID);
         return res.redirect("/post-single/" + postID);
     }
 });
 
+/* Asynchronous helper function to update the database with a new like */
+async function likePost(uid, postID) {
+    const db = await Connection.open(mongoUri, DB);
+    const likeDoc = await db.collection(LIKES).insertOne(
+        { postID: postID, userID: uid },
+        { upsert: false });
+    console.log("User with ID", uid, "liked post with ID", postID);
+}
+
 // Classic route for unliking uses POST-Redirect-GET pattern to update database
 app.post('/unlikeClassic/:id', async (req, res) => {
-    let uid = req.session.uid || false;
-    let logged_in = req.session.logged_in || false;
-    const postID = parseInt(req.params.id);
+    var uid = req.session.uid || false;
+    var logged_in = req.session.logged_in || false;
+    var postID = parseInt(req.params.id);
     console.log("clicked the unlike button")
     if (!logged_in) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
-        const db = await Connection.open(mongoUri, DB);
-        var unlikeDoc = await db.collection(LIKES).deleteOne(
-            { postID: postID, userID: uid });
-        if (unlikeDoc.acknowledged == true) {
-            console.log("User with ID", uid, "unliked post with ID", postID);
-        } else {
-            req.flash('error', "Error finding post.");
-            return res.redirect("/post-single/" + postID);
-        }
+        await unlikePost(uid, postID)
         return res.redirect("/post-single/" + postID);
     }
 });
+
+/* Asynchronous helper function to delete a like from the database */
+async function unlikePost(uid, postID) {
+    const db = await Connection.open(mongoUri, DB);
+    var unlikeDoc = await db.collection(LIKES).deleteOne(
+        { postID: postID, userID: uid });
+    console.log("User with ID", uid, "unliked post with ID", postID);
+}
 
 /**
  * Renders the create page to make a new post. 
