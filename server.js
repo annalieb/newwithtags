@@ -76,7 +76,7 @@ const CITIES = ['wellesley', 'boston', 'tokyo', 'jakarta', 'delhi', 'guangzhou',
     'johannesburg', 'bogotá', 'shenyang', 'shangqiu', 'melbourne', 'venice',
     'hong kong', 'santiago', 'orlando', 'las vegas', 'miami', 'orlando',
     'madrid', 'baghdad', 'singapore', 'san francisco', 'honolulu', 'munich',
-    'houston', 'barcelona', 'copenhagen']; 
+    'houston', 'barcelona', 'copenhagen'];
 
 const numButtons = 5;
 
@@ -192,7 +192,7 @@ async function sortCitiesByNumPosts(n) {
             $sort: { count: -1 }
         },
         {
-            $project: { city: 1}
+            $project: { city: 1 }
         }
     ]).toArray();
 
@@ -201,15 +201,15 @@ async function sortCitiesByNumPosts(n) {
     sortedCityDicts.forEach((elt) => {
         sortedPresentCities.push(elt._id);
     });
-    
 
-    let absentCities = CITIES.filter( (elt) => {
+
+    let absentCities = CITIES.filter((elt) => {
         return !sortedPresentCities.includes(elt);
     });
 
     let sortedCities = sortedPresentCities.concat(absentCities);
 
-    return capitalizeCities(sortedCities.slice(0,n));
+    return capitalizeCities(sortedCities.slice(0, n));
 };
 
 
@@ -252,9 +252,8 @@ async function sortTagsByNumPosts(n) {
 function capitalizeCity(city) {
     //console.log("this is a city",city);
     let words = city.split(' ');
-    newWords = words.map( (word) => 
-            {return word.charAt(0).toUpperCase() + word.slice(1)}
-        );
+    newWords = words.map((word) => { return word.charAt(0).toUpperCase() + word.slice(1) }
+    );
     return newWords.join(' ');
 }
 
@@ -265,7 +264,7 @@ function capitalizeCity(city) {
  */
 function capitalizeCities(cities) {
     let capitalizedCities = [];
-    cities.forEach( (city) => {
+    cities.forEach((city) => {
         capitalizedCities.push(capitalizeCity(city));
     });
 
@@ -326,9 +325,6 @@ async function insertUser(username, firstName, lastName, email, password) {
 app.get('/', async (req, res) => {
     let uid = req.session.uid || false;
     let logged_in = req.session.logged_in || false;
-    let visits = req.session.visits || 0;
-    visits++;
-    req.session.visits = visits;
     console.log('uid', uid);
 
     let sortedPostsByLiked = await sortPostsByLikes();
@@ -341,7 +337,6 @@ app.get('/', async (req, res) => {
     return res.render('index.ejs', {
         uid: uid,
         logged_in: logged_in,
-        visits: visits,
         posts: sortedPostsByLiked,
         cities: capitalizedSortedCities,
         tags: sortedTags
@@ -524,9 +519,7 @@ app.get('/sort', async (req, res) => {
 
     let uid = req.session.uid || false;
     let logged_in = req.session.logged_in || false;
-    let visits = req.session.visits || 0;
-    visits++;
-    req.session.visits = visits;
+
     console.log('uid', uid);
 
     let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
@@ -547,7 +540,6 @@ app.get('/sort', async (req, res) => {
         return res.render('index.ejs', {
             uid: uid,
             logged_in: logged_in,
-            visits: visits,
             posts: postsToSort,
             cities: sortedCities,
             tags: sortedTags
@@ -561,13 +553,13 @@ app.get('/sort', async (req, res) => {
             postIDs.push(elt.postID);
         });
         console.log(postIDs);
-        
+
         const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
         const posts = db.collection(POSTS);
 
         let sortedPostsByLiked = await posts.aggregate([
             {
-                $match: {postID: {$in: postIDs}}
+                $match: { postID: { $in: postIDs } }
             },
             {
                 $lookup: {
@@ -592,7 +584,6 @@ app.get('/sort', async (req, res) => {
         return res.render('index.ejs', {
             uid: uid,
             logged_in: logged_in,
-            visits: visits,
             posts: sortedPostsByLiked,
             cities: sortedCities,
             tags: sortedTags
@@ -622,18 +613,27 @@ app.get('/post-single/:id', async (req, res) => {
         likeString = "Like";
     };
 
-    // check if this user has already liked the post 
-    var alreadyLiked = true;
-    var userLiked = await likes.findOne({ postID: postID, userID: req.session.uid, });
-    if (userLiked == null) {
-        // if no one has liked the post, it is not alreadyLiked
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
+    console.log("CURRENT LOGIN: ", uid, logged_in)
+
+    if (logged_in) {
+        // check if this user has already liked the post 
+        var alreadyLiked = true;
+        var userLiked = await likes.findOne({ postID: postID, userID: uid, });
+        if (userLiked == null) {
+            // if the current user has not liked the post, it is not alreadyLiked
+            alreadyLiked = false;
+        }
+    } else {
         alreadyLiked = false;
     }
 
+
     return res.render('post-single.ejs', {
         findPost,
-        uid: req.session.uid,
-        logged_in: req.session.logged_in,
+        uid: uid,
+        logged_in: logged_in,
         postID: postID,
         numLikes: numLikes,
         likeString: likeString,
@@ -644,17 +644,41 @@ app.get('/post-single/:id', async (req, res) => {
 
 // Classic route for likes uses POST-Redirect-GET pattern to update database
 app.post('/likeClassic/:id', async (req, res) => {
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
     const postID = parseInt(req.params.id);
-    console.log(req.session.logged_in)
-    if (!req.session.logged_in) {
+    if (!logged_in) {
         req.flash('error', "You are not logged in. Please log in to like this post.");
         return res.redirect("/post-single/" + postID);
     } else {
         const db = await Connection.open(mongoUri, DB);
         const likeDoc = await db.collection(LIKES).insertOne(
-            { postID: postID, userID: req.session.uid },
+            { postID: postID, userID: uid },
             { upsert: false });
         console.log("User with ID", req.session.uid, "liked post with ID", postID);
+        return res.redirect("/post-single/" + postID);
+    }
+});
+
+// Classic route for unliking uses POST-Redirect-GET pattern to update database
+app.post('/unlikeClassic/:id', async (req, res) => {
+    let uid = req.session.uid || false;
+    let logged_in = req.session.logged_in || false;
+    const postID = parseInt(req.params.id);
+    console.log("clicked the unlike button")
+    if (!logged_in) {
+        req.flash('error', "You are not logged in. Please log in to like this post.");
+        return res.redirect("/post-single/" + postID);
+    } else {
+        const db = await Connection.open(mongoUri, DB);
+        var unlikeDoc = await db.collection(LIKES).deleteOne(
+            { postID: postID, userID: uid });
+        if (unlikeDoc.acknowledged == true) {
+            console.log("User with ID", uid, "unliked post with ID", postID);
+        } else {
+            req.flash('error', "Error finding post.");
+            return res.redirect("/post-single/" + postID);
+        }
         return res.redirect("/post-single/" + postID);
     }
 });
@@ -667,9 +691,11 @@ app.get('/create', async (req, res) => {
     if (req.session.logged_in == true) {
         let sortedCities = await sortCitiesByNumPosts(CITIES.length);
         console.log(sortedCities)
-        return res.render('create.ejs', { uid: req.session.uid, 
-                                        logged_in: req.session.logged_in, 
-                                        cityList: sortedCities });
+        return res.render('create.ejs', {
+            uid: req.session.uid,
+            logged_in: req.session.logged_in,
+            cityList: sortedCities
+        });
     } else {
         req.flash('error', "You are not logged in. Please log in to create a post.");
         return res.redirect("/login");

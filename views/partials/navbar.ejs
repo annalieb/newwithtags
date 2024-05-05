@@ -28,7 +28,7 @@
 <script>
 
   var logged_in = "<%= logged_in %>";
-  if (logged_in !== 'false') {
+  if (logged_in == 'true') {
     $(".logged-in").show();
     $(".not-logged-in").hide();
   } else {

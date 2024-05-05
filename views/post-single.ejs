@@ -51,9 +51,11 @@
                 <div class="like-del-edit">
                     <div> <!-- Like button container -->
                         <% if( alreadyLiked ) { %>
-                            <button class="likeBtn alreadyLiked" type="button" data-id="<%= postID %>">
-                                <img src="../assets/heart-filled.svg">
-                            </button>
+                            <form style="display: inline-block;" method="post" action="/unlikeClassic/<%= postID %>">
+                                <button class="likeBtn alreadyLiked" type="submit" data-id="<%= postID %>">
+                                    <img src="../assets/heart-filled.svg">
+                                </button>
+                            </form>
                         <% } else { %>
                             <form style="display: inline-block;" method="post" action="/likeClassic/<%= postID %>">
                                 <button class="likeBtn notLiked" type="submit" data-id="<%= postID %>">
