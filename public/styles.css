@@ -358,7 +358,7 @@ label, select, input {
 	transform: rotate(180deg);
 }
 
-.active, .active:hover {
+#posted.active, #posted.active:hover, #liked.active, #liked.active:hover{
 	color: white !important;
 	background-color: black; 
 }
