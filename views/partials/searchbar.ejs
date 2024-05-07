@@ -88,60 +88,41 @@ input[type="radio"] {
 <script>
   
     let currentLink = window.location.href;
-    console.log("currentLink:", currentLink);
-
     currentSearchArray = currentLink.split("/");
-
     currentSearch = currentSearchArray[currentSearchArray.length - 1];
-    console.log("currentSearch", currentSearch)
 
     if (currentSearch.includes("?search=")) { // searching multiple cities/tags
         console.log("in multiple cities/tags");
         currentSearch = currentSearch.split("?search=")[1];
         searchTerms = currentSearch.split("%2C");
-        console.log(searchTerms);
         let linkSearch = null;
 
         searchTerms.forEach( (term) => {
             if (term.includes("%23")) { // term is a hashtag; hashtags are represented by %23
                 term = term.split("%23")[1].toLowerCase();
                 linkSearch = document.getElementById("/tag/" + term);
-                console.log("this is a hashtag term: ", term);
             } else { // term is a city
                 term = term.split("+").join(" ").toLowerCase();
                 linkSearch = document.getElementById("/city/" + term);
-                console.log("this is a city term:", term);
             };
             
-            console.log("outside linkSearch");
             if (linkSearch) {
-                console.log("in linkSearch",linkSearch);
                 linkSearch.classList.add('active');
             };
         });
         
-
     } else { // searching one city or one tag
-
         let currentSearch = window.location.pathname.toLowerCase();
-        /* console.log("currentpage:");
-        console.log(currentPage); */
-        console.log("currentSearch, in one only", currentSearch)
-
 
         if (currentSearch.includes("%20")) { // includes spaces
-                console.log("new york lol");
                 currentSearch = currentSearch.split("%20").join(" ");
-                console.log(currentSearch);
             };
 
         let linkSearch = document.getElementById(currentSearch);
-        /*   console.log(link); */
+
         if (linkSearch) {
             linkSearch.classList.add('active');
         }
-
-        
     };
   
     
