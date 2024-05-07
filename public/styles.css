@@ -335,31 +335,32 @@ label, select, input {
 	width: 100%;
 }
 
-/* Style for each session container */
 .session {
 	cursor: pointer;
 }
 
-/* Style for the content that can be collapsed */
 .content {
 	max-height: 0;
 	overflow: hidden;
 	transition: max-height 0.25s ease-in-out;
 }
 
-/* Style for the content when it's visible */
 .content.active {
 	display: block;
 	max-height: none;
 }
 
 .arrow-container img {
-	transition: transform 0.25s ease; /* Smooth transition for rotation */
+	transition: transform 0.25s ease; 
 }
 
-/* Rotate the image by 180 degrees when the "active" class is added */
 .session.active .arrow-container img {
 	transform: rotate(180deg);
+}
+
+.active, .active:hover {
+	color: white !important;
+	background-color: black; 
 }
 
 /* SMALL SCREEN SIZE */

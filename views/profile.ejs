@@ -61,17 +61,17 @@
 
 <script>
 
-    let currentPage = window.location.pathname;
-    console.log("currentpage:");
-    console.log(currentPage);
+    let nowPage = window.location.pathname;
+    console.log("nowPage:");
+    console.log(nowPage);
 
-    if (currentPage == "/profile/liked") {
+    if (nowPage == "/profile/liked") {
       let buttonProfileLiked = document.getElementById("liked");
       console.log(buttonProfileLiked);
       buttonProfileLiked.classList.add('active');
       console.log(buttonProfileLiked);
     }
-    if (currentPage == "/profile/posted") {
+    if (nowPage == "/profile/posted") {
       let buttonProfilePosted = document.getElementById("posted");
       console.log(buttonProfilePosted);
       buttonProfilePosted.classList.add('active');
