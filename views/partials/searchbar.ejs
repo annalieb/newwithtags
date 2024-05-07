@@ -38,14 +38,14 @@
                     <p style="margin-bottom: 8px">Select city</p> 
 
                     <% cities.forEach((elt) => { %>
-                        <a href="/city/<%= elt%>" class="city-tag"><%=elt%></a>
+                        <a href="/city/<%= elt%>" id="/city/<%= elt.toLowerCase()%>" class="city-tag"><%=elt%></a>
                     <% }); %>
                 
 
                     <p style="margin-bottom: 8px">Select tags</p> 
 
                     <% tags.forEach((elt) => { %>
-                        <a href="/tag/<%= elt%>" class="component-tag">#<%=elt%></a>
+                        <a href="/tag/<%= elt%>" id="/tag/<%= elt%>" class="component-tag">#<%=elt%></a>
                     <% }); %>
 
                 </div>
@@ -81,3 +81,24 @@ input[type="radio"] {
 
 }
 </style>
+
+<script>
+  
+    let currentSearch = window.location.pathname;
+    console.log("currentSearch:");
+    console.log(currentSearch);
+
+    if (currentSearch.includes("%")) {
+        currentSearch = currentSearch.split("%20").join(" ");
+        console.log("New currentSearch:", currentSearch)
+    }
+  
+    currentSearch = currentSearch.toLowerCase();
+    let linkSearch = document.getElementById(currentSearch);
+    console.log(linkSearch);
+    if (linkSearch) {
+      linkSearch.classList.add('active');
+    }
+    
+  </script>
+  
