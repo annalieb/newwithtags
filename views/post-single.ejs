@@ -85,7 +85,15 @@
                                 <hr class="gray">
                                 <div class="full-width" style="display: flex; justify-content: space-between;">
                                     <p><%=elt.text%></p>
-                                    <img style="height: 18px" alt="You commented this comment" src="../assets/comment-tag-you.svg">
+                                    <div>
+                                        <img style="height: 18px; margin-top: 2px" alt="You commented this comment" src="../assets/comment-tag-you.svg">
+                                        <form style="display: inline-block;" method="POST" action="/delete-comment/<%= postID %>">
+                                            <input type="hidden" name="commentText" value="<%= elt.text %>">
+                                            <input type="hidden" name="userID" value="<%= elt.userID %>">
+                                            <input type="hidden" name="date" value="<%= elt.date %>">
+                                            <button style="margin-top: -13px;" type="submist" id="delete-submit"><img id="delete-btn" src="../assets/delete-comment.svg"></button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <p class="text-timestamp"><%=elt.date%></p>
                             <% } else { %>

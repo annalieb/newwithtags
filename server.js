@@ -874,6 +874,33 @@ app.post("/delete/:id", async (req, res) => {
 })
 
 /**
+ * Post for deleting a comment. Takes the ID of the post to delete and gets the 
+ * text, userID, and date of the comment in the body of the request. Flashes confirmation.
+ */
+app.post('/delete-comment/:id', async (req, res) => {
+    const postID = parseInt(req.params.id);
+    const text = req.body.commentText;
+    const userID = req.body.userID;
+    const date = req.body.date;
+
+    let db = await Connection.open(mongoUri, DB);
+    let posts = db.collection(POSTS);
+    
+    let deleteComment = await posts.updateOne(
+        { postID: postID },
+        { $pull: { comments: {text: text, userID: userID, date: date} } }
+    );
+
+    if (deleteComment.modifiedCount == true) {
+        req.flash("info", "Deleted comment.");
+    } else {
+        req.flash("error", "Failed to delete comment. Please try again.");
+    };
+    
+    return res.redirect("/post-single/" + postID);
+})
+
+/**
  * Renders the profile page, which shows the logged in user's information and the user's posts. 
  * If the user is not logged in, redirects to the home and flashes an error message. 
  */
