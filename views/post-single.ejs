@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-12" style="padding-bottom: 10px">
                 <a href="/" style="color: black;">
-                    <img style="padding-right: 5px; margin-top:-3px;" src="../assets/arrow-back.svg">Back
+                    <img style="padding-right: 5px; margin-top:-3px;" alt="Back button to return to home page" src="../assets/arrow-back.svg">Back
                 </a>
             </div>
         
@@ -53,11 +53,11 @@
                         <!-- AJAX version -->
                         <% if( alreadyLiked ) { %>
                             <button class="likeBtn alreadyLiked" type="button">
-                                <img src="../assets/heart-filled.svg">
+                                <img src="../assets/heart-filled.svg" alt="Filled heart button">
                             </button>
                         <% } else { %>
                             <button class="likeBtn notLiked" type="button">
-                                <img src="../assets/heart-empty.svg">
+                                <img src="../assets/heart-empty.svg" alt="Empty heart button">
                             </button>
                         <% } %>
                         
@@ -85,7 +85,7 @@
                                 <hr class="gray">
                                 <div class="full-width" style="display: flex; justify-content: space-between;">
                                     <p><%=elt.text%></p>
-                                    <img style="height: 18px" src="../assets/comment-tag-you.svg">
+                                    <img style="height: 18px" alt="You commented this comment" src="../assets/comment-tag-you.svg">
                                 </div>
                                 <p class="text-timestamp"><%=elt.date%></p>
                             <% } else { %>

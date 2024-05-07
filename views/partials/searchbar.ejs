@@ -10,25 +10,28 @@
                 </div>
                 <div class="col-lg-1 col-md-1 col-sm-2" style="padding-right: 0px; display: flex; justify-content: flex-end;">
                     <div class="arrow-container">
-                        <img src="../assets/arrow-down.svg" style="height:9px; width:14px; margin-top: -10px">
+                        <img src="../assets/arrow-down.svg" alt="down arrow to open search accordian" style="height:9px; width:14px; margin-top: -10px">
                     </div>
                 </div>
             </div>
             <div class="content" style="display: flex; width: 100%;">
                 <div class="col-lg-2 col-md-2 col-sm-12" style="padding-left: 0px; margin-bottom: 30px">
 
-                    <p style="margin-bottom: 8px">Sort by</p> 
+                    
                     <form method="GET" action="/sort">
-                        <label class="radio">
-                            <input type="radio" name="sortBy" value="Newest">
-                            Newest
-                        </label>
-                        <br>
-                        <label class="radio" style="margin-bottom: 24px">
-                            <input type="radio" name="sortBy" value="Liked">
-                            Most liked
-                        </label>
-                        <input type="submit" value="Sort" id="sortButton">
+                        <fieldset>
+                            <legend style="margin-bottom: 8px">Sort by</legend> 
+                            <label class="radio">
+                                <input type="radio" name="sortBy" value="Newest">
+                                Newest
+                            </label>
+                            <br>
+                            <label class="radio" style="margin-bottom: 24px">
+                                <input type="radio" name="sortBy" value="Liked">
+                                Most liked
+                            </label>
+                            <input type="submit" value="Sort" id="sortButton">
+                        </fieldset>
                     </form>
                     
                 </div>
