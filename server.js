@@ -65,18 +65,17 @@ const LIKES = 'likes';
 const USERS = 'users';
 const COUNTERS = 'counters';
 
-const CITIES = ['wellesley', 'boston', 'tokyo', 'jakarta', 'delhi', 'guangzhou', 'mumbai', 'Manila', 'shanghai',
+const CITIES = ['wellesley', 'boston', 'tokyo', 'jakarta', 'delhi', 'mumbai', 'shanghai',
     'são paulo', 'seoul', 'mexico city', 'cairo', 'new york city', 'beijing',
-    'bangkok', 'shenzhen', 'moscow', 'buenos aires', 'lagos', 'istanbul', 'milan',
+    'bangkok', 'moscow', 'buenos aires', 'lagos', 'istanbul', 'milan',
     'bangalore', 'osaka', 'chengdu', 'tehran', 'rio de jane', 'toronto', 'athens',
     'chennai', 'los angeles', 'london', 'paris', 'rome', 'prague', 'sydney', 'lima',
     'wuhan', 'nanyang', 'hangzhou', 'amsterdam', 'dubai', 'dublin', 'stockholm', 'cairo',
     'nagoya', 'taipei', 'berlin', 'washington D.C.', 'vienna', 'lisbon', 'edinburgh',
     'chicago', 'nanjing', 'fuyang', 'montreal', 'vilnius', 'frankfurt', 'vancouver',
-    'johannesburg', 'bogotá', 'shenyang', 'shangqiu', 'melbourne', 'venice',
-    'hong kong', 'santiago', 'orlando', 'las vegas', 'miami', 'orlando',
+    'johannesburg', 'bogotá', 'melbourne', 'venice', 'hong kong', 'santiago', 'las vegas', 
     'madrid', 'baghdad', 'singapore', 'san francisco', 'honolulu', 'munich',
-    'houston', 'barcelona', 'copenhagen'];
+    'houston', 'barcelona', 'copenhagen', 'miami'];
 
 const numButtons = 5;
 
@@ -121,7 +120,8 @@ var upload = multer({
 // helper functions
 
 /**
- * Increases the counter document in the counters collection associated with the given key by 1.
+ * Increases the counter document in the counters collection 
+ * associated with the given key by 1.
  * @param {collection} counters 
  * @param {string} key 
  * @returns the document after the update
@@ -194,7 +194,8 @@ async function sortPostsByNewest () {
 };
 
 /**
- * Function to sort all the cities that are both used and not used in the database by most used to least used. 
+ * Function to sort all the cities that are both used and not 
+ * used in the database by most used to least used. 
  * @returns an array of sorted cities as strings
  */
 async function sortCitiesByNumPosts(n) {
@@ -269,8 +270,9 @@ async function sortTagsByNumPosts(n) {
 function capitalizeCity(city) {
     //console.log("this is a city",city);
     let words = city.split(' ');
-    newWords = words.map((word) => { return word.charAt(0).toUpperCase() + word.slice(1) }
-    );
+    newWords = words.map((word) => { 
+        return word.charAt(0).toUpperCase() + word.slice(1) 
+    });
     return newWords.join(' ');
 }
 
@@ -362,7 +364,8 @@ app.get('/', async (req, res) => {
 
 /**
  * Action Get from Search Bar Form for Filtering Tags or Cities
- * Redirects URL to filteres image gallery with certain tags/cities, flashes error message if none found.
+ * Redirects URL to filteres image gallery with certain tags/cities, 
+ * flashes error message if none found.
  */
 app.get('/search/', async (req, res) => {
     const search = req.query.search;
@@ -415,7 +418,9 @@ app.get('/search/', async (req, res) => {
             })
             // console.log(tagList);
 
-            let findPosts = await postsDB.find({ $and: [{ city: searchedCity }, { tags: { $in: tagList } }] }).toArray();
+            let findPosts = await postsDB.find(
+                { $and: [{ city: searchedCity }, { tags: { $in: tagList } }] }
+            ).toArray();
             console.log(findPosts);
 
             if (findPosts.length == 0) {
@@ -806,7 +811,8 @@ app.post('/edit/:id', async (req, res) => {
             }
         });
 
-    if (editPost.acknowledged) { // if successfully edited, redirect to the new post's post-single page
+    if (editPost.acknowledged) { 
+        // if successfully edited, redirect to the new post's post-single page
         req.flash("info", "Successfully edited.");
         return res.redirect('/post-single/' + postID);
     } else {
@@ -981,7 +987,9 @@ app.post("/login", async (req, res) => {
     username = req.body.username;
     password = req.body.password;
     const db = await Connection.open(mongoUri, DB);
-    let userdict = await db.collection(USERS).findOne({ userID: username }, { projection: { password: 1 } });
+    let userdict = await db.collection(USERS).findOne(
+        { userID: username }, { projection: { password: 1 } }
+    );
     if (userdict == null) {
         console.log("failed login for", username);
         req.session.uid = false;
