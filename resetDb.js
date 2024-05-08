@@ -167,7 +167,7 @@ async function main() {
     city: "paris",
     date: "2023-11-30 3:26:23",
     caption: "this skirt is so cool!",
-    alttext: "A person walking down the street in Paris in a calf-length red and black striped skirt, black hoodie, and large black Chanel shoulder bag."
+    alttext: "A person walking in Paris in a red and black striped skirt, black hoodie, and black Chanel bag."
   };
 
   const post5 = {
@@ -191,7 +191,7 @@ async function main() {
     city: "paris",
     date: "2023-12-30 3:26:23",
     caption: "my favorite type of outfit is all black with a pop of red",
-    alttext: "A person walking down the street in a long tan coat carrying a large beige shoulder bag."
+    alttext: "A person walking down the street in a long tan coat carrying a large beige bag."
   };
 
   const post6 = {
@@ -214,7 +214,7 @@ async function main() {
     city: "paris",
     date: "2023-10-30 3:26:23",
     caption: "the flowers are so cute!!",
-    alttext: "A person walking down the street in a short navy coat and white pants carrying two bouquets of flowers and a woven shoulder bag."
+    alttext: "A person in a short navy coat and white pants carrying bouquets of flowers and a woven bag."
   };
 
   const post7 = {
@@ -238,7 +238,7 @@ async function main() {
     city: "beijing",
     date: "2023-12-30 3:26:23",
     caption: "casual fit for today",
-    alttext: "A person looking away from the camera in an oversized denim jacket, white t-shirt, black pants, and a black baseball cap facing forward."
+    alttext: "A person in a denim jacket, white t-shirt, black pants, and a black baseball cap facing forward."
   };
 
   const post8 = {
@@ -262,7 +262,7 @@ async function main() {
     city: "normandy",
     date: "2023-12-30 3:26:23",
     caption: "posed in a red doorway!",
-    alttext: "A person posing with their arm up in a red doorframe wearing a white crochet top and denim shorts."
+    alttext: "A person posing in a red doorframe wearing a white crochet top and denim shorts."
   };
 
   const post9 = {
@@ -292,7 +292,7 @@ async function main() {
     city: "new york city",
     date: "2023-12-30 3:26:23",
     caption: "felt like being comfy today",
-    alttext: "A person by a street crossing holding a neon green purse and wearing a green baseball cap, cream fleece vest, and jeans."
+    alttext: "A person wearing a neon green purse, a green baseball cap, cream fleece vest, and jeans."
   };
 
   const post10 = {
@@ -350,7 +350,7 @@ async function main() {
     city: "wellesley",
     date: "2024-04-10 3:26:23",
     caption: "felt casual today!",
-    alttext: "Two people next to each other facing the camera, both wearing white tops. One has tan pants while the other has black pants."
+    alttext: "Two people wearing white tops. One has tan pants while the other has black pants."
   };
 
   const post12 = {
@@ -378,7 +378,7 @@ async function main() {
     city: "madrid",
     date: "2024-04-28 10:25:27",
     caption: "this city was so cute!",
-    alttext: "A person posing in front of a tan building wearing a black adidas zip-up jacket, black leg warmers, and a grey skirt and top with white sneakers."
+    alttext: "A person wearing a black jacket, black leg warmers, and a grey skirt and top with white sneakers."
   };
 
   const post13 = {
@@ -406,7 +406,7 @@ async function main() {
     city: "new york city",
     date: "2024-04-09 10:25:27",
     caption: "went to a museum to take pics",
-    alttext: "A person in a museum holding a bouquet of pink flowers, with a pink shoulder bag and white cardigan with a short black skirt."
+    alttext: "A person in a museum holding a bouquet of flowers with a pink bag, white cardigan, and black skirt."
   };
 
   const post14 = {
@@ -435,7 +435,7 @@ async function main() {
     city: "new york city",
     date: "2024-04-09 10:25:27",
     caption: "sitting on a bench",
-    alttext: "A person sitting on a stone bench wearing a black off-the-shoulder top, long black skirt, black stockings, and red mary janes."
+    alttext: "A person wearing a black top, long black skirt, black stockings, and red mary janes."
   };
 
   const post15 = {
@@ -470,7 +470,7 @@ async function main() {
     city: "normandy",
     date: "2024-03-20 10:25:27",
     caption: "visited christian dior's home!",
-    alttext: "A person sitting at a table with a plate of mostly-finished food in front of them, wearing a tan patterned short dress."
+    alttext: "A person sitting at a table with a plate of food, wearing a tan patterned short dress."
   };
 
   const post16 = {
@@ -546,7 +546,7 @@ async function main() {
     city: "wellesley",
     date: "2024-04-12 10:25:27",
     caption: "marmon fits!!",
-    alttext: "Two people walking away from the camera, one wearing a denim jacket and the other wearing a football shirt with jean shorts."
+    alttext: "Two people, one wearing a denim jacket and the other wearing a football shirt with jean shorts."
   };
 
   const post19 = {
@@ -570,7 +570,7 @@ async function main() {
     city: "los angeles",
     date: "2024-03-28 10:25:27",
     caption: "caught off guard",
-    alttext: "A person sitting on a stool by a table indoors wearing a black cropped shirt, sunglasses, black dickies pants, and white sneakers."
+    alttext: "A person wearing a black cropped shirt, sunglasses, black dickies pants, and white sneakers."
   };
 
   const post20 = {
@@ -595,7 +595,7 @@ async function main() {
     city: "boston",
     date: "2023-05-15 10:25:27",
     caption: "boston public library!",
-    alttext: "A person standing next to a building wearing a black dress over black jeans and a white front-tie lacy top."
+    alttext: "A person wearing a black dress over black jeans and a white front-tie lacy top."
   };
 
   const post21 = {
@@ -620,7 +620,7 @@ async function main() {
     city: "madrid",
     date: "2023-08-15 10:25:27",
     caption: "loved this fit for spain!",
-    alttext: "A person standing in front of many stone columns wearing a long grey skrit, blue bustier top, and white cropped cardigan."
+    alttext: "A person wearing a long grey skrit, blue bustier top, and white cropped cardigan."
   };
 
   const post22 = {
@@ -646,7 +646,7 @@ async function main() {
     city: "new york city",
     date: "2023-12-15 10:25:27",
     caption: "out on a quick walk!",
-    alttext: "A person with their back facing the camera walking a dog in a white vest, white shirt, and black shorts."
+    alttext: "A person walking a dog in a white vest, white shirt, and black shorts."
   };
 
   const post23 = {
@@ -674,7 +674,7 @@ async function main() {
     city: "madrid",
     date: "2024-01-20 10:25:27",
     caption: "nighttime outing!",
-    alttext: "A person standing in the street wearing a white tiered skirt, white crochet cardigan, and white crop top."
+    alttext: "A person wearing a white tiered skirt, white crochet cardigan, and white crop top."
   };
 
   const post24 = {
@@ -805,7 +805,7 @@ async function main() {
     city: "new york city",
     date: "2023-11-02 10:25:27",
     caption: "cafe fit!!",
-    alttext: "A person wearing a neon green ruffled button-up top and ripped jeans with a black shoulderbag and sunglasses."
+    alttext: "A person wearing a neon green ruffled top and ripped jeans with a black bag and sunglasses."
   };
 
   const post30 = {
@@ -856,7 +856,7 @@ async function main() {
     city: "new york city",
     date: "2023-11-02 10:25:27",
     caption: "today was such a nice day!",
-    alttext: "A person standing by a red building wearing a navy varsity jacket, tan knit top, and tan skirt with black boots."
+    alttext: "A person wearing a navy varsity jacket, tan knit top, and tan skirt with black boots."
   };
 
   const post32 = {
