@@ -220,7 +220,6 @@ async function sortCitiesByNumPosts(n) {
         sortedPresentCities.push(elt._id);
     });
 
-
     let absentCities = CITIES.filter((elt) => {
         return !sortedPresentCities.includes(elt);
     });
@@ -229,7 +228,6 @@ async function sortCitiesByNumPosts(n) {
 
     return capitalizeCities(sortedCities.slice(0, n));
 };
-
 
 /**
  * Function to sort all the tags used in the database by most used to least used. 
@@ -268,7 +266,6 @@ async function sortTagsByNumPosts(n) {
  * @returns properly-capitalized string city
  */
 function capitalizeCity(city) {
-    //console.log("this is a city",city);
     let words = city.split(' ');
     newWords = words.map((word) => { 
         return word.charAt(0).toUpperCase() + word.slice(1) 
@@ -364,11 +361,13 @@ app.get('/', async (req, res) => {
 
 /**
  * Action Get from Search Bar Form for Filtering Tags or Cities
- * Redirects URL to filteres image gallery with certain tags/cities, 
- * flashes error message if none found.
+ * Redirects URL to filters image gallery with certain tags/cities, 
+ * Flashes error message if none found.
  */
 app.get('/search/', async (req, res) => {
     const search = req.query.search;
+
+    // Handles Error when Search is null or undefined
     if (!search) {
         console.log("Search is missing from query string; ignoring this request to /search");
         return res.redirect('/');
@@ -378,19 +377,18 @@ app.get('/search/', async (req, res) => {
     const db = await Connection.open(mongoUri, DB);
     const postsDB = db.collection(POSTS);
 
+    // Recognizes if search contained multiple items
     if (searched.includes(",")) {
         console.log("You are searching multiple tags!")
-        console.log(searched.split(","));
         var searchList = searched.split(",");
+
         if (searchList[0].includes("#")) { //filters multiple tags
             var tagList = [];
             searchList.forEach((elt) => {
                 tagList.push(elt.split("#")[1])
             })
-            console.log(tagList);
 
             let findTags = await postsDB.find({ tags: { $in: tagList } }).toArray();
-            console.log(findTags);
 
             if (findTags.length == 0) {
                 req.flash("error", "Sorry, these tags do not exist.")
@@ -407,21 +405,19 @@ app.get('/search/', async (req, res) => {
                 });
             }
         } else {
-            console.log("hello")
+            console.log("You are searching a city and tags!")
             const searchedCity = searchList[0].toLowerCase();
-            // console.log(city);
 
             var tagList = [];
             var restSearch = searchList.slice(1);
             restSearch.forEach((elt) => {
                 tagList.push(elt.split("#")[1])
             })
-            // console.log(tagList);
 
+            // Look ups posts that have city and tags of either in tagList
             let findPosts = await postsDB.find(
                 { $and: [{ city: searchedCity }, { tags: { $in: tagList } }] }
             ).toArray();
-            console.log(findPosts);
 
             if (findPosts.length == 0) {
                 req.flash("error", "Sorry, these tags do not exist.")
@@ -440,12 +436,12 @@ app.get('/search/', async (req, res) => {
         }
     }
 
+    // Handles individual searches of city or tag
     if (searched.charAt(0) == "#") {
         console.log(`You submitted ${searched}`);
         const styleTag = searched.split("#")[1];
 
         let findTag = await postsDB.find({ tags: styleTag }).toArray();
-        console.log(findTag);
 
         if (findTag.length == 0) {
             req.flash("error", "Sorry, this tag does not exist.")
@@ -532,29 +528,26 @@ app.get('/sort', async (req,res) => {
 
     let uid = req.session.uid || false;
     let logged_in = req.session.logged_in || false;
-    let visits = req.session.visits || 0;
-    visits++;
-    req.session.visits = visits;
     console.log('uid', uid);
 
     let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
+    // Sort by Newest
     if (sortBy == "Newest") {
         console.log('newest');
         let sortedPostsByNewest = await sortPostsByNewest();
 
         return res.render('index.ejs', {uid: uid, 
                                         logged_in: logged_in, 
-                                        visits: visits, 
                                         posts: sortedPostsByNewest, 
                                         cities: sortedCities, 
                                         tags: sortedTags});
+    // Sort by Liked
     } else if (sortBy == "Liked") {
         console.log('liked');
         let sortedPostsByLiked = await sortPostsByLikes();
         return res.render('index.ejs', {uid: uid, 
                                         logged_in: logged_in, 
-                                        visits: visits, 
                                         posts: sortedPostsByLiked, 
                                         cities: sortedCities, 
                                         tags: sortedTags});
@@ -630,6 +623,7 @@ async function likePost(uid, postID) {
         { postID: postID, userID: uid },
         { upsert: false });
     console.log("User with ID", uid, "liked post with ID", postID);
+    console.log(likeDoc);
     
     var matched = await db.collection(LIKES).find({ postID: postID }).toArray();
     var numLikes = matched.length;
@@ -655,6 +649,7 @@ async function unlikePost(uid, postID) {
     var unlikeDoc = await db.collection(LIKES).deleteOne(
         { postID: postID, userID: uid });
     console.log("User with ID", uid, "unliked post with ID", postID);
+    console.log(unlikeDoc);
 
     var matched = await db.collection(LIKES).find({ postID: postID }).toArray();
     var numLikes = matched.length;
@@ -963,6 +958,7 @@ app.post('/comment/:postID', async (req, res) => {
             { postID: postID },
             { $push: { comments: comment } }
         );
+        console.log(addComment);
 
         return res.redirect("/post-single/" + postID);
     } else {
