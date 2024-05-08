@@ -363,6 +363,18 @@ label, select, input {
 	background-color: black; 
 }
 
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0,0,0,0);
+	border: 0;
+	color: black;
+}
+
 /* SMALL SCREEN SIZE */
 @media (max-width: 767px) {
 	.partial-width {
