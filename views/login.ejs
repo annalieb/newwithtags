@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Login</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo-primary-vector.svg">
     <!-- load bootstrap stylesheet (css) -->
-    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css">
     <!-- load local stylesheet (css) -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <!-- loading jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
@@ -26,43 +26,43 @@
       <div class="col-lg-4 col-md-4 col-sm-12">
         <h2>Sign in</h2>
         <p class="text-timestamp">Already have an account?</p>
-        <p>
-          <form action="/login" method="POST">
-              <label> Username
-                  <input class="partial-width" type="text" name="username" required>
-              </label>
-              <label> Password
-                  <input class="partial-width" type="password" autocomplete="current-password" name="password" required>
-              </label>
-            <button type="submit">login</button>
-          </form>
-        </p>
+        
+        <form action="/login" method="POST">
+            <label> Username
+                <input class="partial-width" type="text" name="username" required>
+            </label>
+            <label> Password
+                <input class="partial-width" type="password" autocomplete="current-password" name="password" required>
+            </label>
+          <button type="submit">login</button>
+        </form>
+        
         <br>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
         <h2>Create account</h2>
         <p class="text-timestamp">Your first time here?</p>
-        <p>
-          <form action="/join" method="POST">
-              <label> Username
-                  <input class="partial-width" type="text" name="username" required>
-              </label>
-              <label> First name
-                <input class="partial-width" type="text" name="first" required>
-              </label>
-              <label> Last name
-                <input class="partial-width" type="text" name="last" required>
-              </label>
-              <label> Email
-                <input class="partial-width" type="text" name="email" required>
-              </label>
-              <label> Password
-                  <input class="partial-width" type="password" autocomplete="new-password" name="password" required>
-              </label>
-            <button type="submit">join</button>
-          </form>
-        </p>
+        
+        <form action="/join" method="POST">
+            <label> Username
+                <input class="partial-width" type="text" name="username" required>
+            </label>
+            <label> First name
+              <input class="partial-width" type="text" name="first" required>
+            </label>
+            <label> Last name
+              <input class="partial-width" type="text" name="last" required>
+            </label>
+            <label> Email
+              <input class="partial-width" type="text" name="email" required>
+            </label>
+            <label> Password
+                <input class="partial-width" type="password" autocomplete="new-password" name="password" required>
+            </label>
+          <button type="submit">join</button>
+        </form>
+        
       </div>
 
     </div>
@@ -72,7 +72,7 @@
     <script src="/main.js"></script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
-</bodys>
+</body>
 </html>
 
 

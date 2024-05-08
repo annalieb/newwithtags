@@ -23,7 +23,9 @@
             <% posts.forEach((elt) => { %>
                 <div class="col-lg-4 col-md-4 col-sm-6 gallery-image">
                     <a href="/post-single/<%= elt.postID%>">
-                    <img src=<%= elt.imageURL %> alt="<%= elt.alttext %>"><span class="sr-only">Visit individual post</span></a>
+                        <img src=<%= elt.imageURL %> alt="<%= elt.alttext %>">
+                        <span class="sr-only">Visit individual post</span>
+                    </a>
                 </div>
             <% }); %>
         </div>
