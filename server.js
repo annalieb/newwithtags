@@ -693,6 +693,7 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
     console.log(city)
     let tagsInitial = req.body.tags.split(" ");
     let description = req.body.description;
+    console.log("description", description)
     let alttext = req.body.alttext;
     let imageUpload = './public/assets/uploads/' + req.file.filename;
 
@@ -726,9 +727,10 @@ app.post('/create', upload.single('imageUpload'), async (req, res) => {
         tags: tags,
         city: city,
         date: date,
-        description: description,
+        caption: description,
         alttext: alttext
     });
+    console.log(insertPost);
 
     if (insertPost.acknowledged) { // if successfully inserted, redirect to the new post's post-single page
         console.log('successfully inserted post');
