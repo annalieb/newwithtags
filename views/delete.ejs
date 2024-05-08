@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Create a post</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo-primary-vector.svg">
     <!-- load bootstrap stylesheet (css) -->
-    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css">
     <!-- load local stylesheet (css) -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <!-- loading jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
@@ -18,12 +18,12 @@
         <div class="row">
             <div class="col-12" style="padding-bottom: 10px">
                 <a href="/post-single/<%= post.postID %>" style="color: black;">
-                    <img style="padding-right: 5px; margin-top:-3px;" src="../assets/arrow-back.svg">Back
+                    <img style="padding-right: 5px; margin-top:-3px;" src="../assets/arrow-back.svg" alt="Back arrow">Back
                 </a>
             </div>
         
             <div class="col-lg-8 col-md-8 col-sm-12 container-image gallery-image">
-                <img src=<%= post.imageURL %>>
+                <img src=<%= post.imageURL %> alt="<%= post.alttext %>">
             </div>
         
             <div class="col-lg-4 col-md-4 col-sm-12">
@@ -40,5 +40,5 @@
     <script src="/main.js"></script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
-</bodys>
+</body>
 </html>

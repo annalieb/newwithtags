@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>View Post</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo-primary-vector.svg">
     <!-- load bootstrap stylesheet (css) -->
-    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css">
     <!-- load local stylesheet (css) -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <!-- loading jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -67,10 +67,12 @@
                     <div> <!-- Edit and delete button container -->
                         <% if( uid == findPost.userID ) { %>
                             <a style="display: inline-block;" href="/edit/<%= postID %>">
-                                <img id="edit-btn" src="../assets/edit.svg">
+                                <img id="edit-btn" src="../assets/edit.svg" alt="Pencil for editing post">
                             </a>
                             <form style="display: inline-block;" method="GET" action="/delete/<%= postID %>">
-                                <button type="submit" id="delete-submit"><img id="delete-btn" src="../assets/delete.svg"></button>
+                                <button type="submit" id="delete-submit">
+                                    <img id="delete-btn" src="../assets/delete.svg" alt="Trash can for deleting post">
+                                </button>
                             </form>
                         <% } %>
                     </div>
@@ -91,7 +93,9 @@
                                             <input type="hidden" name="commentText" value="<%= elt.text %>">
                                             <input type="hidden" name="userID" value="<%= elt.userID %>">
                                             <input type="hidden" name="date" value="<%= elt.date %>">
-                                            <button style="margin-top: -13px;" type="submist" id="delete-submit"><img id="delete-btn" src="../assets/delete-comment.svg"></button>
+                                            <button style="margin-top: -13px;" type="submit" id="delete-submit">
+                                                <img id="delete-btn" src="../assets/delete-comment.svg" alt="Delete comment">
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

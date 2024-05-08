@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Edit a post</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo-primary-vector.svg">
     <!-- load bootstrap stylesheet (css) -->
-    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css">
     <!-- load local stylesheet (css) -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <!-- loading jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-12" style="padding-bottom: 10px">
                 <a>
-                    <img style="padding-right: 5px; margin-top:-3px" src="../assets/arrow-back.svg">Back
+                    <img style="padding-right: 5px; margin-top:-3px" src="../assets/arrow-back.svg" alt="Back arrow">Back
                 </a>
             </div>
         
@@ -27,10 +27,8 @@
                 <form id="edit-form"
                     method="POST"
                     action="/edit/<%= post.postID %>">
-                    <label for="city">
-                        <p class="bold" style="margin-bottom: 5px;">City</p>
-                        <p class="text-timestamp">Select from the dropdown</p>
-                    </label>
+                    <label for="city" class="bold" style="margin-bottom: 5px;">City</label>
+                    <p class="text-timestamp">Select from the dropdown</p>
                     <select id="city" name="city">
                         <% cityList.forEach((elt) => { %>
                             <option value="<%= elt %>" <%= post.city === elt.toLowerCase() ? 'selected' : '' %>><%= elt %></option>
@@ -39,18 +37,14 @@
 
                     <br>
 
-                    <label for="tags">
-                        <p class="bold" style="margin-bottom: 5px;">Tags</p>
-                        <p class="text-timestamp">Type each tag with a hashtag in the front, separated by a space.</p>
-                    </label>
+                    <label for="tags" class="bold" style="margin-bottom: 5px;">Tags</label>
+                    <p class="text-timestamp">Type each tag with a hashtag in the front, separated by a space.</p>
                     <input type="text" id="tags" name="tags" value="<% post.tags.forEach((elt) => { %>#<%= elt %> <% }) %>">
 
                     <br>
 
-                    <label for="description">
-                        <p class="bold" style="margin-bottom: 5px;">Description</p>
-                        <p class="text-timestamp">Say whatever you'd like about the look!</p>
-                    </label>
+                    <label for="description" class="bold" style="margin-bottom: 5px;">Description</label>
+                    <p class="text-timestamp">Say whatever you'd like about the look!</p>
                     <input type="text" id="description" name="description" value="<%= post.caption %>">
                     
                     <br>
@@ -65,5 +59,5 @@
     <script src="/main.js"></script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
-</bodys>
+</body>
 </html>

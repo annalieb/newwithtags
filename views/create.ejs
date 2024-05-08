@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Create a post</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo-primary-vector.svg">
     <!-- load bootstrap stylesheet (css) -->
-    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css">
     <!-- load local stylesheet (css) -->
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <!-- loading jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
@@ -23,10 +23,9 @@
                     method="POST"
                     action="/create"
                     enctype="multipart/form-data">
-                    <label for="city">
-                        <p class="bold" style="margin-bottom: 5px;">City</p>
-                        <p class="text-timestamp">Select from the dropdown</p>
-                    </label>
+                    
+                    <label for="city" class="bold" style="margin-bottom: 5px;">City</label>
+                    <p class="text-timestamp">Select from the dropdown</p>
                     <select id="city" name="city">
                         <% cityList.forEach((elt) => { %>
                             <option value="<%=elt%>"><%=elt%></option>
@@ -35,34 +34,26 @@
 
                     <br>
 
-                    <label for="tags">
-                        <p class="bold" style="margin-bottom: 5px;">Tags</p>
-                        <p class="text-timestamp">Type each tag with a hashtag in the front, separated by a space.</p>
-                    </label>
+                    <label for="tags" class="bold" style="margin-bottom: 5px;">Tags</label>
+                    <p class="text-timestamp">Type each tag with a hashtag in the front, separated by a space.</p>
                     <input type="text" id="tags" name="tags">
 
                     <br>
 
-                    <label for="description">
-                        <p class="bold" style="margin-bottom: 5px;">Description</p>
-                        <p class="text-timestamp">Say whatever you’d like about the look!</p>
-                    </label>
+                    <label for="description" class="bold" style="margin-bottom: 5px;">Description</label>
+                    <p class="text-timestamp">Say whatever you’d like about the look!</p>
                     <input type="text" id="description" name="description">
                     
                     <br>
 
-                    <label for="alttext">
-                        <p class="bold" style="margin-bottom: 5px;">Alt Text</p>
-                        <p class="text-timestamp">Describe your image.</p>
-                    </label>
+                    <label for="alttext" class="bold" style="margin-bottom: 5px;">Alt Text</label>
+                    <p class="text-timestamp">Describe your image.</p>
                     <input type="text" id="alttext" name="alttext">
                     
                     <br>
 
-                    <label for="imageUpload">
-                        <p class="bold" style="margin-bottom: 5px;">Image</p>
-                        <p class="text-timestamp">Choose an image to upload</p>
-                    </label>
+                    <label for="imageUpload" class="bold" style="margin-bottom: 5px;">Image</label>
+                    <p class="text-timestamp">Choose an image to upload</p>
                     <input type="file" accept="image/*" id="imageUpload" name="imageUpload">
 
                     <br>
@@ -80,5 +71,5 @@
     <script src="/main.js"></script>
     <!-- load bootstrap js -->
     <script src="../bootstrap.min.js"></script>
-</bodys>
+</body>
 </html>
