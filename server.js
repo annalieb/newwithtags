@@ -151,7 +151,7 @@ async function getNumCitiesAndTags(n) {
  * Function to sort all posts in database by likes in decreasing order
  * @returns an array of sorted posts
  */
-async function sortPostsByLikes() {
+async function sortPostsByLikes () {
     const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
     const posts = db.collection(POSTS);
     let sortedPosts = await posts.aggregate([
@@ -169,7 +169,24 @@ async function sortPostsByLikes() {
             }
         },
         {
-            $sort: { numLikes: -1 } // sort posts by num of likes in decr. order
+            $sort: {numLikes: -1} // sort posts by num of likes in decr. order
+        }
+    ]).toArray();
+
+    return sortedPosts;
+};
+
+/**
+ * Function to sort all posts by date created, in descending order from most liked to least liked
+ * @returns an array 
+ */
+async function sortPostsByNewest () {
+    const db = await Connection.open(mongoUri, DB);
+    const posts = db.collection(POSTS);
+    
+    let sortedPosts = await posts.aggregate([
+        {
+            $sort: {date: -1} // sort posts by num of likes in decr. order
         }
     ]).toArray();
 
@@ -377,19 +394,18 @@ app.get('/search/', async (req, res) => {
                 return res.redirect('/');
             } else {
                 let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-                req.session.posts = findTags;
 
                 return res.render('index.ejs', {
                     uid: req.session.uid,
                     logged_in: req.session.logged_in,
-                    posts: req.session.posts,
+                    posts: findTags,
                     cities: sortedCities,
                     tags: sortedTags
                 });
             }
         } else {
             console.log("hello")
-            const searchedCity = searchList[0];
+            const searchedCity = searchList[0].toLowerCase();
             // console.log(city);
 
             var tagList = [];
@@ -407,12 +423,11 @@ app.get('/search/', async (req, res) => {
                 return res.redirect('/');
             } else {
                 let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-                req.session.posts = findPosts;
 
                 return res.render('index.ejs', {
                     uid: req.session.uid,
                     logged_in: req.session.logged_in,
-                    posts: req.session.posts,
+                    posts: findPosts,
                     cities: sortedCities,
                     tags: sortedTags
                 });
@@ -465,12 +480,11 @@ app.get('/city/:city', async (req, res) => {
         return res.redirect('/');
     } else {
         let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        req.session.posts = findCity;
 
         return res.render('index.ejs', {
             uid: req.session.uid,
             logged_in: req.session.logged_in,
-            posts: req.session.posts,
+            posts: findCity,
             cities: sortedCities,
             tags: sortedTags
         });
@@ -495,12 +509,11 @@ app.get('/tag/:tag', async (req, res) => {
         return res.redirect('/');
     } else {
         let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
-        req.session.posts = findTag;
 
         return res.render('index.ejs', {
             uid: req.session.uid,
             logged_in: req.session.logged_in,
-            posts: req.session.posts,
+            posts: findTag,
             cities: sortedCities,
             tags: sortedTags
         });
@@ -508,91 +521,43 @@ app.get('/tag/:tag', async (req, res) => {
 });
 
 // Get to sort posts on the home page by either newest or most liked.
-app.get('/sort', async (req, res) => {
-    // console.log("PRINT REQ:" + url);
-    // console.log("PRINT REQ:" + window.history.previous.href);
+app.get('/sort', async (req,res) => {
     let sortBy = req.query.sortBy;
     console.log(sortBy);
 
-    let postsToSort = req.session.posts;
-    console.log(postsToSort);
-
     let uid = req.session.uid || false;
     let logged_in = req.session.logged_in || false;
-
+    let visits = req.session.visits || 0;
+    visits++;
+    req.session.visits = visits;
     console.log('uid', uid);
 
     let [sortedCities, sortedTags] = await getNumCitiesAndTags(numButtons);
 
     if (sortBy == "Newest") {
         console.log('newest');
+        let sortedPostsByNewest = await sortPostsByNewest();
 
-        postsToSort.sort((a, b) => {
-            const postA = new Date(a.date);
-            const postB = new Date(b.date);
-
-            // Reverse order comparison based on extracted dates
-            return postB - postA;
-        });
-
-        console.log(postsToSort);
-
-        return res.render('index.ejs', {
-            uid: uid,
-            logged_in: logged_in,
-            posts: postsToSort,
-            cities: sortedCities,
-            tags: sortedTags
-        });
+        return res.render('index.ejs', {uid: uid, 
+                                        logged_in: logged_in, 
+                                        visits: visits, 
+                                        posts: sortedPostsByNewest, 
+                                        cities: sortedCities, 
+                                        tags: sortedTags});
     } else if (sortBy == "Liked") {
         console.log('liked');
-        // let sortedPostsByLiked = await sortPostsByLikes();
-
-        postIDs = []
-        postsToSort.forEach((elt) => {
-            postIDs.push(elt.postID);
-        });
-        console.log(postIDs);
-
-        const db = await Connection.open(mongoUri, DB); // connects to newwithtags database
-        const posts = db.collection(POSTS);
-
-        let sortedPostsByLiked = await posts.aggregate([
-            {
-                $match: { postID: { $in: postIDs } }
-            },
-            {
-                $lookup: {
-                    from: "likes",
-                    localField: "postID",
-                    foreignField: "postID",
-                    as: "likes"
-                }
-            },
-            {
-                $addFields: {
-                    numLikes: { $size: "$likes" }
-                }
-            },
-            {
-                $sort: { numLikes: -1 } // sort posts by num of likes in decr. order
-            }
-        ]).toArray();
-
-        console.log(sortedPostsByLiked);
-
-        return res.render('index.ejs', {
-            uid: uid,
-            logged_in: logged_in,
-            posts: sortedPostsByLiked,
-            cities: sortedCities,
-            tags: sortedTags
-        });
+        let sortedPostsByLiked = await sortPostsByLikes();
+        return res.render('index.ejs', {uid: uid, 
+                                        logged_in: logged_in, 
+                                        visits: visits, 
+                                        posts: sortedPostsByLiked, 
+                                        cities: sortedCities, 
+                                        tags: sortedTags});
     } else {
         req.flash("error", "Please select a sorting method.");
         return res.redirect('/');
     };
-});
+}); 
 
 // get for /post-single/:id for a specific post
 app.get('/post-single/:id', async (req, res) => {
