@@ -79,6 +79,7 @@ const CITIES = ['wellesley', 'boston', 'tokyo', 'jakarta', 'delhi', 'mumbai', 's
 
 const numButtons = 5;
 
+
 // ================================================================
 // file upload functions and variables
 
@@ -1047,9 +1048,24 @@ app.post('/logout', (req, res) => {
 // ================================================================
 // postlude
 
-const serverPort = cs304.getPort(8080);
+// old postlude:
+/* const serverPort = cs304.getPort(8080);
 
 // this is last, because it never returns
 app.listen(serverPort, function () {
     console.log(`open http://localhost:${serverPort}`);
+}); */
+
+// new postlude: 
+// no trailing slash on TOP
+const TOP = process.env.NODE_ENV === 'production' ? '/nwt' : '';
+app.locals.TOP = TOP;
+
+const serverPort = process.env.NODE_ENV === 'production' ? 9363 : cs304.getPort(8080);
+// this is last, because it never returns
+app.listen(serverPort, function() {
+    console.log(`NODE_ENV is ${process.env.NODE_ENV} and TOP is ${TOP}`);
+    console.log(`Connecting to database ${DB}`);
+    console.log(`http://localhost:${serverPort}`);
 });
+
